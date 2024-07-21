@@ -20,7 +20,7 @@ I go ahead and pull in all of the dependencies. A run of the default tests shows
 
 Starting up the web server with `iex -S mix phx.server` and going to `http://localhost:4000` shows the default Phoenix web page.
 
-We're no ready to start developing.
+We're now ready to start developing.
 
 ## Store Our Progress in Git
 
