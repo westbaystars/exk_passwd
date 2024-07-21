@@ -33,6 +33,10 @@ git commit -m "Initial commit."
 # I use the GitHub CLI to create the GitHub project then push it up
 gh auth login
 gh repo create
-git remote add origin https://github.com/westbaystars/exk_passwd.git
+# Select to push existing repository
 git push -u origin main
 ```
+
+Once uploaded, add a license. The official port uses the "BSD-2-Clause" license, so let's go with it. Naturally, incorporate the copyright notice from the official port's license.
+
+Check that in and commit. And that should do it for a start.
