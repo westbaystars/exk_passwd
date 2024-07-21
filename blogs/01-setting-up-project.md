@@ -24,7 +24,7 @@ We're now ready to start developing.
 
 ## Store Our Progress in Git
 
-[CTR]C two times to get back to the shell. Then let's initialize Git locally and upload it to GitHub (or which ever Git service you prefer).
+`[CTR]C` two times to get back to the shell. Then let's initialize Git locally and upload it to GitHub (or which ever Git service you prefer).
 
 ```sh
 git init
