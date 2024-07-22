@@ -16,6 +16,10 @@ defmodule EXKPasswd.TokenGeneratorTest do
     assert TokenGenerator.get_word(15) == ""
   end
 
+  test "non-integer length should return an empty string" do
+    assert TokenGenerator.get_word("invalid") == ""
+  end
+
   test "generate a word between 5 and 7 letters" do
   end
 

@@ -49,7 +49,7 @@ And running `mix test` will result in a compile error because we haven't yet cre
 
 Under `/lib/exk_passwd`, create `TokenGenerator` like so:
 
-```Elixir
+```elixir
 defmodule EXKPasswd.TokenGenerator do
   @moduledoc """
   Provides core functionality for generating random tokens (words, numbers,
@@ -123,7 +123,7 @@ Nice. It does work.
 
 Before moving on to the range test, what other edge cases can we test for? What should be get when we ask for a `-1` length word? I think it should return `""`. Let's see what happens.
 
-```Elixir
+```elixir
 test "a -1 length word request should return an empty string" do
   assert TokenGenerator.get_word(-1) == ""
 end
@@ -153,7 +153,7 @@ Well, that didn't work. Looks like it blew up in `Enum.random` with an `Enum.Emp
 
 Looks like we need a way to handle the case when the there are no words after the filter stage. So let's create a private `random` function that takes an array of words and simply passes them to the `Enum.random` function if there are elements in the array or returns an empty string when the array is empty.
 
-```Elixir
+```elixir
 def get_word(length) do
   @words
   |> Enum.filter(fn w -> String.length(w) == length end)
@@ -183,7 +183,7 @@ And we're all green.
 
 Another edge case would be a 15 letter word. I'm pretty sure there weren't any in the list. Let's check.
 
-```Elixir
+```elixir
 test "a request for a 15 character word request should return an empty string" do
   assert TokenGenerator.get_word(15) == ""
 end
@@ -201,3 +201,37 @@ Finished in 0.01 seconds (0.01s async, 0.00s sync)
 ```
 
 All green. All good.
+
+### Non Integer Values
+
+There is another potential edge case that we should test for: non-integer values for the length of the string. In the end, we will be accepting user input. While it should be sanitized before reaching this layer, it would make me feel better knowing that it can't do harm if it does get through.
+
+```elixir
+test "non-integer length should return an empty string" do
+  assert TokenGenerator.get_word("invalid") == ""
+end
+```
+
+And if we run it:
+
+```sh
+mix test test/exk_passwd/token_generator_test.exs
+Running ExUnit with seed: 118530, max_cases: 24
+
+..........
+Finished in 0.01 seconds (0.01s async, 0.00s sync)
+1 doctest, 9 tests, 0 failures
+```
+
+It worked! Why did it work? I was expecting it to fail. Let's start up a new `iex -S mix` shell and see what we've got.
+
+```sh
+iex(1)> EXKPasswd.TokenGenerator.get_word("invalid")
+""
+iex(2)> ~w(this is a test) |> Enum.filter(fn w -> String.length(w) == "invalid" end)
+[]
+```
+
+We are getting the empty string as I wanted. So a quick check of our filter comparing the result of `String.length(w)` with `"invalid"`, and that comparison is always `false`. Therefore, the filter results in an empty array. The empty array passed to our private `random` function always returns a blank string.
+
+So that's why it worked! Excellent. Another passed edge case.x
