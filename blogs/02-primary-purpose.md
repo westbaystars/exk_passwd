@@ -112,9 +112,9 @@ Compiling 1 file (.ex)
 Generated exk_passwd app
 Interactive Elixir (1.17.2) - press Ctrl+C to exit (type h() ENTER for help)
 iex(1)> EXKPasswd.TokenGenerator.get_word(4)
-"lone"
+"save"
 iex(2)> EXKPasswd.TokenGenerator.get_word(9)
-"suggested"
+"Australia"
 ```
 
 Nice. It does work.
