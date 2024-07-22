@@ -123,6 +123,13 @@ defmodule EXKPasswd.TokenGenerator do
   @doc """
   Select a word at random based on the specified length of the word.
 
+  This function will reduce the @words list to only those that contain the
+  specified number of characters and select one of the words at random from
+  that list.
+
+  If there are no words with the specified list, this will return an empty
+  string (`""`).
+
   ## Examples
 
     iex> TokenGenerator.get_word(4)
