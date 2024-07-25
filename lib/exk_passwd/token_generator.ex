@@ -36,7 +36,7 @@ defmodule EXKPasswd.TokenGenerator do
     center cents century certain chair chance change character charge chart check chief
     child childhood children choose church cigarette circle city class clean clear climbed
     clock close cloth clothes cloud coast coat cold college color colour column come
-    common company compare complete compound condition conditions consider considerable
+    common company compare complete compound condition conditions consider
     consonant contain continue continued control cook cool copy corn corner correct cost
     cotton could count country course cover covered cows create cried crops cross crowd
     current daily dance dare dark date daughter dead deal dear death decide decided decimal
@@ -140,6 +140,71 @@ defmodule EXKPasswd.TokenGenerator do
     |> Enum.filter(fn w -> String.length(w) == length end)
     |> random()
   end
+
+  @doc """
+  Select a word at random with the length >= to the first value and
+  <= to the last value (inclusive).
+
+  ## Examples
+
+    iex> TokenGenerator.get_word_between(5, 7)
+
+  """
+  def get_word_between(last, first) when last > first, do: get_word_between(first, last)
+  def get_word_between(length, length) when length == length, do: get_word(length)
+
+  def get_word_between(first, last) when is_integer(first) and is_integer(last) do
+    @words
+    |> Enum.filter(fn w ->
+      len = String.length(w)
+      len >= first and len <= last
+    end)
+    |> random()
+  end
+
+  def get_word_between(_first, _last), do: ""
+
+  @doc """
+  Get a 0 padded integer with a given number of digits. This gets returned as an integer.
+
+  ## Examples
+
+    iex> TokenGenerator.get_number(2)
+
+  """
+  def get_number(digits) when is_integer(digits) and digits >= 1 do
+    0..(10 ** digits - 1)
+    |> random()
+    |> Integer.to_string()
+    |> String.pad_leading(digits, "0")
+  end
+
+  def get_number(_), do: ""
+
+  @doc """
+  Randomly select one of the elements in the range.
+
+  ## Examples
+
+  iex> TokenGenerator.get_one_of(~w[! " # $ % & ' ( ) + * |])
+
+  """
+  def get_one_of(range), do: random(range)
+
+  @doc """
+  Randomly select one of the elements in the range.
+
+  ## Examples
+
+    iex> TokenGenerator.get_one_of(~w[! " # $ % & ' ( ) + * |])
+
+  """
+  def get_n_of(range, count) when is_integer(count) and count > 0 do
+    char = random(range)
+    String.pad_leading(char, count, char)
+  end
+
+  def get_n_of(_range, _count), do: ""
 
   defp random([]), do: ""
 
