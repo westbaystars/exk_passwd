@@ -1,6 +1,6 @@
 defmodule EXKPasswd.PasswordCreatorTest do
   use ExUnit.Case, async: true
-  alias EXKPasswd.{PasswordCreator, TokenGenerator}
+  alias EXKPasswd.PasswordCreator
 
   doctest PasswordCreator
 
@@ -13,7 +13,7 @@ defmodule EXKPasswd.PasswordCreatorTest do
     num_words: 3,
     word_length_min: 4,
     word_length_max: 8,
-    case_transform: "ALTERNATE",
+    case_transform: :alternate,
     separator_character: ~w(! @ $ % ^ & * - _ + = : | ~ ? / . ;),
     digits_before: 2,
     digits_after: 2,
@@ -27,7 +27,7 @@ defmodule EXKPasswd.PasswordCreatorTest do
     num_words: 4,
     word_length_min: 4,
     word_length_max: 5,
-    case_transform: "ALTERNATE",
+    case_transform: :alternate,
     separator_character: ~w(- + = . * _ | ~),
     digits_before: 2,
     digits_after: 2,
@@ -46,7 +46,7 @@ defmodule EXKPasswd.PasswordCreatorTest do
     num_words: 3,
     word_length_min: 4,
     word_length_max: 4,
-    case_transform: "ALTERNATE",
+    case_transform: :alternate,
     separator_character: ~w(! @ $ % ^ & * - _ + = : | ~ ? / .),
     digits_before: 0,
     digits_after: 2,
@@ -61,7 +61,7 @@ defmodule EXKPasswd.PasswordCreatorTest do
     num_words: 6,
     word_length_min: 4,
     word_length_max: 8,
-    case_transform: "ALTERNATE",
+    case_transform: :alternate,
     separator_character: ~w(- + = . * _ | ~ ,),
     digits_before: 4,
     digits_after: 4,
@@ -78,7 +78,7 @@ defmodule EXKPasswd.PasswordCreatorTest do
     num_words: 3,
     word_length_min: 4,
     word_length_max: 7,
-    case_transform: "RANDOM",
+    case_transform: :random,
     separator_character: ~w(- : . @ &),
     digits_before: 2,
     digits_after: 2,
@@ -92,7 +92,7 @@ defmodule EXKPasswd.PasswordCreatorTest do
     num_words: 6,
     word_length_min: 4,
     word_length_max: 8,
-    case_transform: "NONE",
+    case_transform: :none,
     separator_character: " ",
     digits_before: 0,
     digits_after: 0,
@@ -111,7 +111,7 @@ defmodule EXKPasswd.PasswordCreatorTest do
     num_words: 5,
     word_length_min: 4,
     word_length_max: 8,
-    case_transform: "RANDOM",
+    case_transform: :random,
     separator_character: "-",
     digits_before: 0,
     digits_after: 0,
@@ -119,4 +119,22 @@ defmodule EXKPasswd.PasswordCreatorTest do
     padding_before: 0,
     padding_after: 0
   }
+
+  test "verify that the default %PasswordCreator is the same as @default_settings" do
+    assert @default_settings === %PasswordCreator{}
+  end
+
+  test "verify that the default %PasswordCreator is not the same as @web32_settings" do
+    refute @web32_settings === %PasswordCreator{}
+  end
+
+  test "verify a default password generates 3 words, alternating all lower case and all capital letters, with the same symbol between them" do
+    regex =
+      ~r/^([!@$%^&*-_+=:|~?\/.;]){2}[[:digit:]]{2}([!@$%^&*-_+=:|~?\/.;])[[:lower:]]{4,8}\2[[:upper:]]{4,8}\2[[:lower:]]{4,8}\2[[:digit:]]{2}\1{2}$/
+
+    assert String.match?(
+             PasswordCreator.create(),
+             regex
+           )
+  end
 end

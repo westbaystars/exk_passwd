@@ -186,17 +186,26 @@ defmodule EXKPasswd.TokenGenerator do
 
   ## Examples
 
-  iex> TokenGenerator.get_one_of(~w[! " # $ % & ' ( ) + * |])
+  iex> TokenGenerator.get_token("-")
+  "-"
+  iex> TokenGenerator.get_token([])
+  ""
+
+  > TokenGenerator.get_token(~S[!"#$%&'()+*|])
+  "&"
+  > TokenGenerator.get_token(~w[! " # $ % & ' ( ) + * |])
+  ")"
 
   """
-  def get_one_of(range), do: random(range)
+  def get_token(string) when is_binary(string), do: get_token(String.graphemes(string))
+  def get_token(range), do: random(range)
 
   @doc """
-  Randomly select one of the elements in the range.
+  Randomly select one of the elements in the range of values and repeat it `count` times.
 
   ## Examples
 
-    iex> TokenGenerator.get_one_of(~w[! " # $ % & ' ( ) + * |])
+    iex> TokenGenerator.get_n_of(~w[! " # $ % & ' ( ) + * |], 3)
 
   """
   def get_n_of(range, count) when is_integer(count) and count > 0 do
@@ -207,6 +216,7 @@ defmodule EXKPasswd.TokenGenerator do
   def get_n_of(_range, _count), do: ""
 
   defp random([]), do: ""
+  defp random(value) when is_binary(value), do: value
 
   defp random(range) do
     Enum.random(range)

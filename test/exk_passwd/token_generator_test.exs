@@ -80,7 +80,7 @@ defmodule EXKPasswd.TokenGeneratorTest do
 
   test "verify that one of the passed symbols is returned" do
     symbols = ~w(! @ $ % ^ & * - _ + = \: | ~ ? / . \;)
-    symbol = TokenGenerator.get_one_of(symbols)
+    symbol = TokenGenerator.get_token(symbols)
     assert Enum.any?(symbols, fn sym -> sym == symbol end)
   end
 
