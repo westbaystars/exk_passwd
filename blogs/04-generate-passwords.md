@@ -557,3 +557,67 @@ Finished in 0.02 seconds (0.02s async, 0.00s sync)
 The pieces are all coming together nicely. The last piece is a repeated character at the front and end for padding.
 
 Once again, let's implement the addition and update our regular expression.
+
+```elixir
+  def create(settings \\ %PasswordCreator{}) do
+    ...
+    |> add_padding(settings)
+  end
+
+  ...
+
+  # Handle the case when `pad_to_length` is > 0
+  defp add_padding(password, settings)
+        when is_integer(settings.pad_to_length) and settings.pad_to_length > 0 do
+    cond do
+      settings.pad_to_length < String.length(password) ->
+        String.slice(password, 0, settings.pad_to_length)
+
+      settings.pad_to_length > String.length(password) ->
+        password <>
+          TokenGenerator.get_n_of(
+            settings.padding_character,
+            settings.pad_to_length - String.length(password)
+          )
+
+      true ->
+        password
+    end
+  end
+
+  defp add_padding(password, settings) do
+    padding_character = TokenGenerator.get_token(settings.padding_character)
+
+    append(TokenGenerator.get_n_of(padding_character, settings.padding_before), password)
+    |> append(TokenGenerator.get_n_of(padding_character, settings.padding_after))
+  end
+
+  ...
+
+  # Only join two values when prefix or suffix is not an empty string.
+  defp append("", suffix), do: suffix
+  defp append(prefix, ""), do: prefix
+  defp append(prefix, suffix), do: prefix <> suffix
+```
+
+The first `add_padding` pattern matches for when there is a `pad_length > 0` in the settings. This will need to be tested later. For now, it hypothetically forces the password to be a given length by either cutting some of it off or filling it with padding at the end.
+
+It's the second version of `add_padding` that we're normally using.
+
+Our new regular expression is now `~r/^([!@$%^&*-_+=:|~?\/.;]){2}[[:digit:]]{2}([!@$%^&*-_+=:|~?\/.;])[[:lower:]]{4,8}\2[[:upper:]]{4,8}\2[[:lower:]]{4,8}\2[[:digit:]]{2}\1{2}$/`. Padding was added to the beginning and end with the same random symbol. The other change was that the internal capture number was incremented.
+
+Let's run the tests and see how it went.
+
+```sh
+mix test test/exk_passwd/password_creator_test.exs
+Running ExUnit with seed: 826682, max_cases: 24
+
+[warnings]
+
+
+
+Finished in 0.02 seconds (0.02s async, 0.00s sync)
+3 tests, 0 failures
+```
+
+All good. It's now time to test the other presets and some of the other functionality.
