@@ -57,9 +57,9 @@ defmodule EXKPasswd.PasswordCreator do
   ## Examples
 
     > PasswordCreator.create()
-    "method^FRUIT^broad"
+    "28?heavy?SOUND?later?94"
     > PasswordCreator.create(%PasswordCreator{num_words: 2, separator_character: "-"})
-    "someone-DELIGHT"
+    "29-large-WINTER-77"
 
   """
   def create(settings \\ %PasswordCreator{}) do
