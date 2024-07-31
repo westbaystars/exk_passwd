@@ -79,7 +79,7 @@ defmodule EXKPasswd.PasswordCreator do
   defp case_transform(words, :upper), do: Enum.map(words, &String.upcase/1)
 
   defp case_transform(words, :random) do
-    Enum.map(words, fn word -> case_transform(word, Enum.random([:lower, :upper])) end)
+    Enum.map(words, fn word -> case_transform([word], Enum.random([:lower, :upper])) end)
   end
 
   defp case_transform(words, :alternate) do

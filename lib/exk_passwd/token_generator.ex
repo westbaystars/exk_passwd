@@ -210,7 +210,11 @@ defmodule EXKPasswd.TokenGenerator do
   """
   def get_n_of(range, count) when is_integer(count) and count > 0 do
     char = random(range)
-    String.pad_leading(char, count, char)
+
+    cond do
+      String.length(char) > 0 -> String.pad_leading(char, count, char)
+      true -> ""
+    end
   end
 
   def get_n_of(_range, _count), do: ""

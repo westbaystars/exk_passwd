@@ -30,7 +30,7 @@ defmodule EXKPasswd.PasswordCreatorTest do
     case_transform: :alternate,
     separator_character: ~w(- + = . * _ | ~),
     digits_before: 2,
-    digits_after: 2,
+    digits_after: 3,
     padding_character: ~w(! @ $ % ^ & * + = : | ~),
     padding_before: 1,
     padding_after: 1
@@ -46,10 +46,10 @@ defmodule EXKPasswd.PasswordCreatorTest do
     num_words: 3,
     word_length_min: 4,
     word_length_max: 4,
-    case_transform: :alternate,
+    case_transform: :random,
     separator_character: ~w(! @ $ % ^ & * - _ + = : | ~ ? / .),
     digits_before: 0,
-    digits_after: 2,
+    digits_after: 1,
     padding_character: ""
   }
 
@@ -128,13 +128,161 @@ defmodule EXKPasswd.PasswordCreatorTest do
     refute @web32_settings === %PasswordCreator{}
   end
 
-  test "verify a default password generates 3 words, alternating all lower case and all capital letters, with the same symbol between them" do
+  test "verify a default password generates 3 words, alternating all lower case and all capital letters, with the same symbol between them and a pair of 2-digit numbers on either side, wrapped by a symbol repeated twice" do
     regex =
-      ~r/^([!@$%^&*-_+=:|~?\/.;]){2}[[:digit:]]{2}([!@$%^&*-_+=:|~?\/.;])[[:lower:]]{4,8}\2[[:upper:]]{4,8}\2[[:lower:]]{4,8}\2[[:digit:]]{2}\1{2}$/
+      ~r/^([!@\$%\^&\*-_\+=:\|~\?\/\.;]){2}[[:digit:]]{2}([!@\$%\^&\*-_\+=:\|~\?\/\.;])[[:lower:]]{4,8}\2[[:upper:]]{4,8}\2[[:lower:]]{4,8}\2[[:digit:]]{2}\1{2}$/
+
+    Enum.all?(1..5000, fn _ ->
+      assert String.match?(
+               PasswordCreator.create(),
+               regex
+             )
+    end)
+  end
+
+  test "verify that the @web32_settings password generates a password in the format: <sym1>dd<sym2>word<sym2>WORD<sym2>word<sym2>WORD<sym2>dd<sym1>" do
+    regex =
+      ~r/^([!@\$%\^&\*\+=:\|~])[[:digit:]]{2}([\-+=.*_\|~])[[:lower:]]{4,5}\2[[:upper:]]{4,5}\2[[:lower:]]{4,5}\2[[:upper:]]{4,5}\2[[:digit:]]{3}\1$/
 
     assert String.match?(
+             PasswordCreator.create(@web32_settings),
+             regex
+           )
+
+    refute String.match?(
              PasswordCreator.create(),
              regex
            )
+
+    Enum.all?(1..5000, fn _ ->
+      password = PasswordCreator.create(@web32_settings)
+      assert String.length(password) <= 32
+      assert String.length(password) >= 28
+      assert String.match?(password, regex)
+    end)
+  end
+
+  test "verify that the @web16_settings password generates a password in the format: word<sym>WORD<sym>WORD<sym>d" do
+    regex =
+      ~r/^[a-zA-Z]{4}([!@\$%\^&\*-_\+=:\|~\?\/\.])[a-zA-Z]{4}\1[a-zA-Z]{4}\1\d$/
+
+    assert String.match?(
+             PasswordCreator.create(@web16_settings),
+             regex
+           )
+
+    refute String.match?(
+             PasswordCreator.create(),
+             regex
+           )
+
+    Enum.all?(1..5000, fn _ ->
+      password = PasswordCreator.create(@web16_settings)
+      String.match?(password, regex)
+      assert String.length(password) == 16
+    end)
+  end
+
+  test "verify that the @wifi_settings password generates a password in the format: dddd<sym1>word<sym1>WORD<sym1>word<sym1>WORD<sym1>word<sym1>WORD<sym1>dddd[<sym2>]*" do
+    regex =
+      ~r/[[:digit:]]{4}([-\+=\.\*_\|~,])[[:lower:]]{4,8}\1[[:upper:]]{4,8}\1[[:lower:]]{4,8}\1[[:upper:]]{4,8}\1[[:lower:]]{4,8}\1[[:upper:]]{4,8}\1[[:digit:]]{4}[!@\$%\^&\*\+=:\|~\?]*$/
+
+    assert String.match?(
+             PasswordCreator.create(@wifi_settings),
+             regex
+           )
+
+    refute String.match?(
+             PasswordCreator.create(),
+             regex
+           )
+
+    Enum.all?(1..5000, fn _ ->
+      password = PasswordCreator.create(@wifi_settings)
+      assert String.length(password) == 63
+      assert String.match?(password, regex)
+    end)
+  end
+
+  test "verify that the @wifi_settings password generates a password in the format: dddd<sym1>word<sym1>WORD<sym1>word<sym1>WORD<sym1>word<sym1>WORD<sym1>dddd" do
+    regex =
+      ~r/[[:digit:]]{4}([-\+=\.\*_\|~,])[[:lower:]]{4,8}\1[[:upper:]]{4,8}\1[[:lower:]]{4,8}\1[[:upper:]]{4,8}\1[[:lower:]]{4,8}\1[[:upper:]]{4,8}\1[[:digit:]]{4}$/
+
+    # Force a password to be created with all 8 character words based on the @wifi_settings
+    password = PasswordCreator.create(%{@wifi_settings | word_length_min: 8})
+
+    assert String.length(password) == 63
+    assert String.match?(password, regex)
+  end
+
+  test "verify that the @apple_id_settings password generates a password in the format: <sym1>dd<sym2>WORD<sym2>WORD<sym2>word<sym2>dd<sym1>" do
+    regex =
+      ~r/^([-:\.!\?@&])[[:digit:]]{2}([-:\.@&])[a-zA-Z]{4,7}\2[a-zA-Z]{4,7}\2[a-zA-Z]{4,7}\2[[:digit]]{2}\1$/
+
+    Enum.all?(1..5000, fn _ ->
+      password = PasswordCreator.create(@apple_id_settings)
+      String.match?(password, regex)
+      assert String.length(password) >= 22
+      assert String.length(password) <= 31
+    end)
+
+    refute String.match?(
+             PasswordCreator.create(),
+             regex
+           )
+  end
+
+  test "verify that the @apple_id_settings password generates a password 22 charaters in length at least once in 5,000 tries" do
+    assert Enum.any?(1..5000, fn _ ->
+             String.length(PasswordCreator.create(@apple_id_settings)) == 22
+           end)
+  end
+
+  test "verify that the @apple_id_settings password generates a password 31 characters in length at least once in 5,000 tries" do
+    assert Enum.any?(1..5000, fn _ ->
+             String.length(PasswordCreator.create(@apple_id_settings)) == 31
+           end)
+  end
+
+  test "verify that the @security_questions_settings password generates a sentence in the format: word word word word word word<punctuation>" do
+    regex =
+      ~r/^\w{4-8} \w{4-8} \w{4-8} \w{4-8} \w{4-8} \w{4-8}[\.!\?]$/
+
+    Enum.all?(1..5000, fn _ ->
+      password = PasswordCreator.create(@security_questions_settings)
+      String.match?(password, regex)
+    end)
+
+    refute String.match?(
+             PasswordCreator.create(),
+             regex
+           )
+  end
+
+  test "verify that the @xkcd_settings password generates a password in the format: WORD-word-word-WORD-word<punctuation>" do
+    regex =
+      ~r/^[[[a-zA-Z]]]{4,8}-[a-zA-Z]{4,8}-[a-zA-Z]{4,8}-[a-zA-Z]{4,8}-[a-zA-Z]{4,8}[\.!\?]$/
+
+    Enum.all?(1..5000, fn _ ->
+      password = PasswordCreator.create(@xkcd_settings)
+      String.match?(password, regex)
+      assert String.length(password) >= 24
+      assert String.length(password) <= 44
+    end)
+
+    refute String.match?(
+             PasswordCreator.create(),
+             regex
+           )
+  end
+
+  test "verify that the @xkcd_settings password generates a password 24 charaters in length at least once in 5,000 tries" do
+    assert Enum.any?(1..5000, fn _ ->
+             String.length(PasswordCreator.create(@xkcd_settings)) == 24
+           end)
+  end
+
+  test "verify that the @xkcd_settings password generates a password 44 characters in length when forced to use 8 character long words" do
+    assert String.length(PasswordCreator.create(%{@xkcd_settings | word_length_min: 8})) == 44
   end
 end
