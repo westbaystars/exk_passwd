@@ -1,48 +1,24 @@
 <.flash_group flash={@flash} />
 <!-- Main page -->
-<div class="h-[350px] mt-4 w-full xs:max-w-md sm:max-w-3xl md:max-w-7xl px-3 mx-auto">
-  <div class="flex flex-wrap gap-6 mt-0 -mx-3 xs:w-96"> <!-- open row for all content above footer -->
-    <section id="main" class="flex-[1 0 0%] order-2 shrink-0 w-full max-w-full mx-3"> <!-- open section for content right of graphic -->
+<!-- Hidden by default to prevent a flash of unstyled content (FOUC) when the page loads. -->
+<div class="h-[350px] m-4 gap-6 w-full max-w-lg sm:max-w-xl md:max-w-2xl lg:max-w-4xl xl:max-w-6xl px-3 mx-auto">
+  <div class="flex flex-wrap gap-6 mt-0 -mx-3"> <!-- open row for all content above footer -->
+    <section id="main" class="flex-[1 0 0%] order-2"> <!-- open section for content right of graphic -->
 
       <div class="flex flex-wrap gap-6 mt-0 -mx-3"> <!-- open row for topBanner on mobile screens -->
-        <section id="top-art" class="shrink-0 w-full max-w-full mx-3 flex-[1 0 0%] order-4 inline-flex lg:hidden">
+        <section id="top-art" class="flex-[1 0 0%] order-4 inline-flex lg:hidden shrink-0 w-full max-w-full mx-3">
           <picture>
             <!-- show this up to lg -->
             <source media="(max-width: 768px)" srcset="/images/topBanner.png">
             <!-- else show this -->
-            <img class="block w-auto max-h-[350px] max-w-full h-auto" aria-hidden="true" alt="XKPasswd - A Secure Memorable Password Generator"
+            <img class="block w-auto max-h-[350px]" aria-hidden="true" alt="XKPasswd - A Secure Memorable Password Generator"
               src="/images/topBanner.png">
           </picture>
         </section>
       </div> <!-- close row for topBanner on mobile screens -->
 
-      <header class="flex flex-wrap gap-6 mt-0 -mx-3"> <!-- open row for nav -->
-        <nav class="flex-[0 0 auto] w-11/12 shrink-0 max-w-full items-center justify-between flex-wrap bg-gradient-to-b from-blue-500 to-blue-800 rounded-md p-6">
-          <div class="block md:hidden">
-            <button class="flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white">
-              <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
-            </button>
-          </div>
-          <div class="w-full block flex-grow md:flex md:items-center md:w-auto">
-            <div class="text-md md:flex-grow">
-              <a href="#responsive-header" class="block mt-4 md:inline-block md:mt-0 text-white hover:text-white mr-4">
-                Actions
-              </a>
-              <a href="#responsive-header" class="block mt-4 md:inline-block md:mt-0 text-white hover:text-white mr-4">
-                User Guide
-              </a>
-            </div>
-            <div class="text-md md:flex-grow ml-auto">
-              <a href="#responsive-header" class="block mt-4 md:inline-block md:mt-0 text-white hover:text-white">
-                About
-              </a>
-              <a href="#responsive-header" class="block mt-4 md:inline-block md:mt-0 text-white hover:text-white">
-                Please donate
-              </a>
-            </div>
-          </div>
-        </nav>
-        <nav class="flex-[0 0 auto] w-11/12 shrink-0 max-w-full navbar navbar-expand-lg rounded bg-primary bg-gradient col-11 col-md mx-auto">
+      <header class="row"> <!-- open row for nav -->
+        <nav class="navbar navbar-expand-lg rounded bg-primary bg-gradient col-11 col-md mx-auto">
           <div class="container-fluid">
             <!-- <a class="navbar-brand text-white" href="#"><img class="img-responsive" src="assets/logo.png"><br /><small class="fs-6">Password Generator</small></a> -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -364,12 +340,12 @@
       </section> <!-- close section for content below nav -->
     </section> <!-- close section for content right of graphic -->
 
-    <section id="sidebar-left" class="col-2 order-1 d-none d-lg-inline" aria-flowto="password-card"> <!-- open section for graphic -->
+    <section id="sidebar-left" class="flex-[0 0 auto] w-1/6 order-1 hidden lg:inline shrink-0 max-w-full mx-3" aria-flowto="password-card"> <!-- open section for graphic -->
       <picture>
         <!-- show this on large and above -->
-        <source media="(max-width: 992px)" srcset="/images/sideBanner.png">
+        <source media="(max-width: 1024px)" srcset="/images/sideBanner.png">
         <!-- else show this -->
-        <img class="img-fluid" aria-hidden="true" alt="XKPasswd - A Secure Memorable Password Generators"
+        <img class="img-fluid" aria-hidden="true" alt="XKPasswd - A Secure Memorable Password Generator"
           src="/images/sideBanner.png">
       </picture>
     </section> <!-- close section for graphic -->

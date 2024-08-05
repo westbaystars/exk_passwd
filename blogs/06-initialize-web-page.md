@@ -86,6 +86,106 @@ While we're looking at the `assets` folder, let's download and replace the `favi
 
 ### Presentation (CSS)
 
+Just as the Official Port uses Bootstrap for not only CSS but also for compoents, the Tailwind component library I'm most used to is DaisyUI. So let's next get it setup.
+
+In the `assets` directory, run:
+
+```sh
+npm i -D daisyui@latest
+```
+
+Now we need to add the `require("daisyui")` to the list of `plugins` in `assets/tailwind.config.js` as so:
+
+```js
+...
+plugins: [
+  require("daisyui"),
+  require("@tailwindcss/forms"),
+  ...
+```
+
+And when we save that, WOW! All kinds of things appear on our page. DaisyUI has a lot in common with Bootstrap, so many of the components that were built with Bootstrap suddenly show up. It's not quite right yet, but it gives us something more to work with.
+
+The default purple theme is also a bit, ..., something. Let's go with the same color theme as the Official Port and set the primary color to be blue with the secondary color to a gray:
+
+```js
+...
+theme: {
+  extend: {
+    colors: {
+      brand: "#FD4F00",
+      primary: "#0d6efd",
+      secondary: "#6c757d",
+    },
+  },
+},
+...
+```
+
+Save that and the navbar turns blue. Whew. That's easier to look at.
+
+### Flex Layout
+
+Next up, let's fix the layout. Right now, everything is shoved to the left edge rather than neatly centered. Also, resising the page does not do any of the magical responsive design stuff. Let's get that working.
+
+Looking at the Official Port with browswer debug tools, it appears that they are using the `flex` layout to manage resizing and organizing the various blocks on the screen. Let's start with the three main sections:
+
+* `.container`
+* `#main`
+* `#sidebar-left`
+
+The `#sidebar-left` section is only displayed when the screen size exceeds `992px` in width. The responsive sizes are different between Bootstrap and Tailwind, so we can deviate a bit on our implementation. Let's set the `min-width` of `1024px` to show the `#sidebar-left` section, which is the `lg:` prefix in CSS.
+
+```html
+      <section id="sidebar-left" class="flex-[0 0 auto] w-1/6 order-1 hidden lg:inline shrink-0 w-full max-w-full mx-3" aria-flowto="password-card"> <!-- open section for graphic -->
+        <picture>
+          <!-- show this on large and above -->
+          <source media="(max-width: 1024px)" srcset="/images/sideBanner.png">
+          <!-- else show this -->
+          <img class="img-fluid" aria-hidden="true" alt="XKPasswd - A Secure Memorable Password Generator" src="assets/sideBanner.png">
+        </picture>
+      </section>
+```
+
+This successfully shows and hids the side banner only when the width of the browser window is `1024px` or more.
+
+The `.container` parent needs to be `flex` at least for the side banner to be properly placed, so let's fix it next.
+
+```html
+<div class="h-[350px] m-4 gap-6 w-full max-w-lg sm:max-w-xl md:max-w-2xl lg:max-w-4xl xl:max-w-6xl px-3 mx-auto">
+  <div class="flex flex-wrap gap-6 mt-0 -mx-3"> <!-- open row for all content above footer -->
+    ...
+```
+
+Ah, this does a good job centering the contents on the page in steps as the page gets wider, with the side banner appearing when the width gets to `1024px` or more.
+
+Now, the top banner should disappear once `1024px` width is reached, so let's work on it next.
+
+```html
+<section id="main" class="flex-[1 0 0%] order-2"> <!-- open section for content right of graphic -->
+
+  <div class="flex flex-wrap gap-6 mt-0 -mx-3"> <!-- open row for topBanner on mobile screens -->
+    <section id="top-art" class="flex-[1 0 0%] order-4 inline-flex lg:hidden shrink-0 w-full max-w-full mx-3">
+      <picture>
+        <!-- show this up to lg -->
+        <source media="(max-width: 768px)" srcset="/images/topBanner.png">
+        <!-- else show this -->
+        <img class="block w-auto max-h-[350px]" aria-hidden="true" alt="XKPasswd - A Secure Memorable Password Generator"
+          src="/images/topBanner.png">
+      </picture>
+    </section>
+  </div> <!-- close row for topBanner on mobile screens -->
+  ...
+```
+
+That got the main layout working, with the top banner only showing when the screen width is less that `1024px`, and the side banner only showing at `1024px` or greater size.
+
+### Navbar
+
+
+
+
+
 Next up is fixing the way the page works. Using a completely different CSS library (TailwindCSS instead of Bootstrap), we need to build the page differently to get the same results.
 
 The main `<div>` is:
