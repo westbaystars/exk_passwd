@@ -137,7 +137,7 @@ Looking at the Official Port with browswer debug tools, it appears that they are
 The `#sidebar-left` section is only displayed when the screen size exceeds `992px` in width. The responsive sizes are different between Bootstrap and Tailwind, so we can deviate a bit on our implementation. Let's set the `min-width` of `1024px` to show the `#sidebar-left` section, which is the `lg:` prefix in CSS.
 
 ```html
-      <section id="sidebar-left" class="flex-[0 0 auto] w-1/6 order-1 hidden lg:inline shrink-0 w-full max-w-full mx-3" aria-flowto="password-card"> <!-- open section for graphic -->
+      <section id="sidebar-left" class="flex-[0_0_auto] w-1/6 order-1 hidden lg:inline shrink-0 w-full max-w-full mx-3" aria-flowto="password-card"> <!-- open section for graphic -->
         <picture>
           <!-- show this on large and above -->
           <source media="(max-width: 1024px)" srcset="/images/sideBanner.png">
@@ -162,17 +162,27 @@ Ah, this does a good job centering the contents on the page in steps as the page
 Now, the top banner should disappear once `1024px` width is reached, so let's work on it next.
 
 ```html
-<section id="main" class="flex-[1 0 0%] order-2"> <!-- open section for content right of graphic -->
+<section
+  id="main"
+  class="flex-[1_0_0%] order-2 shrink-0 w-full max-w-full mx-3"
+> <!-- open section for content right of graphic -->
 
   <div class="flex flex-wrap gap-6 mt-0 -mx-3"> <!-- open row for topBanner on mobile screens -->
-    <section id="top-art" class="flex-[1 0 0%] order-4 inline-flex lg:hidden shrink-0 w-full max-w-full mx-3">
-      <picture>
+    <section
+      id="top-art"
+      class="flex-[1_0_0%] order-4 inline-flex lg:hidden shrink-0 w-full max-w-full mx-3"
+    >
+    <picture>
         <!-- show this up to lg -->
-        <source media="(max-width: 768px)" srcset="/images/topBanner.png">
+        <source media="(max-width: 768px)" srcset="/images/topBanner.png" />
         <!-- else show this -->
-        <img class="block w-auto max-h-[350px]" aria-hidden="true" alt="XKPasswd - A Secure Memorable Password Generator"
-          src="/images/topBanner.png">
-      </picture>
+        <img
+        class="block w-auto max-h-[350px]"
+        aria-hidden="true"
+        alt="XKPasswd - A Secure Memorable Password Generator"
+        src="/images/topBanner.png"
+        />
+    </picture>
     </section>
   </div> <!-- close row for topBanner on mobile screens -->
   ...
@@ -182,207 +192,76 @@ That got the main layout working, with the top banner only showing when the scre
 
 ### Navbar
 
-
-
-
-
-Next up is fixing the way the page works. Using a completely different CSS library (TailwindCSS instead of Bootstrap), we need to build the page differently to get the same results.
-
-The main `<div>` is:
+We now get to our first component. The [responsive (dropdown menu on small screen, center menu on large screen)](https://daisyui.com/components/navbar/#responsive-dropdown-menu-on-small-screen-center-menu-on-large-screen) sample has most of what we need. Namely, a drop down and items on both the left and right sides of the menu bar (we can ignore the center, but it's nice to know that it's available).
 
 ```html
-<div class="container mt-3" fouc="true">
-  <div class="flex flex-wrap gap-6 mt-0 mx-3"> <!-- open row for all content above footer -->
-    <section id="main" class="col order-2"> <!-- open section for content right of graphic -->
-```
-
-Looking at how this is rendered, I've got the CSS according to the debug tools for each given element and the equivilent TailwindCSS class as the comment above.
-
-```css
-/* h-[350px] */
-.container {
-    height: 350px;
-}
-/* w-full px-3 mx-auto */
-.container, .container-fluid, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
-    --bs-gutter-x: 1.5rem;
-    --bs-gutter-y: 0;
-    width: 100%;
-    padding-right: calc(var(--bs-gutter-x)* .5);
-    padding-left: calc(var(--bs-gutter-x)* .5);
-    margin-right: auto;
-    margin-left: auto;
-}
-/* mt-4 */
-.mt-3 {
-    margin-top: 1rem !important;
-}
-/* flex flex-wrap gap-6 mt-0 -mx-3 */
-.row {
-    --bs-gutter-x: 1.5rem;
-    --bs-gutter-y: 0;
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: calc(-1* var(--bs-gutter-y));
-    margin-right: calc(-.5* var(--bs-gutter-x));
-    margin-left: calc(-.5* var(--bs-gutter-x));
-}
-/* order-2 */
-.order-2 {
-    order: 2 !important;
-}
-/* flex-[1 0 0%] */
-.col {
-    flex: 1 0 0%;
-}
-/* shrink-0 w-full max-w-full mx-3 */
-.row>* {
-    flex-shrink: 0;
-    width: 100%;
-    max-width: 100%;
-    padding-right: calc(var(--bs-gutter-x)* .5);
-    padding-left: calc(var(--bs-gutter-x)* .5);
-    margin-top: var(--bs-gutter-y);
-}
-```
-
-I'm not sure what the `fouc="true"` flag is for. The best I can tell, FOUC stands for "Flash Of Unstyled Content," usually caused by CSS being loaded asyncronously. I don't think that this will be a problem for us, so I've removed the attribute.
-
-Now, let's translate these first three elements to use TailwindCSS.
-
-```html
-<div class="h-[350px] mt-4">
-  <div class="flex flex-wrap gap-6 mt-0 -mx-3"> <!-- open row for all content above footer -->
-    <section id="main" class="flex-[1 0 0%] order-2 shrink-0 w-full max-w-full mx-3"> <!-- open section for content right of graphic -->
-```
-
-The order of the images change so that the side title image is now on top followed by the header title image. Okay.
-
-Next is the header title banner, which is displayed by default on mobile screens.
-
-```html
-<div class="row"> <!-- open row for topBanner on mobile screens -->
-  <section id="top-art" class="col order-4 d-inline-flex d-lg-none">
-    <picture>
-      <!-- show this up to lg -->
-      <source media="(max-width: 768px)" srcset="/images/topBanner.png">
-      <!-- else show this -->
-      <img class="img-fluid" aria-hidden="true" alt="XKPasswd - A Secure Memorable Password Generator"
-        src="/images/topBanner.png">
-    </picture>
-  </section>
-</div> <!-- close row for topBanner on mobile screens -->
-```
-
-The new CSS that we see here gets translated as:
-
-```css
-/* order-4 */
-.order-4 {
-    order: 4 !important;
-}
-/* inline-flex */
-.d-inline-flex {
-    display: inline-flex !important;
-}
-/* lg:hidden */
-@media (min-width: 992px) {
-    .d-lg-none {
-        display: none !important;
-    }
-}
-/* block w-auto max-h-[350px] */
-.container .img-fluid {
-    display: block;
-    width: auto;
-    max-height: 350px;
-}
-/* max-w-full h-auto */
-.img-fluid {
-    max-width: 100%;
-    height: auto;
-}
-```
-
-And substituting the classes, we get:
-
-```html
-<div class="flex flex-wrap gap-6 mt-0 -mx-3"> <!-- open row for topBanner on mobile screens -->
-  <section id="top-art" class="shrink-0 w-full max-w-full mx-3 flex-[1 0 0%] order-4 inline-flex lg:hidden">
-    <picture>
-      <!-- show this up to lg -->
-      <source media="(max-width: 768px)" srcset="/images/topBanner.png">
-      <!-- else show this -->
-      <img class="block w-auto max-h-[350px] max-w-full h-auto" aria-hidden="true" alt="XKPasswd - A Secure Memorable Password Generator"
-        src="/images/topBanner.png">
-    </picture>
-  </section>
-</div> <!-- close row for topBanner on mobile screens -->
-```
-
-The top banner now disappears when we have a wide screen, but appears when the screen is less than 1,024 pixels wide. We're starting to get some functionality with the CSS.
-
-Next is the `navbar` row. Rather than tweak the CSS to make it work under TailwindCSS, let's take a navbar the way it's done with Tailwind and use it.
-
-We do need to bring over a couple of CSS attributes so that our navbar will fit into place. Namely:
-
-```css
-/* flex-[1 0 0%] */
-.col-md {
-    flex: 1 0 0%;
-}
-/* flex-[0 0 auto] w-11/12 */
-.col-11 {
-    flex: 0 0 auto;
-    width: 91.66666667%;
-}
-```
-
-
-```html
-<header class="row"> <!-- open row for nav -->
-  <nav class="navbar navbar-expand-lg rounded bg-primary bg-gradient col-11 col-md mx-auto">
-    <div class="container-fluid">
-      <!-- <a class="navbar-brand text-white" href="#"><img class="img-responsive" src="assets/logo.png"><br /><small class="fs-6">Password Generator</small></a> -->
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-        aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown"
-              aria-expanded="false">
-              Actions
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#load_config" href="#">Import Config</a></li>
-              <li><a class="dropdown-item disabled" href="#">Export Config</a></li>
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-              <li><a class="dropdown-item" href="docs/index.html">Developer docs</a></li>
+<header class="flex flex-wrap gap-6 mt-0 -mx-3">
+  <!-- open row for nav -->
+  <div class="navbar bg-primary text-primary-content flex-wrap justify-start rounded-lg w-11/12">
+    <div class="navbar-start">
+      <div class="dropdown">
+        <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h8m-8 6h16"
+            />
+          </svg>
+        </div>
+        <ul
+          tabindex="0"
+          class="menu menu-sm text-lg dropdown-content bg-primary text-primary-content rounded-box z-[1] mt-3 w-52 p-2 shadow"
+        >
+          <li>
+            <a>Actions</a>
+            <ul class="p-2">
+              <li><a>Import Config</a></li>
+              <li><a>Export Config</a></li>
+              <li><hl class="w-full" /></li>
+              <li><a>Developer Docs</a></li>
             </ul>
           </li>
-          <li class="nav-item"><a class="nav-link text-white" href="https://userguide.xkpasswd.net">User Guide</a></li>
-        </ul>
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link text-white" data-bs-toggle="modal" data-bs-target="#about" href="#">About</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white" data-bs-toggle="modal" data-bs-target="#donate" href="#">Please
-              donate</a>
-          </li>
+          <li><a>User Guide</a></li>
+          <li><a>About</a></li>
+          <li><a>Please Donate</a></li>
         </ul>
       </div>
+      <ul class="menu menu-horizontal text-lg hidden lg:inline-flex px-1">
+        <li>
+          <details>
+            <summary>Actions</summary>
+            <ul class="bg-primary text-primary-content p-2 w-48 z-20">
+              <li><a>Import Config</a></li>
+              <li><a>Export Config</a></li>
+              <li><hl class="w-full" /></li>
+              <li><a>Developer Docs</a></li>
+            </ul>
+          </details>
+        </li>
+        <li><a>User Guide</a></li>
+      </ul>
     </div>
-  </nav>
-</header> <!-- close row for nav -->
+    <div class="navbar-end">
+      <ul class="menu menu-horizontal hidden text-lg lg:inline-flex px-1">
+        <li><a>About</a></li>
+        <li><a>Please Donate</a></li>
+      </ul>
+    </div>
+  </div>
+</header>
+<!-- close row for nav -->
 ```
 
-New CSS translations are:
+I dropped the sample DaisyUI navbar into the page over the Official Port `<navbar>` element. I then replaced the sample items with those of the Official Port. The links don't go anywhere yet. The main thing now is that it looks like the navbar we were trying to replicate. Well, it has a bit more padding, but looks good.
 
-```css
-```
+One major difference is that the contents of the "hamburger menu" is a duplicate of the items on the navbar, whereas they are only listed once to appear in both places for the Bootstrap component. Maybe I'll make a Phoenix component that only requires them once. But let's go with this for now.
+
+### Accordian Presets and Settings

@@ -2,63 +2,95 @@
 <!-- Main page -->
 <!-- Hidden by default to prevent a flash of unstyled content (FOUC) when the page loads. -->
 <div class="h-[350px] m-4 gap-6 w-full max-w-lg sm:max-w-xl md:max-w-2xl lg:max-w-4xl xl:max-w-6xl px-3 mx-auto">
-  <div class="flex flex-wrap gap-6 mt-0 -mx-3"> <!-- open row for all content above footer -->
-    <section id="main" class="flex-[1 0 0%] order-2"> <!-- open section for content right of graphic -->
-
-      <div class="flex flex-wrap gap-6 mt-0 -mx-3"> <!-- open row for topBanner on mobile screens -->
-        <section id="top-art" class="flex-[1 0 0%] order-4 inline-flex lg:hidden shrink-0 w-full max-w-full mx-3">
+  <div class="flex flex-wrap gap-6 mt-0 -mx-3">
+    <!-- open row for all content above footer -->
+    <section id="main" class="flex-[1_0_0%] order-2 shrink-0 w-full max-w-full mx-3">
+      <!-- open section for content right of graphic -->
+      <div class="flex flex-wrap gap-6 mt-0 -mx-3">
+        <!-- open row for topBanner on mobile screens -->
+        <section
+          id="top-art"
+          class="flex-[1_0_0%] order-4 inline-flex lg:hidden shrink-0 w-full max-w-full mx-3"
+        >
           <picture>
             <!-- show this up to lg -->
-            <source media="(max-width: 768px)" srcset="/images/topBanner.png">
+            <source media="(max-width: 768px)" srcset="/images/topBanner.png" />
             <!-- else show this -->
-            <img class="block w-auto max-h-[350px]" aria-hidden="true" alt="XKPasswd - A Secure Memorable Password Generator"
-              src="/images/topBanner.png">
+            <img
+              class="block w-auto max-h-[350px]"
+              aria-hidden="true"
+              alt="XKPasswd - A Secure Memorable Password Generator"
+              src="/images/topBanner.png"
+            />
           </picture>
         </section>
-      </div> <!-- close row for topBanner on mobile screens -->
-
-      <header class="row"> <!-- open row for nav -->
-        <nav class="navbar navbar-expand-lg rounded bg-primary bg-gradient col-11 col-md mx-auto">
-          <div class="container-fluid">
-            <!-- <a class="navbar-brand text-white" href="#"><img class="img-responsive" src="assets/logo.png"><br /><small class="fs-6">Password Generator</small></a> -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-              data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-              aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown"
-                    aria-expanded="false">
-                    Actions
-                  </a>
-                  <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#load_config" href="#">Import Config</a></li>
-                    <li><a class="dropdown-item disabled" href="#">Export Config</a></li>
-                    <li>
-                      <hr class="dropdown-divider">
-                    </li>
-                    <li><a class="dropdown-item" href="docs/index.html">Developer docs</a></li>
+      </div>
+      <!-- close row for topBanner on mobile screens -->
+      <header class="flex flex-wrap gap-6 mt-0 -mx-3">
+        <!-- open row for nav -->
+        <div class="navbar bg-primary text-primary-content flex-wrap justify-start rounded-lg w-11/12">
+          <div class="navbar-start">
+            <div class="dropdown">
+              <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4 6h16M4 12h8m-8 6h16"
+                  />
+                </svg>
+              </div>
+              <ul
+                tabindex="0"
+                class="menu menu-sm text-lg dropdown-content bg-primary text-primary-content rounded-box z-[1] mt-3 w-52 p-2 shadow"
+              >
+                <li>
+                  <a>Actions</a>
+                  <ul class="p-2">
+                    <li><a>Import Config</a></li>
+                    <li><a>Export Config</a></li>
+                    <li><hl class="w-full" /></li>
+                    <li><a>Developer Docs</a></li>
                   </ul>
                 </li>
-                <li class="nav-item"><a class="nav-link text-white" href="https://userguide.xkpasswd.net">User Guide</a></li>
-              </ul>
-              <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                  <a class="nav-link text-white" data-bs-toggle="modal" data-bs-target="#about" href="#">About</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link text-white" data-bs-toggle="modal" data-bs-target="#donate" href="#">Please
-                    donate</a>
-                </li>
+                <li><a>User Guide</a></li>
+                <li><a>About</a></li>
+                <li><a>Please Donate</a></li>
               </ul>
             </div>
+            <ul class="menu menu-horizontal text-lg hidden lg:inline-flex px-1">
+              <li>
+                <details>
+                  <summary>Actions</summary>
+                  <ul class="bg-primary text-primary-content p-2 w-48 z-20">
+                    <li><a>Import Config</a></li>
+                    <li><a>Export Config</a></li>
+                    <li><hl class="w-full" /></li>
+                    <li><a>Developer Docs</a></li>
+                  </ul>
+                </details>
+              </li>
+              <li><a>User Guide</a></li>
+            </ul>
           </div>
-        </nav>
-      </header> <!-- close row for nav -->
-
-      <section id="content" class="row"> <!-- open row for content below nav -->
+          <div class="navbar-end">
+            <ul class="menu menu-horizontal hidden text-lg lg:inline-flex px-1">
+              <li><a>About</a></li>
+              <li><a>Please Donate</a></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <!-- close row for nav -->
+      <section id="content" class="row">
+        <!-- open row for content below nav -->
         <!-- div class="accordion mt-3 mb-3 mb-lg-3 col-11 col-md mx-auto" id="passwordConfig"> < !-- open config col - - >
           <div class="accordion-item">
             <h2 class="accordion-header">
@@ -69,26 +101,38 @@
             </h2>
             <div id="collapseConfig" class="accordion-collapse collapse" data-bs-parent="#passwordConfig">
               <div class="accordion-body"> -->
-                <div class="accordion my-3 mb-lg-3 px-0" id="configOptions">
-                  <div class="accordion-item">
-                    <h2 class="accordion-header">
-                      <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#collapsePresets" aria-expanded="true" aria-controls="collapsePresets">
-                        <span>Presets</span>&nbsp;<span class="fst-italic" id="currentPreset"></span>
-                      </button>
-                    </h2>
-                    <!-- This section (id = collapsePresets) is handled by the PresetController and the PresetView -->
-                    <div id="collapsePresets" class="accordion-collapse collapse"
-                      data-bs-parent="#configOptions">
-                      <div class="accordion-body">
-                        <div id="preset-btn-group" class="row" role="group" aria-label="Preset group">
-                        </div>
-                        <div id="presetDescription"
-                             class="row mt-2 p-1 border border-primary-subtle bg-primary-subtle rounded-2"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- <div class="accordion-item">
+        <div class="accordion my-3 mb-lg-3 px-0" id="configOptions">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button
+                class="accordion-button"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapsePresets"
+                aria-expanded="true"
+                aria-controls="collapsePresets"
+              >
+                <span>Presets</span>&nbsp;<span class="fst-italic" id="currentPreset"></span>
+              </button>
+            </h2>
+            <!-- This section (id = collapsePresets) is handled by the PresetController and the PresetView -->
+            <div
+              id="collapsePresets"
+              class="accordion-collapse collapse"
+              data-bs-parent="#configOptions"
+            >
+              <div class="accordion-body">
+                <div id="preset-btn-group" class="row" role="group" aria-label="Preset group">
+                </div>
+                <div
+                  id="presetDescription"
+                  class="row mt-2 p-1 border border-primary-subtle bg-primary-subtle rounded-2"
+                >
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="accordion-item">
                     <h2 class="accordion-header">
                       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDict" aria-expanded="false" aria-controls="collapseDict">
                         Dictionaries
@@ -101,319 +145,566 @@
                       </div>
                     </div>
                   </div> -->
-                  <div class="accordion-item">
-                    <h2 class="accordion-header">
-                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#collapseSettings" aria-expanded="false" aria-controls="collapseSettings">
-                        Settings
-                      </button>
-                    </h2>
-                    <!-- This section (id = collapseSettings) is handled by the SettingsController and the SettingsView -->
-                    <div id="collapseSettings" class="accordion-collapse collapse" data-bs-parent="#configOptions">
-                      <div class="accordion-body">
-                        <div id="invalidSettings" class="alert alert-danger alert-dismissible" role="alert">
-                         </div>
-                        <form id="passwordSettings" class="needs-validation container-fluid" novalidate>
-
-                          <!-- word settings -->
-                          <div id="section_words" class="row g-1 mb-3">
-                            <h5>Words</h5>
-                            <div class="mt-2 col-sm-12 col-md-8 col-lg-3">
-                              <div class="input-group">
-                                <label for="dict" class="input-group-text">Dictionary</label>
-                                <select name="dict" id="dict" class="form-select">
-                                  <option value="english" selected="selected">English</option>
-                                </select>
-                              </div>
-                            </div>
-                            <div class="mt-2 col-sm-12 col-md-4 col-lg-3">
-                              <div class="input-group">
-                                <label for="num_words" class="input-group-text"># of Words</label>
-                                <input type="number" min="1" max="10" step="1" value="1" class="form-control rounded-end"
-                                  name="num_words" id="num_words" required />
-                                <div class="invalid-feedback">Enter a number between 1 and 10</div>
-                              </div>
-                            </div>
-                            <div class="mt-2 col-sm-12 col-md-6 col-lg-3">
-                              <div class="input-group">
-                                <label for="word_length_min" class="input-group-text col-form-label">Min Length</label>
-                                <input type="number" min="4" max="12" step="1" value="4" class="form-control rounded-end"
-                                  name="word_length_min" id="word_length_min" required aria-describedby="word_length_min_error"/>
-                                <div id="word_length_min_error" class="invalid-feedback">Enter a number between 4 and 12</div>
-                              </div>
-                            </div>
-                            <div class="mt-2 col-sm-12 col-md-6 col-lg-3">
-                              <div class="input-group">
-                                <label for="word_length_max" class="input-group-text col-form-label">Max Length</label>
-                                <input type="number" min="4" max="12" step="1" value="4" class="form-control rounded-end"
-                                  name="word_length_max" id="word_length_max" required aria-describedby="word_length_max_error"/>
-                                <div id="word_length_max_error" class="invalid-feedback">Enter a number between 4 and 12</div>
-                              </div>
-                            </div>
-                          </div> <!-- section_words -->
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button
+                class="accordion-button collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseSettings"
+                aria-expanded="false"
+                aria-controls="collapseSettings"
+              >
+                Settings
+              </button>
+            </h2>
+            <!-- This section (id = collapseSettings) is handled by the SettingsController and the SettingsView -->
+            <div
+              id="collapseSettings"
+              class="accordion-collapse collapse"
+              data-bs-parent="#configOptions"
+            >
+              <div class="accordion-body">
+                <div
+                  id="invalidSettings"
+                  class="alert alert-danger alert-dismissible"
+                  role="alert"
+                >
+                </div>
+                <form id="passwordSettings" class="needs-validation container-fluid" novalidate>
+                  <!-- word settings -->
+                  <div id="section_words" class="row g-1 mb-3">
+                    <h5>Words</h5>
+                    <div class="mt-2 col-sm-12 col-md-8 col-lg-3">
+                      <div class="input-group">
+                        <label for="dict" class="input-group-text">Dictionary</label>
+                        <select name="dict" id="dict" class="form-select">
+                          <option value="english" selected="selected">English</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="mt-2 col-sm-12 col-md-4 col-lg-3">
+                      <div class="input-group">
+                        <label for="num_words" class="input-group-text"># of Words</label>
+                        <input
+                          type="number"
+                          min="1"
+                          max="10"
+                          step="1"
+                          value="1"
+                          class="form-control rounded-end"
+                          name="num_words"
+                          id="num_words"
+                          required
+                        />
+                        <div class="invalid-feedback">Enter a number between 1 and 10</div>
+                      </div>
+                    </div>
+                    <div class="mt-2 col-sm-12 col-md-6 col-lg-3">
+                      <div class="input-group">
+                        <label for="word_length_min" class="input-group-text col-form-label">
+                          Min Length
+                        </label>
+                        <input
+                          type="number"
+                          min="4"
+                          max="12"
+                          step="1"
+                          value="4"
+                          class="form-control rounded-end"
+                          name="word_length_min"
+                          id="word_length_min"
+                          required
+                          aria-describedby="word_length_min_error"
+                        />
+                        <div id="word_length_min_error" class="invalid-feedback">
+                          Enter a number between 4 and 12
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mt-2 col-sm-12 col-md-6 col-lg-3">
+                      <div class="input-group">
+                        <label for="word_length_max" class="input-group-text col-form-label">
+                          Max Length
+                        </label>
+                        <input
+                          type="number"
+                          min="4"
+                          max="12"
+                          step="1"
+                          value="4"
+                          class="form-control rounded-end"
+                          name="word_length_max"
+                          id="word_length_max"
+                          required
+                          aria-describedby="word_length_max_error"
+                        />
+                        <div id="word_length_max_error" class="invalid-feedback">
+                          Enter a number between 4 and 12
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- section_words -->
                           <!-- Word Transformations -->
-                          <div id="section_transformations" class="row mb-3">
-                            <h5>Transformations</h5>
-                            <div class="input-group mt-2">
-                              <label for="case_transform" class="input-group-text">Case Transformation</label>
-                              <select name="case_transform" id="case_transform" class="form-select">
-                                <option value="NONE" selected="selected">-none-</option>
-                                <option value="ALTERNATE">alternating WORD case</option>
-                                <option value="CAPITALISE">Capitalise First Letter</option>
-                                <option value="INVERT">cAPITALISE eVERY lETTER eXCEPT tHe fIRST</option>
-                                <option value="LOWER">lower case</option>
-                                <option value="UPPER">UPPER CASE</option>
-                                <option value="RANDOM">EVERY word randomly CAPITALISED or NOT</option>
-                              </select>
-                            </div>
-                          </div> <!-- /section_transformations -->
+                  <div id="section_transformations" class="row mb-3">
+                    <h5>Transformations</h5>
+                    <div class="input-group mt-2">
+                      <label for="case_transform" class="input-group-text">
+                        Case Transformation
+                      </label>
+                      <select name="case_transform" id="case_transform" class="form-select">
+                        <option value="NONE" selected="selected">-none-</option>
+                        <option value="ALTERNATE">alternating WORD case</option>
+                        <option value="CAPITALISE">Capitalise First Letter</option>
+                        <option value="INVERT">cAPITALISE eVERY lETTER eXCEPT tHe fIRST</option>
+                        <option value="LOWER">lower case</option>
+                        <option value="UPPER">UPPER CASE</option>
+                        <option value="RANDOM">EVERY word randomly CAPITALISED or NOT</option>
+                      </select>
+                    </div>
+                  </div>
+                  <!-- /section_transformations -->
 
                           <!-- Separator -->
-                          <div id="section_separator" class="row g-1 mb-3">
-                            <h5>Separator</h5>
-                            <div class="mt-2 col-sm-12 col-md-6">
-                              <div class="input-group">
-                                <label for="separator_type" class="input-group-text">Type</label>
-                                <select name="separator_type" id="separator_type" class="form-control">
-                                  <option value="NONE" selected="selected">-none-</option>
-                                  <option value="FIXED">Specified Character</option>
-                                  <option value="RANDOM">Random Character</option>
-                                </select>
-                              </div>
-                            </div>
-                            <div class="col-sm-12 col-md-6 mt-2">
-                              <div class="input-group">
-                                <!-- specific character -->
-                                <label for="separator_character" class="input-group-text">Character</label>
-                                <input name="separator_character" id="separator_character" class="form-control rounded-end"
-                                  type="text" size="1" minlength="1" maxlength="1" value="-" />
-                                <div class="invalid-feedback">Enter exactly 1 character</div>
-                              </div>
-                              <div class="input-group">
-                                <!-- random characters -->
-                                <label for="separator_alphabet" class="input-group-text rounded-start">Alphabet</label>
-                                <input name="separator_alphabet" id="separator_alphabet" class="form-control rounded-end"
-                                  type="text" size="6" minlength="2" maxlength="20" value="" />
-                                <div class="invalid-feedback">Enter at least 2 characters and no more than 20</div>
-                              </div>
-                            </div>
-                          </div> <!-- /section_separator -->
+                  <div id="section_separator" class="row g-1 mb-3">
+                    <h5>Separator</h5>
+                    <div class="mt-2 col-sm-12 col-md-6">
+                      <div class="input-group">
+                        <label for="separator_type" class="input-group-text">Type</label>
+                        <select name="separator_type" id="separator_type" class="form-control">
+                          <option value="NONE" selected="selected">-none-</option>
+                          <option value="FIXED">Specified Character</option>
+                          <option value="RANDOM">Random Character</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 mt-2">
+                      <div class="input-group">
+                        <!-- specific character -->
+                        <label for="separator_character" class="input-group-text">
+                          Character
+                        </label>
+                        <input
+                          name="separator_character"
+                          id="separator_character"
+                          class="form-control rounded-end"
+                          type="text"
+                          size="1"
+                          minlength="1"
+                          maxlength="1"
+                          value="-"
+                        />
+                        <div class="invalid-feedback">Enter exactly 1 character</div>
+                      </div>
+                      <div class="input-group">
+                        <!-- random characters -->
+                        <label for="separator_alphabet" class="input-group-text rounded-start">
+                          Alphabet
+                        </label>
+                        <input
+                          name="separator_alphabet"
+                          id="separator_alphabet"
+                          class="form-control rounded-end"
+                          type="text"
+                          size="6"
+                          minlength="2"
+                          maxlength="20"
+                          value=""
+                        />
+                        <div class="invalid-feedback">
+                          Enter at least 2 characters and no more than 20
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- /section_separator -->
 
                           <!-- Digit Padding -->
-                          <div id="section_padding" class="row g-1 mb-3">
-                            <h5>Padding</h5>
-                            <div class="mt-2 col-sm-12 col-md-6">
-                              <div class="input-group">
-                                <!-- padding digits before -->
-                                <label for="padding_digits_before" class="input-group-text">Digit(s) Before</label>
-                                <input type="number" min="0" max="5" step="1" value="2" class="form-control rounded-end"
-                                  name="padding_digits_before" id="padding_digits_before" required />
-                                <div class="invalid-feedback">Enter a number between 0 and 5</div>
-                              </div>
-                            </div> <!-- /padding_digits_before -->
-                            <div class="mt-2 col-sm-12 col-md-6">
-                              <div class="input-group">
-                                <!-- padding digits after -->
-                                <label for="padding_digits_after" class="input-group-text">Digit(s) After</label>
-                                <input type="number" min="0" max="5" step="1" value="2" class="form-control rounded-end"
-                                  name="padding_digits_after" id="padding_digits_after" required />
-                                <div class="invalid-feedback">Enter a number between 0 and 5</div>
-                              </div>
-                            </div> <!-- /padding_digits_after -->
+                  <div id="section_padding" class="row g-1 mb-3">
+                    <h5>Padding</h5>
+                    <div class="mt-2 col-sm-12 col-md-6">
+                      <div class="input-group">
+                        <!-- padding digits before -->
+                        <label for="padding_digits_before" class="input-group-text">
+                          Digit(s) Before
+                        </label>
+                        <input
+                          type="number"
+                          min="0"
+                          max="5"
+                          step="1"
+                          value="2"
+                          class="form-control rounded-end"
+                          name="padding_digits_before"
+                          id="padding_digits_before"
+                          required
+                        />
+                        <div class="invalid-feedback">Enter a number between 0 and 5</div>
+                      </div>
+                    </div>
+                    <!-- /padding_digits_before -->
+                    <div class="mt-2 col-sm-12 col-md-6">
+                      <div class="input-group">
+                        <!-- padding digits after -->
+                        <label for="padding_digits_after" class="input-group-text">
+                          Digit(s) After
+                        </label>
+                        <input
+                          type="number"
+                          min="0"
+                          max="5"
+                          step="1"
+                          value="2"
+                          class="form-control rounded-end"
+                          name="padding_digits_after"
+                          id="padding_digits_after"
+                          required
+                        />
+                        <div class="invalid-feedback">Enter a number between 0 and 5</div>
+                      </div>
+                    </div>
+                    <!-- /padding_digits_after -->
 
                             <!-- Symbol Padding -->
-                            <div class="mt-2 col-sm-12 col-md-4">
-                              <div class="input-group">
-                                <label for="padding_type" class="input-group-text">Type</label>
-                                <select name="padding_type" id="padding_type" class="form-select">
-                                  <option value="NONE" selected="selected">-none-</option>
-                                  <option value="FIXED">Fixed</option>
-                                  <option value="ADAPTIVE">Adaptive</option>
-                                </select>
-                              </div>
-                            </div> <!-- /padding_type -->
-
-                             <div class="mt-2 col-sm-12 col-md-4">
-                              <div class="input-group">
-                                <!-- padding characters before -->
-                                <label for="padding_characters_before" class="input-group-text">Symbol(s) Before</label>
-                                <input type="number" min="0" max="5" step="1" value="0" class="form-control rounded-end"
-                                  name="padding_characters_before" id="padding_characters_before" required />
-                                <div class="invalid-feedback">Enter a number between 0 and 5</div>
-                              </div>
-                             </div> <!-- /padding_characters_before -->
-
-                             <div class="mt-2 col-sm-12 col-md-4">
-                              <div class="input-group">
-                                <!-- padding characters after -->
-                                <label for="padding_characters_after" class="input-group-text">Symbol(s) After</label>
-                                <input type="number" min="0" max="5" step="1" value="0" class="form-control rounded-end"
-                                  name="padding_characters_after" id="padding_characters_after" required />
-                                <div class="invalid-feedback">Enter a number between 0 and 5</div>
-                              </div>
-                             </div> <!-- /padding_characters_after -->
-
-                             <div class="mt-2 col-sm-12 col-md-8">
-                              <div class="input-group">
-                                <!-- pad to length -->
-                                  <label for="pad_to_length" class="input-group-text">Pad to Length</label>
-                                  <input type="number" size="3" name="pad_to_length" id="pad_to_length" value="8" min="8"
-                                    max="999" step="1" class="form-control rounded-end" required />
-                                  <div class="invalid-feedback">Enter a number between 8 and 999</div>
-                              </div>
-                             </div> <!-- /pad_to_length -->
+                    <div class="mt-2 col-sm-12 col-md-4">
+                      <div class="input-group">
+                        <label for="padding_type" class="input-group-text">Type</label>
+                        <select name="padding_type" id="padding_type" class="form-select">
+                          <option value="NONE" selected="selected">-none-</option>
+                          <option value="FIXED">Fixed</option>
+                          <option value="ADAPTIVE">Adaptive</option>
+                        </select>
+                      </div>
+                    </div>
+                    <!-- /padding_type -->
+                    <div class="mt-2 col-sm-12 col-md-4">
+                      <div class="input-group">
+                        <!-- padding characters before -->
+                        <label for="padding_characters_before" class="input-group-text">
+                          Symbol(s) Before
+                        </label>
+                        <input
+                          type="number"
+                          min="0"
+                          max="5"
+                          step="1"
+                          value="0"
+                          class="form-control rounded-end"
+                          name="padding_characters_before"
+                          id="padding_characters_before"
+                          required
+                        />
+                        <div class="invalid-feedback">Enter a number between 0 and 5</div>
+                      </div>
+                    </div>
+                    <!-- /padding_characters_before -->
+                    <div class="mt-2 col-sm-12 col-md-4">
+                      <div class="input-group">
+                        <!-- padding characters after -->
+                        <label for="padding_characters_after" class="input-group-text">
+                          Symbol(s) After
+                        </label>
+                        <input
+                          type="number"
+                          min="0"
+                          max="5"
+                          step="1"
+                          value="0"
+                          class="form-control rounded-end"
+                          name="padding_characters_after"
+                          id="padding_characters_after"
+                          required
+                        />
+                        <div class="invalid-feedback">Enter a number between 0 and 5</div>
+                      </div>
+                    </div>
+                    <!-- /padding_characters_after -->
+                    <div class="mt-2 col-sm-12 col-md-8">
+                      <div class="input-group">
+                        <!-- pad to length -->
+                        <label for="pad_to_length" class="input-group-text">Pad to Length</label>
+                        <input
+                          type="number"
+                          size="3"
+                          name="pad_to_length"
+                          id="pad_to_length"
+                          value="8"
+                          min="8"
+                          max="999"
+                          step="1"
+                          class="form-control rounded-end"
+                          required
+                        />
+                        <div class="invalid-feedback">Enter a number between 8 and 999</div>
+                      </div>
+                    </div>
+                    <!-- /pad_to_length -->
 
                             <!-- character type -->
-                            <div id="padding_char_container">
-                              <div class="mt-2">
-                                <div class="input-group">
-                                  <label for="padding_character_type" class="input-group-text">Padding Type</label>
-                                  <select name="padding_character_type" id="padding_character_type" class="form-select">
-                                    <option value="SEPARATOR">Use Separator Character</option>
-                                    <option value="FIXED" selected="selected">Specified Character</option>
-                                    <option value="RANDOM">Random Character</option>
-                                  </select>
-                                </div>
-                              </div> <!-- /padding_character_type -->
+                    <div id="padding_char_container">
+                      <div class="mt-2">
+                        <div class="input-group">
+                          <label for="padding_character_type" class="input-group-text">
+                            Padding Type
+                          </label>
+                          <select
+                            name="padding_character_type"
+                            id="padding_character_type"
+                            class="form-select"
+                          >
+                            <option value="SEPARATOR">Use Separator Character</option>
+                            <option value="FIXED" selected="selected">Specified Character</option>
+                            <option value="RANDOM">Random Character</option>
+                          </select>
+                        </div>
+                      </div>
+                      <!-- /padding_character_type -->
 
                               <!-- padding character -->
-                              <div class="mt-2">
-                                <div class="input-group">
-                                  <label for="padding_character" class="input-group-text">Padding
-                                    Character</label>
-                                  <input class="form-control rounded-end" type="text" size="1" maxlength="1" value="*"
-                                    name="padding_character" id="padding_character" />
-                                  <div class="invalid-feedback">Enter exactly 1 character</div>
-                                </div>
-                              </div> <!-- /padding_character -->
+                      <div class="mt-2">
+                        <div class="input-group">
+                          <label for="padding_character" class="input-group-text">Padding
+                            Character</label>
+                          <input
+                            class="form-control rounded-end"
+                            type="text"
+                            size="1"
+                            maxlength="1"
+                            value="*"
+                            name="padding_character"
+                            id="padding_character"
+                          />
+                          <div class="invalid-feedback">Enter exactly 1 character</div>
+                        </div>
+                      </div>
+                      <!-- /padding_character -->
 
                               <!-- padding character alphabet -->
-                              <div class="mt-2">
-                                <div class="input-group">
-                                  <label for="padding_alphabet" class="input-group-text">Padding Character
-                                    Alphabet</label>
-                                  <input name="padding_alphabet" id="padding_alphabet" class="form-control rounded-end"
-                                         type="text" size="6" minlength="2" maxlength="20" value="" />
-                                  <div class="invalid-feedback">Enter at least 2 characters and max 20</div>
-                                </div>
-                              </div> <!-- /padding_alphabet -->
-                            </div> <!-- /padding_char_container -->
-                          </div> <!-- /section_padding -->
-                        </form>
-                      </div> <!-- /accordion-body -->
-                    </div> <!-- /collapseSettings -->
-                  </div> <!-- /accordion-item for settings -->
-                </div> <!-- /accordion configOptions -->
+                      <div class="mt-2">
+                        <div class="input-group">
+                          <label for="padding_alphabet" class="input-group-text">Padding Character
+                            Alphabet</label>
+                          <input
+                            name="padding_alphabet"
+                            id="padding_alphabet"
+                            class="form-control rounded-end"
+                            type="text"
+                            size="6"
+                            minlength="2"
+                            maxlength="20"
+                            value=""
+                          />
+                          <div class="invalid-feedback">
+                            Enter at least 2 characters and max 20
+                          </div>
+                        </div>
+                      </div>
+                      <!-- /padding_alphabet -->
+                    </div>
+                    <!-- /padding_char_container -->
+                  </div>
+                  <!-- /section_padding -->
+                </form>
+              </div>
+              <!-- /accordion-body -->
+            </div>
+            <!-- /collapseSettings -->
+          </div>
+          <!-- /accordion-item for settings -->
+        </div>
+        <!-- /accordion configOptions -->
               <!-- /div> <! - - /accordion body - - >
             </div> <!- - /collapseConfig - - >
           </div>
         </div> <!- - close config col -->
 
         <!-- this section (id = generatePassword) is handled by the PasswordController and the PasswordView -->
-        <div id="generatePassword" class="mt-2"> <!-- open generate pw - need to split pw box out -->
-
+        <div id="generatePassword" class="mt-2">
+          <!-- open generate pw - need to split pw box out -->
           <h3>Generate Password(s)</h3>
-          <form id="generatePasswords"> <!-- open input area for gen pw -->
+          <form id="generatePasswords">
+            <!-- open input area for gen pw -->
             <div class="row">
               <div class="col-8 col-md-6 mb-3">
                 <!-- Technically the label should be there, but it's an audible repeat of span class -->
                 <!-- <label class="visually-hidden" for="selectAmount">Number of passwords</label> -->
                 <div class="input-group mt-2">
                   <label class="input-group-text" for="selectAmount"># of passwords</label>
-                  <input type="number" min="1" max="10" step="1" value="3" class="form-control" name="selectAmount"
-                    id="selectAmount" aria-describedby="enterNumberOfPasswords" />
+                  <input
+                    type="number"
+                    min="1"
+                    max="10"
+                    step="1"
+                    value="3"
+                    class="form-control"
+                    name="selectAmount"
+                    id="selectAmount"
+                    aria-describedby="enterNumberOfPasswords"
+                  />
                   <!-- doesn't show as stepper on iOS or Chromium -->
                 </div>
-                <div id="enterNumberOfPasswords" class="form-text">Enter the number of passwords to be generated</div>
+                <div id="enterNumberOfPasswords" class="form-text">
+                  Enter the number of passwords to be generated
+                </div>
               </div>
-              <div class="col-3 "> <!-- open col for Generate -->
+              <div class="col-3 ">
+                <!-- open col for Generate -->
                 <div class="input-group mt-2">
-                  <button id="generate" type="submit" class="btn btn-primary" aria-label="generate passwords"
-                    tabindex="0">Generate</button>
+                  <button
+                    id="generate"
+                    type="submit"
+                    class="btn btn-primary"
+                    aria-label="generate passwords"
+                    tabindex="0"
+                  >
+                    Generate
+                  </button>
                 </div>
               </div>
             </div>
-          </form> <!-- close input area for gen pw -->
-
-        </div> <!-- close generate pw -->
-
-      </section> <!-- close section for content below nav -->
-    </section> <!-- close section for content right of graphic -->
-
-    <section id="sidebar-left" class="flex-[0 0 auto] w-1/6 order-1 hidden lg:inline shrink-0 max-w-full mx-3" aria-flowto="password-card"> <!-- open section for graphic -->
+          </form>
+          <!-- close input area for gen pw -->
+        </div>
+        <!-- close generate pw -->
+      </section>
+      <!-- close section for content below nav -->
+    </section>
+    <!-- close section for content right of graphic -->
+    <section
+      id="sidebar-left"
+      class="flex-[0_0_auto] w-1/12 order-1 hidden lg:inline shrink-0 max-w-full mx-3"
+      aria-flowto="password-card"
+    >
+      <!-- open section for graphic -->
       <picture>
         <!-- show this on large and above -->
-        <source media="(max-width: 1024px)" srcset="/images/sideBanner.png">
+        <source media="(max-width: 1024px)" srcset="/images/sideBanner.png" />
         <!-- else show this -->
-        <img class="img-fluid" aria-hidden="true" alt="XKPasswd - A Secure Memorable Password Generator"
-          src="/images/sideBanner.png">
+        <img
+          class="img-fluid"
+          aria-hidden="true"
+          alt="XKPasswd - A Secure Memorable Password Generator"
+          src="/images/sideBanner.png"
+        />
       </picture>
-    </section> <!-- close section for graphic -->
-  </div> <!-- close opening row -->
-  <div class="row"> <!-- open row for password card -->
+    </section>
+    <!-- close section for graphic -->
+  </div>
+  <!-- close opening row -->
+  <div class="row">
+    <!-- open row for password card -->
 
     <!-- this section (id = password-card) is handled by the PasswordController and the PasswordView -->
     <section id="password-card" class="order-3 px-0">
-      <div class="card mt-3 mt-lg-5 col"> <!-- open password card with stats -->
+      <div class="card mt-3 mt-lg-5 col">
+        <!-- open password card with stats -->
         <div class="card-header d-flex align-items-center">
           <span class="text-uppercase">Passwords</span>
         </div>
         <div class="card-body">
           <div id="password_presentation">
-              <input id="pw_lst" type="radio" name="pwdPresentation" value="lst" aria-description="Present passwords in a list" tabindex="0" checked>
-              <label for="pw_lst" class="bi bi-list-ul" aria-label="Present passwords in a list" style="margin-left:0.5em;margin-right:1em"></label>
-              <input id="pw_txt" type="radio" name="pwdPresentation" value="txt" aria-description="Present passwords as a block of text" tabindex="0">
-              <label for="pw_txt" class="bi bi-file-earmark-text" aria-label="Present passwords as a block of text" style="margin-left:0.5em;margin-right:1em"></label>
+            <input
+              id="pw_lst"
+              type="radio"
+              name="pwdPresentation"
+              value="lst"
+              aria-description="Present passwords in a list"
+              tabindex="0"
+              checked
+            />
+            <label
+              for="pw_lst"
+              class="bi bi-list-ul"
+              aria-label="Present passwords in a list"
+              style="margin-left:0.5em;margin-right:1em"
+            >
+            </label>
+            <input
+              id="pw_txt"
+              type="radio"
+              name="pwdPresentation"
+              value="txt"
+              aria-description="Present passwords as a block of text"
+              tabindex="0"
+            />
+            <label
+              for="pw_txt"
+              class="bi bi-file-earmark-text"
+              aria-label="Present passwords as a block of text"
+              style="margin-left:0.5em;margin-right:1em"
+            >
+            </label>
           </div>
           <div id="generated_password_lst" class="list-group list-group-flush"></div>
 
           <label for="generated_password_txt" class="visually-hidden">Bulk password text</label>
-          <textarea type="text" readonly class="form-control form-control-plaintext border-0 font-monospace mb-3 password-textbox"
-                     rows="3" id="generated_password_txt"></textarea>
+          <textarea
+            type="text"
+            readonly
+            class="form-control form-control-plaintext border-0 font-monospace mb-3 password-textbox"
+            rows="3"
+            id="generated_password_txt"
+          ></textarea>
 
           <div id="passwordErrorContainer"></div>
-
         </div>
         <div class="card-footer">
           <div id="password_stats_container" class="pt-1 fs-6">
             <h6><i class="bi bi-graph-up"></i> Statistics</h6>
             <p class="fw-lighter lh-1 ">
-              <span class="fw-bolder">Strength </span><span class="btn btn-stats btn-success"
-                id="password_strength">test</span>
+              <span class="fw-bolder">Strength </span><span
+                class="btn btn-stats btn-success"
+                id="password_strength"
+              >test</span>
             </p>
             <p class="fw-light">
               <span class="fw-bolder">Entropy</span>&nbsp;<span id="entropy_blind">
-              </span> blind & <span class="btn btn-stats btn-warning" id="entropy_seen">seen</span>&nbsp;with
-              full knowledge
-              <br />
+              </span> blind & <span
+                class="btn btn-stats btn-warning"
+                id="entropy_seen"
+              >seen</span>&nbsp;with
+              full knowledge <br />
               <span class="fst-italic" id="entropy_suggestion"></span>
             </p>
           </div>
         </div>
-      </div><!-- close password card with stats -->
+      </div>
+      <!-- close password card with stats -->
     </section>
-
   </div>
 
   <footer class="row bg-primary-subtle py-3 mt-3 rounded">
     <div class="col">
-      Inspired by <a href="https://xkcd.com/936/" target="_blank" class="link">XKCD</a> and <a
-        href="https://www.grc.com/haystack.htm" target="_blank" class="link">Password Hay Stacks</a> |
-      Powered by <a href="https://github.com/bartificer/xkpasswd-js" target="_blank" class="link">XKPasswd on
+      Inspired by <a href="https://xkcd.com/936/" target="_blank" class="link">XKCD</a>
+      and
+      <a href="https://www.grc.com/haystack.htm" target="_blank" class="link">
+        Password Hay Stacks
+      </a>
+      |
+      Powered by
+      <a href="https://github.com/bartificer/xkpasswd-js" target="_blank" class="link">XKPasswd on
         GitHub</a>
     </div>
   </footer>
 </div>
-
 <!-- Modal load config -->
 <!-- Hidden by default to prevent a flash of unstyled content (FOUC) when the page loads. -->
-<div class="modal fade" id="load_config" fouc="true" tabindex="-1" aria-labelledby="aboutLabel" aria-hidden="true"
-  style="visibility: hidden;">
+<div
+  class="modal fade"
+  id="load_config"
+  fouc="true"
+  tabindex="-1"
+  aria-labelledby="aboutLabel"
+  aria-hidden="true"
+  style="visibility: hidden;"
+>
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="loadConfigLabel">Load config</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        </button>
       </div>
       <div class="modal-body">
         <div class="alert alert-warning alert-dismissible" role="alert">
@@ -421,17 +712,29 @@
           an error with processing your particular configuration.
         </div>
         <h1 class="h3">Load your personal configuration</h1>
-         <form id="uploadConfigFile">
-            <div class="my-3">
-		          <label class="form-label" for="configFile">Select the JSON config file to use</label>
-	  	          <input class="form-control" type="file" id="configFile" required
-                     aria-description="press this button to select a json file with your configuration"
-                     accept=".json">
-            </div>
-            <button id="upload" type="submit" class="btn btn-primary" data-bs-dismiss="modal"
-                    aria-label="upload config file"
-                    tabindex="0">Upload</button>
-	          </form>
+        <form id="uploadConfigFile">
+          <div class="my-3">
+            <label class="form-label" for="configFile">Select the JSON config file to use</label>
+            <input
+              class="form-control"
+              type="file"
+              id="configFile"
+              required
+              aria-description="press this button to select a json file with your configuration"
+              accept=".json"
+            />
+          </div>
+          <button
+            id="upload"
+            type="submit"
+            class="btn btn-primary"
+            data-bs-dismiss="modal"
+            aria-label="upload config file"
+            tabindex="0"
+          >
+            Upload
+          </button>
+        </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -439,22 +742,34 @@
     </div>
   </div>
 </div>
-
 <!-- Modal about-->
 <!-- Hidden by default to prevent a flash of unstyled content (FOUC) when the page loads. -->
-<div class="modal fade" id="about" fouc="true" tabindex="-1" aria-labelledby="aboutLabel" aria-hidden="true"
-  style="visibility: hidden;">
+<div
+  class="modal fade"
+  id="about"
+  fouc="true"
+  tabindex="-1"
+  aria-labelledby="aboutLabel"
+  aria-hidden="true"
+  style="visibility: hidden;"
+>
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="aboutLabel">About this tool</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        </button>
       </div>
       <div class="modal-body">
         <h1 class="h3">THE COMIC THAT INSPIRED THIS TOOL</h1>
         <p>
-          <a href="https://xkcd.com/936/" target="_blank"><img class="img-fluid" alt="XKCD - Password Strength"
-              src="/images/password_strength.png"></a>
+          <a href="https://xkcd.com/936/" target="_blank">
+            <img
+              class="img-fluid"
+              alt="XKCD - Password Strength"
+              src="/images/password_strength.png"
+            />
+          </a>
         </p>
         <h1 class="h3">CREDITS</h1>
         <ul>
@@ -467,7 +782,6 @@
           <li>
             Web Interface powered by Bootstrap 5.
           </li>
-
         </ul>
       </div>
       <div class="modal-footer">
@@ -476,27 +790,37 @@
     </div>
   </div>
 </div>
-
 <!-- Modal donate -->
 <!-- Hidden by default to prevent a flash of unstyled content (FOUC) when the page loads. -->
-<div class="modal fade" id="donate" fouc="true" tabindex="-1" aria-labelledby="donateLabel" aria-hidden="true"
-  style="visibility: hidden;">
+<div
+  class="modal fade"
+  id="donate"
+  fouc="true"
+  tabindex="-1"
+  aria-labelledby="donateLabel"
+  aria-hidden="true"
+  style="visibility: hidden;"
+>
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="donateLabel">Please donate</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        </button>
       </div>
       <div class="modal-body">
         This service is provided entirely for free and without ads, but
         the server is not free to run. Please consider making a small contribution towards those costs.
         <div id="donation_button">
           <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-            <input type="hidden" name="cmd" value="_s-xclick">
-            <input type="hidden" name="hosted_button_id" value="HEYHNGKY8EASE">
-            <input type="image" name="submit" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif"
-              alt="PayPal - The safer, easier way to pay online!">
-
+            <input type="hidden" name="cmd" value="_s-xclick" />
+            <input type="hidden" name="hosted_button_id" value="HEYHNGKY8EASE" />
+            <input
+              type="image"
+              name="submit"
+              src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif"
+              alt="PayPal - The safer, easier way to pay online!"
+            />
           </form>
         </div>
       </div>
