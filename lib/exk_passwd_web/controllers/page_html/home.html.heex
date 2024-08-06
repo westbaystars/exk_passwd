@@ -89,18 +89,28 @@
         </div>
       </header>
       <!-- close row for nav -->
-      <section id="content" class="row">
+      <section id="content" class="flex flex-wrap gap-6 mt-0 -mx-3">
         <!-- open row for content below nav -->
-        <!-- div class="accordion mt-3 mb-3 mb-lg-3 col-11 col-md mx-auto" id="passwordConfig"> < !-- open config col - - >
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                data-bs-target="#collapseConfig" aria-expanded="true" aria-controls="collapseConfig">
-                Config
-              </button>
-            </h2>
-            <div id="collapseConfig" class="accordion-collapse collapse" data-bs-parent="#passwordConfig">
-              <div class="accordion-body"> -->
+        <div class="collapse collapse-arrow bg-base-200 shrink-0 w-11/12 mt-6">
+          <input type="radio" name="accordian-content" class="w-full" checked="checked" />
+          <div class="collapse-title text-xl font-medium">
+            Presets
+          </div>
+          <div class="collapse-content">
+            <p>Presets go here</p>
+          </div>
+        </div>
+        <div class="collapse collapse-arrow bg-base-200 shrink-0 w-11/12">
+          <input type="radio" name="accordian-content" class="w-full" />
+          <div class="collapse-title text-xl font-medium">
+            Settings
+          </div>
+          <div class="collapse-content">
+            <p>Settings go here</p>
+          </div>
+        </div>
+      </section>
+      <!--
         <div class="accordion my-3 mb-lg-3 px-0" id="configOptions">
           <div class="accordion-item">
             <h2 class="accordion-header">
@@ -115,7 +125,7 @@
                 <span>Presets</span>&nbsp;<span class="fst-italic" id="currentPreset"></span>
               </button>
             </h2>
-            <!-- This section (id = collapsePresets) is handled by the PresetController and the PresetView -->
+            <!-- This section (id = collapsePresets) is handled by the PresetController and the PresetView ->
             <div
               id="collapsePresets"
               class="accordion-collapse collapse"
@@ -132,19 +142,6 @@
               </div>
             </div>
           </div>
-          <!-- <div class="accordion-item">
-                    <h2 class="accordion-header">
-                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDict" aria-expanded="false" aria-controls="collapseDict">
-                        Dictionaries
-                      </button>
-                    </h2>
-                    <div id="collapseDict" class="accordion-collapse collapse" data-bs-parent="#configOptions">
-                      <div class="accordion-body">
-                        <strong>TO BE DONE</strong>
-                         This part contains the selection of the available dictionaries.
-                      </div>
-                    </div>
-                  </div> -->
           <div class="accordion-item">
             <h2 class="accordion-header">
               <button
@@ -158,7 +155,7 @@
                 Settings
               </button>
             </h2>
-            <!-- This section (id = collapseSettings) is handled by the SettingsController and the SettingsView -->
+            <!-- This section (id = collapseSettings) is handled by the SettingsController and the SettingsView ->
             <div
               id="collapseSettings"
               class="accordion-collapse collapse"
@@ -172,7 +169,7 @@
                 >
                 </div>
                 <form id="passwordSettings" class="needs-validation container-fluid" novalidate>
-                  <!-- word settings -->
+                  <!-- word settings ->
                   <div id="section_words" class="row g-1 mb-3">
                     <h5>Words</h5>
                     <div class="mt-2 col-sm-12 col-md-8 col-lg-3">
@@ -245,8 +242,8 @@
                       </div>
                     </div>
                   </div>
-                  <!-- section_words -->
-                          <!-- Word Transformations -->
+                  <!-- section_words ->
+                          <!-- Word Transformations ->
                   <div id="section_transformations" class="row mb-3">
                     <h5>Transformations</h5>
                     <div class="input-group mt-2">
@@ -264,9 +261,9 @@
                       </select>
                     </div>
                   </div>
-                  <!-- /section_transformations -->
+                  <!-- /section_transformations ->
 
-                          <!-- Separator -->
+                          <!-- Separator ->
                   <div id="section_separator" class="row g-1 mb-3">
                     <h5>Separator</h5>
                     <div class="mt-2 col-sm-12 col-md-6">
@@ -281,7 +278,7 @@
                     </div>
                     <div class="col-sm-12 col-md-6 mt-2">
                       <div class="input-group">
-                        <!-- specific character -->
+                        <!-- specific character ->
                         <label for="separator_character" class="input-group-text">
                           Character
                         </label>
@@ -298,7 +295,7 @@
                         <div class="invalid-feedback">Enter exactly 1 character</div>
                       </div>
                       <div class="input-group">
-                        <!-- random characters -->
+                        <!-- random characters ->
                         <label for="separator_alphabet" class="input-group-text rounded-start">
                           Alphabet
                         </label>
@@ -318,14 +315,14 @@
                       </div>
                     </div>
                   </div>
-                  <!-- /section_separator -->
+                  <!-- /section_separator ->
 
-                          <!-- Digit Padding -->
+                          <!-- Digit Padding ->
                   <div id="section_padding" class="row g-1 mb-3">
                     <h5>Padding</h5>
                     <div class="mt-2 col-sm-12 col-md-6">
                       <div class="input-group">
-                        <!-- padding digits before -->
+                        <!-- padding digits before ->
                         <label for="padding_digits_before" class="input-group-text">
                           Digit(s) Before
                         </label>
@@ -343,10 +340,10 @@
                         <div class="invalid-feedback">Enter a number between 0 and 5</div>
                       </div>
                     </div>
-                    <!-- /padding_digits_before -->
+                    <!-- /padding_digits_before ->
                     <div class="mt-2 col-sm-12 col-md-6">
                       <div class="input-group">
-                        <!-- padding digits after -->
+                        <!-- padding digits after ->
                         <label for="padding_digits_after" class="input-group-text">
                           Digit(s) After
                         </label>
@@ -364,9 +361,9 @@
                         <div class="invalid-feedback">Enter a number between 0 and 5</div>
                       </div>
                     </div>
-                    <!-- /padding_digits_after -->
+                    <!-- /padding_digits_after ->
 
-                            <!-- Symbol Padding -->
+                            <!-- Symbol Padding ->
                     <div class="mt-2 col-sm-12 col-md-4">
                       <div class="input-group">
                         <label for="padding_type" class="input-group-text">Type</label>
@@ -377,10 +374,10 @@
                         </select>
                       </div>
                     </div>
-                    <!-- /padding_type -->
+                    <!-- /padding_type ->
                     <div class="mt-2 col-sm-12 col-md-4">
                       <div class="input-group">
-                        <!-- padding characters before -->
+                        <!-- padding characters before ->
                         <label for="padding_characters_before" class="input-group-text">
                           Symbol(s) Before
                         </label>
@@ -398,10 +395,10 @@
                         <div class="invalid-feedback">Enter a number between 0 and 5</div>
                       </div>
                     </div>
-                    <!-- /padding_characters_before -->
+                    <!-- /padding_characters_before ->
                     <div class="mt-2 col-sm-12 col-md-4">
                       <div class="input-group">
-                        <!-- padding characters after -->
+                        <!-- padding characters after ->
                         <label for="padding_characters_after" class="input-group-text">
                           Symbol(s) After
                         </label>
@@ -419,10 +416,10 @@
                         <div class="invalid-feedback">Enter a number between 0 and 5</div>
                       </div>
                     </div>
-                    <!-- /padding_characters_after -->
+                    <!-- /padding_characters_after ->
                     <div class="mt-2 col-sm-12 col-md-8">
                       <div class="input-group">
-                        <!-- pad to length -->
+                        <!-- pad to length ->
                         <label for="pad_to_length" class="input-group-text">Pad to Length</label>
                         <input
                           type="number"
@@ -439,9 +436,9 @@
                         <div class="invalid-feedback">Enter a number between 8 and 999</div>
                       </div>
                     </div>
-                    <!-- /pad_to_length -->
+                    <!-- /pad_to_length ->
 
-                            <!-- character type -->
+                            <!-- character type ->
                     <div id="padding_char_container">
                       <div class="mt-2">
                         <div class="input-group">
@@ -459,9 +456,9 @@
                           </select>
                         </div>
                       </div>
-                      <!-- /padding_character_type -->
+                      <!-- /padding_character_type ->
 
-                              <!-- padding character -->
+                              <!-- padding character ->
                       <div class="mt-2">
                         <div class="input-group">
                           <label for="padding_character" class="input-group-text">Padding
@@ -478,9 +475,9 @@
                           <div class="invalid-feedback">Enter exactly 1 character</div>
                         </div>
                       </div>
-                      <!-- /padding_character -->
+                      <!-- /padding_character ->
 
-                              <!-- padding character alphabet -->
+                              <!-- padding character alphabet ->
                       <div class="mt-2">
                         <div class="input-group">
                           <label for="padding_alphabet" class="input-group-text">Padding Character
@@ -500,35 +497,36 @@
                           </div>
                         </div>
                       </div>
-                      <!-- /padding_alphabet -->
+                      <!-- /padding_alphabet ->
                     </div>
-                    <!-- /padding_char_container -->
+                    <!-- /padding_char_container ->
                   </div>
-                  <!-- /section_padding -->
+                  <!-- /section_padding ->
                 </form>
               </div>
-              <!-- /accordion-body -->
+              <!-- /accordion-body ->
             </div>
-            <!-- /collapseSettings -->
+            <!-- /collapseSettings ->
           </div>
-          <!-- /accordion-item for settings -->
+          <!-- /accordion-item for settings ->
         </div>
-        <!-- /accordion configOptions -->
+        -->
+        <!-- /accordion configOptions ->
               <!-- /div> <! - - /accordion body - - >
             </div> <!- - /collapseConfig - - >
           </div>
         </div> <!- - close config col -->
 
-        <!-- this section (id = generatePassword) is handled by the PasswordController and the PasswordView -->
+        <!-- this section (id = generatePassword) is handled by the PasswordController and the PasswordView ->
         <div id="generatePassword" class="mt-2">
-          <!-- open generate pw - need to split pw box out -->
+          <!-- open generate pw - need to split pw box out ->
           <h3>Generate Password(s)</h3>
           <form id="generatePasswords">
-            <!-- open input area for gen pw -->
+            <!-- open input area for gen pw ->
             <div class="row">
               <div class="col-8 col-md-6 mb-3">
-                <!-- Technically the label should be there, but it's an audible repeat of span class -->
-                <!-- <label class="visually-hidden" for="selectAmount">Number of passwords</label> -->
+                <!-- Technically the label should be there, but it's an audible repeat of span class ->
+                <!-- <label class="visually-hidden" for="selectAmount">Number of passwords</label> ->
                 <div class="input-group mt-2">
                   <label class="input-group-text" for="selectAmount"># of passwords</label>
                   <input
@@ -542,14 +540,14 @@
                     id="selectAmount"
                     aria-describedby="enterNumberOfPasswords"
                   />
-                  <!-- doesn't show as stepper on iOS or Chromium -->
+                  <!-- doesn't show as stepper on iOS or Chromium ->
                 </div>
                 <div id="enterNumberOfPasswords" class="form-text">
                   Enter the number of passwords to be generated
                 </div>
               </div>
               <div class="col-3 ">
-                <!-- open col for Generate -->
+                <!-- open col for Generate ->
                 <div class="input-group mt-2">
                   <button
                     id="generate"
@@ -564,10 +562,10 @@
               </div>
             </div>
           </form>
-          <!-- close input area for gen pw -->
+          <!-- close input area for gen pw ->
         </div>
-        <!-- close generate pw -->
-      </section>
+        <!-- close generate pw ->
+      </section-->
       <!-- close section for content below nav -->
     </section>
     <!-- close section for content right of graphic -->

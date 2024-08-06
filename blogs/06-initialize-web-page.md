@@ -265,3 +265,40 @@ I dropped the sample DaisyUI navbar into the page over the Official Port `<navba
 One major difference is that the contents of the "hamburger menu" is a duplicate of the items on the navbar, whereas they are only listed once to appear in both places for the Bootstrap component. Maybe I'll make a Phoenix component that only requires them once. But let's go with this for now.
 
 ### Accordian Presets and Settings
+
+We next want two accordian sections for the "Presets" and "Settings" to reside. Going to the DaisyUI [Accordion with arrow icon](https://daisyui.com/components/accordion/#accordion-with-arrow-icon) sample, let's plug these in under the `<section id="content" class="row">`, which also needs some CSS touchup, and see what we've got.
+
+```html
+<section id="content" class="flex flex-wrap gap-6 mt-0 -mx-3">
+  <!-- open row for content below nav -->
+  <div class="collapse collapse-arrow bg-base-200 shrink-0 w-11/12 mt-6">
+    <input type="radio" name="accordian-content" class="w-full" checked="checked" />
+    <div class="collapse-title text-xl font-medium">
+      Presets
+    </div>
+    <div class="collapse-content">
+      <p>Presets go here</p>
+    </div>
+  </div>
+  <div class="collapse collapse-arrow bg-base-200 shrink-0 w-11/12">
+    <input type="radio" name="accordian-content" class="w-full" />
+    <div class="collapse-title text-xl font-medium">
+      Settings
+    </div>
+    <div class="collapse-content">
+      <p>Settings go here</p>
+    </div>
+  </div>
+</section>
+```
+
+The `#content` section gets updated with the two accordians as above, replacing the two accordian blocks after the navbar. After closing off the `</section>` after the two new accordians, comment out all of the following forms which are the contents of the "Settings" accordian. Whereas Bootstrap fills the accordian with a block from outside of the accordian, the content goes inside the accordian with DaisyUI.
+
+You may not have the same line numbers, so it commented out everything down to:
+
+```html
+  <!-- close section for content below nav -->
+</section>
+```
+
+That gives us our working accordians with place holders for what goes inside.
