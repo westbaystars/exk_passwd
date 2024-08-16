@@ -180,3 +180,65 @@ Okay, so we have 7 defaults and a function to get them all. Now let's add a func
   """
   def get(name \\ :default), do: Map.get(@presets, name)
 ```
+
+Rather than write a whole new test suite for this module, let's make sure that it works with the `test/exk_passwd/Password_creator_tests.exs` tests. To accomplish that, after removing all of the `@*preset*_setting`s from the file, change `@default_settings` to `Presets.get(:default)`, etc.
+
+The simple tests will become:
+
+```elixir
+defmodule EXKPasswd.PasswordCreatorTest do
+  use ExUnit.Case, async: true
+  alias EXKPasswd.{PasswordCreator, Presets}
+
+  doctest PasswordCreator
+
+  test "verify that the default %PasswordCreator is the same as @default_settings" do
+    assert Presets.get(:default) === %PasswordCreator{}
+  end
+
+  test "verify that the default %PasswordCreator is not the same as @web32_settings" do
+    refute Presets.get(:web32) === %PasswordCreator{}
+  end
+
+  ...
+```
+
+For the more involved tests, where a given setting is evaluated more than once, modify the test similar to:
+
+```elixir
+test "verify that the @web32_settings password generates a password in the format: <sym1>dd<sym2>word<sym2>WORD<sym2>word<sym2>WORD<sym2>dd<sym1>" do
+  regex =
+    ~r/^([!@\$%\^&\*\+=:\|~])[[:digit:]]{2}([\-+=.*_\|~])[[:lower:]]{4,5}\2[[:upper:]]{4,5}\2[[:lower:]]{4,5}\2[[:upper:]]{4,5}\2[[:digit:]]{3}\1$/
+
+  settings = Presets.get(:web32)
+  assert String.match?(
+           PasswordCreator.create(settings),
+           regex
+         )
+
+  refute String.match?(
+           PasswordCreator.create(),
+           regex
+         )
+
+  Enum.all?(1..5000, fn _ ->
+    password = PasswordCreator.create(settings)
+    assert String.length(password) <= 32
+    assert String.length(password) >= 28
+    assert String.match?(password, regex)
+  end)
+end
+```
+
+Once all of the tests have been updated to get the settings from the `Presets` module, run the tests:
+
+```sh
+mix test test/exk_passwd/password_creator_test.exs
+Running ExUnit with seed: 933544, max_cases: 24
+
+..............
+Finished in 15.6 seconds (15.6s async, 0.00s sync)
+14 tests, 0 failures
+```
+
+If you get failures, figure out why and fix them.
