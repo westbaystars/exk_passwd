@@ -8,8 +8,8 @@ defmodule EXKPasswd.Presets do
   """
   alias EXKPasswd.PasswordCreator
 
-  @presets %{
-    default: %PasswordCreator{
+  @presets [
+    {:default, %PasswordCreator{
       description:
         "The default preset resulting in a password consisting of " <>
           "3 random words of between 4 and 8 letters with alternating " <>
@@ -25,9 +25,9 @@ defmodule EXKPasswd.Presets do
       padding_character: ~w(! @ $ % ^ & * - _ + = : | ~ ? / . ;),
       padding_before: 2,
       padding_after: 2
-    },
+    }},
 
-    web32: %PasswordCreator{
+    {:web32, %PasswordCreator{
       description: "A preset for websites that allow passwords up to 32 characters long.",
       num_words: 4,
       word_length_min: 4,
@@ -39,9 +39,9 @@ defmodule EXKPasswd.Presets do
       padding_character: ~w(! @ $ % ^ & * + = : | ~),
       padding_before: 1,
       padding_after: 1
-    },
+    }},
 
-    web16: %PasswordCreator{
+    {:web16, %PasswordCreator{
       description:
         "A preset for websites that insist passwords not be longer " <>
           "than 16 characters. WARNING - only use this preset if you " <>
@@ -56,9 +56,9 @@ defmodule EXKPasswd.Presets do
       digits_before: 0,
       digits_after: 1,
       padding_character: ""
-    },
+    }},
 
-    wifi: %PasswordCreator{
+    {:wifi, %PasswordCreator{
       description:
         "A preset for generating 63 character long WPA2 keys " <>
           "(most routers allow 64 characters, but some only 63, " <>
@@ -72,9 +72,9 @@ defmodule EXKPasswd.Presets do
       digits_after: 4,
       pad_to_length: 63,
       padding_character: ~w(! @ $ % ^ & * + = : | ~ ?)
-    },
+    }},
 
-    apple_id: %PasswordCreator{
+    {:apple_id, %PasswordCreator{
       description:
         "A preset respecting the many prerequisites Apple places " <>
           "on Apple ID passwords. The preset also limits itself to " <>
@@ -90,9 +90,9 @@ defmodule EXKPasswd.Presets do
       padding_character: ~w(- : . ! ? @ &),
       padding_before: 1,
       padding_after: 1
-    },
+    }},
 
-    security: %PasswordCreator{
+    {:security, %PasswordCreator{
       description: "A preset for creating fake answers to security questions.",
       num_words: 6,
       word_length_min: 4,
@@ -104,9 +104,9 @@ defmodule EXKPasswd.Presets do
       padding_character: ~w(. ! ?),
       padding_before: 0,
       padding_after: 1
-    },
+    }},
 
-    xkcd: %PasswordCreator{
+    {:xkcd, %PasswordCreator{
       description:
         "A preset for generating passwords similar " <>
           "to the example in the original XKCD cartoon, " <>
@@ -123,8 +123,8 @@ defmodule EXKPasswd.Presets do
       padding_character: "",
       padding_before: 0,
       padding_after: 0
-    }
-  }
+    }}
+  ]
 
   @doc """
   Returns a map of all presets.
@@ -136,5 +136,5 @@ defmodule EXKPasswd.Presets do
   If no name is passed, defaults to the `:default` preset.
   If the name given does not match the name of a preset, returns `nil`.
   """
-  def get(name \\ :default), do: Map.get(@presets, name)
+  def get(name \\ :default), do: Enum.find_value(@presets, fn {n, s} -> if n === name, do: s end)
 end

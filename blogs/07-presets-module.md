@@ -241,4 +241,125 @@ Finished in 15.6 seconds (15.6s async, 0.00s sync)
 14 tests, 0 failures
 ```
 
-If you get failures, figure out why and fix them.
+If you got any errors, fixing them would be a good exercise. For the most part, place the given preset into `settings` and use that value in its place. Also, remember, we renamed `@security_questions` to the key `:security`.
+
+We'll do more with the `Presets` module later (like have custom presets). But this will work for now.
+
+### Populate Presets on Web Page
+
+The `Presets` module can now feed a list of presets to the web page for viewing. Let's start there and see where it takes us.
+
+Oh, and the first place it takes us is the need to make the main page a `:live_view` page. To do that, create a `live` directory under `lib/exk_passwd_web`. Now copy our `/lib/exk_passwd_web/controllers/page_html_home.html.heex` page to the `../live` directory and rename it as `home_live.html.heex`.
+
+Now, in the same `.../live` directory, let's create `home_live.ex` and fill it with:
+
+```elixir
+defmodule EXKPasswdWeb.HomeLive do
+  use Phoenix.LiveView
+
+  alias EXKPasswd.Presets
+
+  @impl Phoenix.LiveView
+  def mount(_params, _sessoin, socket) do
+    socket = socket
+    |> assign(presets: Presets.all())
+    {:ok, socket}
+  end
+end
+```
+
+This will give us the `:presets` item in `socket.assigns` that we can then access in the `Presets` accordian as so:
+
+```elixir
+<div class="collapse-content">
+  <%= for {preset, _} <- @presets do %>
+    <button class="btn btn-outline"><%= preset %></button>
+  <% end %>
+</div>
+```
+
+Finally, change where `/` points in `lib/exk_passwd_web/router.ex` to:
+
+```elixir
+    live "/", HomeLive
+```
+
+If you don't already have it running, run `iex -S mix phx.server` in a terminal to get the web server running, then check `http://localhost:4000/` to see the results.
+You should now have a list of buttons in the `Presets` accordian labeled: "default", "apple_id", "security", "web16", "web32", "wifi", "xkcd".
+
+Looking at this, there are some things that will be easy to fix, such as spacing the buttons out similar to the Official Port.
+And there will be things that are more difficult, such as that the `Map` of presets doesn't preserve order.
+
+Let's start with the easy ones, capitalizing the text and spacing the buttons out.
+
+```elixir
+<div class="collapse-content grid grid-cols-6">
+  <%= for {preset, _} <- @presets do %>
+    <button class="btn btn-outline uppercase col-span-3 md:col-span-2 lg:col-span-1"><%= preset %></button>
+  <% end %>
+</div>
+```
+
+We first set the accordian content to be a `grid` layout divided into `6` columns.
+The default span for the buttons is `3` column, decreasing to `2` columns for medium sized displayed, and covering only `1` column for large displays.
+Finally, the button text is transformed to `uppercase`, aliviating the need to change the case progmatically.
+
+Resizing the window on a desktop computer will show that all of the preset names are clearly displayed for the various sizes.
+
+Now for the harder part, retaining the order. The simplest way to do this would be to make the map of presets into a list of tuples in the structure of `{:name, preset}`. This is how we're currently returning the list in the `all()` function, so it won't break that. We will need to change how we implement `get/1`, though.
+
+```elixir
+  @presets [
+    {:default, %PasswordCreator{
+      description:
+        "The default preset resulting in a password consisting of " <>
+          "3 random words of between 4 and 8 letters with alternating " <>
+          "case separated by a random character, with two random digits " <>
+          "before and after, and padded with two random characters front and back.",
+      num_words: 3,
+      word_length_min: 4,
+      word_length_max: 8,
+      case_transform: :alternate,
+      separator_character: ~w(! @ $ % ^ & * - _ + = : | ~ ? / . ;),
+      digits_before: 2,
+      digits_after: 2,
+      padding_character: ~w(! @ $ % ^ & * - _ + = : | ~ ? / . ;),
+      padding_before: 2,
+      padding_after: 2
+    }},
+    ...
+    {:xkcd, %PasswordCreator{
+      description:
+        "A preset for generating passwords similar " <>
+          "to the example in the original XKCD cartoon, " <>
+          "but with an extra word, a dash to separate " <>
+          "the random words, and the capitalisation randomised " <>
+          "to add sufficient entropy to avoid warnings.",
+      num_words: 5,
+      word_length_min: 4,
+      word_length_max: 8,
+      case_transform: :random,
+      separator_character: "-",
+      digits_before: 0,
+      digits_after: 0,
+      padding_character: "",
+      padding_before: 0,
+      padding_after: 0
+    }}
+  ]
+
+  ...
+
+  def get(name \\ :default), do: Enum.find_value(@presets, fn {n, s} -> if n === name, do: s end)
+```
+
+And let's make sure that that didn't break anything by running `mix test test/exk_passwd/password_creator_test.exs`.
+All tests pass! That will work.
+
+Now if we look at our presets on the web, we get: "DEFAULT", "WEB32", "WEB16", "WIFI", "APPLE_ID", "SECURITY", and "XKCD". That's the order we were expecting. And not much refactoring was necessary. Yay!
+
+We now have a module for managing our presets, and we refactored it to always return the presets in the order that they are declared.
+
+We also now have a LiveView page that displays buttons for the presets the same as the Official Port does.
+
+This is a good spot to end for now. Next will be the `Settings` accordian.
