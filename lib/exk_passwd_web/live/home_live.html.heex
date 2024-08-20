@@ -107,146 +107,39 @@
             <div class="collapse-title text-xl font-medium">
               Settings
             </div>
-            <div class="collapse-content">
-              <p>Settings go here</p>
-            </div>
-          </div>
-        </div>
-      </section>
-      <!--
-        <div class="accordion my-3 mb-lg-3 px-0" id="configOptions">
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button
-                class="accordion-button"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapsePresets"
-                aria-expanded="true"
-                aria-controls="collapsePresets"
-              >
-                <span>Presets</span>&nbsp;<span class="fst-italic" id="currentPreset"></span>
-              </button>
-            </h2>
-            <!-- This section (id = collapsePresets) is handled by the PresetController and the PresetView ->
-            <div
-              id="collapsePresets"
-              class="accordion-collapse collapse"
-              data-bs-parent="#configOptions"
-            >
-              <div class="accordion-body">
-                <div id="preset-btn-group" class="row" role="group" aria-label="Preset group">
-                </div>
-                <div
-                  id="presetDescription"
-                  class="row mt-2 p-1 border border-primary-subtle bg-primary-subtle rounded-2"
-                >
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button
-                class="accordion-button collapsed"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapseSettings"
-                aria-expanded="false"
-                aria-controls="collapseSettings"
-              >
-                Settings
-              </button>
-            </h2>
-            <!-- This section (id = collapseSettings) is handled by the SettingsController and the SettingsView ->
-            <div
-              id="collapseSettings"
-              class="accordion-collapse collapse"
-              data-bs-parent="#configOptions"
-            >
-              <div class="accordion-body">
-                <div
-                  id="invalidSettings"
-                  class="alert alert-danger alert-dismissible"
-                  role="alert"
-                >
-                </div>
-                <form id="passwordSettings" class="needs-validation container-fluid" novalidate>
-                  <!-- word settings ->
-                  <div id="section_words" class="row g-1 mb-3">
-                    <h5>Words</h5>
-                    <div class="mt-2 col-sm-12 col-md-8 col-lg-3">
-                      <div class="input-group">
-                        <label for="dict" class="input-group-text">Dictionary</label>
-                        <select name="dict" id="dict" class="form-select">
-                          <option value="english" selected="selected">English</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div class="mt-2 col-sm-12 col-md-4 col-lg-3">
-                      <div class="input-group">
-                        <label for="num_words" class="input-group-text"># of Words</label>
-                        <input
-                          type="number"
-                          min="1"
-                          max="10"
-                          step="1"
-                          value="1"
-                          class="form-control rounded-end"
-                          name="num_words"
-                          id="num_words"
-                          required
-                        />
-                        <div class="invalid-feedback">Enter a number between 1 and 10</div>
-                      </div>
-                    </div>
-                    <div class="mt-2 col-sm-12 col-md-6 col-lg-3">
-                      <div class="input-group">
-                        <label for="word_length_min" class="input-group-text col-form-label">
-                          Min Length
-                        </label>
-                        <input
-                          type="number"
-                          min="4"
-                          max="12"
-                          step="1"
-                          value="4"
-                          class="form-control rounded-end"
-                          name="word_length_min"
-                          id="word_length_min"
-                          required
-                          aria-describedby="word_length_min_error"
-                        />
-                        <div id="word_length_min_error" class="invalid-feedback">
-                          Enter a number between 4 and 12
-                        </div>
-                      </div>
-                    </div>
-                    <div class="mt-2 col-sm-12 col-md-6 col-lg-3">
-                      <div class="input-group">
-                        <label for="word_length_max" class="input-group-text col-form-label">
-                          Max Length
-                        </label>
-                        <input
-                          type="number"
-                          min="4"
-                          max="12"
-                          step="1"
-                          value="4"
-                          class="form-control rounded-end"
-                          name="word_length_max"
-                          id="word_length_max"
-                          required
-                          aria-describedby="word_length_max_error"
-                        />
-                        <div id="word_length_max_error" class="invalid-feedback">
-                          Enter a number between 4 and 12
-                        </div>
-                      </div>
+            <div class="collapse-content bg-white">
+              <form id="password-settings" phx-change="validate" phx-submit="apply">
+                <!-- word settings -->
+                <div id="section_words" class="grid grid-cols-6 w-full gap-1 mt-0 py-3 g-1">
+                  <h5 class="text-xl font-medium leading-5 shrink-0 mb-2 col-span-6">Words</h5>
+                  <div class="mt-2 col-span-6 md:col-span-3 lg:col-span-2">
+                    <div class="join w-full grid grid-cols-2">
+                      <label for="num_words" class="font-normal items-center text-base text-center py-2 bg-gray-100 border rounded-l-lg border-gray-300"># of Words</label>
+                      <input type="number" min="1" max="10" step="1" value={@settings.num_words} class="font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg border-gray-300" name="num_words" id="num_words" required />
+                      <!--div class="invalid-feedback">Enter a number between 1 and 10</div-->
                     </div>
                   </div>
-                  <!-- section_words ->
-                          <!-- Word Transformations ->
+                  <div class="mt-2 col-span-6 md:col-span-3 lg:col-span-2">
+                    <div class="join w-full grid grid-cols-2">
+                      <label for="word_length_min" class="font-normal items-center text-base text-center py-2 bg-gray-100 border rounded-l-lg border-gray-300">
+                        Min Length
+                      </label>
+                      <input type="number" min="4" max="10" step="1" value={@settings.word_length_min} class="font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg border-gray-300" name="word_length_min" id="word_length_min" required aria-describedby="word_length_min_error" />
+                      <!--div id="word_length_min_error" class="invalid-feedback">Enter a number between 4 and 10</div-->
+                    </div>
+                  </div>
+                  <div class="mt-2 col-span-6 md:col-span-3 lg:col-span-2">
+                    <div class="join w-full grid grid-cols-2">
+                      <label for="word_length_max" class="font-normal items-center text-base text-center py-2 bg-gray-100 border rounded-l-lg border-gray-300">
+                        Max Length
+                      </label>
+                      <input type="number" min="4" max="10" step="1" value={@settings.word_length_max} class="font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg border-gray-300" name="word_length_max" id="word_length_max" required aria-describedby="word_length_max_error" />
+                      <!--div id="word_length_max_error" class="invalid-feedback">Enter a number between 4 and 10</div-->
+                    </div>
+                  </div>
+                </div>
+                <!-- section_words -->
+                <!-- Word Transformations ->
                   <div id="section_transformations" class="row mb-3">
                     <h5>Transformations</h5>
                     <div class="input-group mt-2">
@@ -504,21 +397,13 @@
                     </div>
                     <!-- /padding_char_container ->
                   </div>
-                  <!-- /section_padding ->
-                </form>
-              </div>
-              <!-- /accordion-body ->
+                <!-- /section_padding -->
+              </form>
+              <p>Settings go here</p>
             </div>
-            <!-- /collapseSettings ->
           </div>
-          <!-- /accordion-item for settings ->
         </div>
-        -->
-        <!-- /accordion configOptions ->
-              <!-- /div> <! - - /accordion body - - >
-            </div> <!- - /collapseConfig - - >
-          </div>
-        </div> <!- - close config col -->
+      </section>
 
         <!-- this section (id = generatePassword) is handled by the PasswordController and the PasswordView ->
         <div id="generatePassword" class="mt-2">

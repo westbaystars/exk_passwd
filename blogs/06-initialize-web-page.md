@@ -1,10 +1,45 @@
 # Initialize Web Page
 
-The XKPasswd is a single page application. If we look at the Official JavaScript Port of XKPasswd at [https://beta.xkpasswd.net/](https://beta.xkpasswd.net/), we'll see a kind of menu bar at the top, then "Presets" and "Settings" accordian buttons, followed by a button to generate 3 (by default) passwords, and space for the generated passwords at the bottom.
+The XKPasswd is a single page application. If we look at the Official
+JavaScript Port of XKPasswd at [https://beta.xkpasswd.net/]
+(https://beta.xkpasswd.net/), we'll see a kind of menu bar at the top,
+then "Presets" and "Settings" accordian buttons, followed by a button
+to generate 3 (by default) passwords, and space for the generated
+passwords at the bottom.
 
-For starters, let's take the body of the HTML from that page and paste it in to `lib/exk_passwd_web/controllers/page_html/home.html.heex`.  A lot of things will break, since the CSS for that page is in Bootstrap and we're using TailwindCSS by default. Don't worry about it for now.
+For starters, let's take the body of the HTML from that page and paste
+it in to `lib/exk_passwd_web/live/home_live.html.heex`.
 
-## Initial Page
+We'll also need to add the following to `lib/exk_passwd_web/router.ex`:
+
+```elixir
+live "/", HomeLive, :home
+```
+
+That will replace the origianal `/` path that went to the `page_html`
+default page.
+
+A lot of things will break, since the CSS for that page is in Bootstrap
+and we're using TailwindCSS by default. Don't worry about it for now.
+
+## HomeLive Module
+
+The initial `HomeLive` module simply mounts the page with nothing for now.
+
+```elixir
+defmodule EXKPasswdWeb.HomeLive do
+  use EXKPasswdWeb, :live_view
+
+  alias EXKPasswd.Presets
+
+  @impl Phoenix.LiveView
+  def mount(_params, _sessoin, socket) do
+    {:ok, socket}
+  end
+end
+```
+
+## Initial Page HEEX
 
 The source HTML for the main page of the Official Port can be found in [src/index.html](https://github.com/bartificer/xkpasswd-js/blob/main/src/index.html). Take everything *inside* of the `<body>` tag (not including the `<body>` tag) and paste is after the `<.flash_group flash={@flash} />` line. The `home.html.heex` page should now start off:
 
