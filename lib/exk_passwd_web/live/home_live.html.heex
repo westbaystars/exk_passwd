@@ -92,13 +92,20 @@
         <!-- open row for content below nav -->
         <div class="join join-vertical shrink-0 w-11/12 mt-6">
           <div class="collapse collapse-arrow bg-base-200 border-base-300 border rounded-b-none">
-            <input type="radio" name="accordian-content" class="w-full checked:bg-active" checked="checked" />
+            <input
+              type="radio"
+              name="accordian-content"
+              class="w-full checked:bg-active"
+              checked="checked"
+            />
             <div class="collapse-title text-xl font-medium">
               Presets
             </div>
             <div class="collapse-content grid grid-cols-6">
               <%= for {preset, _} <- @presets do %>
-                <button class="btn btn-outline uppercase col-span-3 md:col-span-2 lg:col-span-1"><%= preset %></button>
+                <button class="btn btn-outline uppercase col-span-3 md:col-span-2 lg:col-span-1">
+                  <%= preset %>
+                </button>
               <% end %>
             </div>
           </div>
@@ -113,105 +120,135 @@
                 <div id="section_words" class="grid grid-cols-6 w-full gap-1 mt-0 py-3 g-1">
                   <h5 class="text-xl font-medium leading-5 shrink-0 mb-2 col-span-6">Words</h5>
                   <div class="mt-2 col-span-6 md:col-span-3 lg:col-span-2">
-                    <div class="join w-full grid grid-cols-2">
-                      <label for="num_words" class="font-normal items-center text-base text-center py-2 bg-gray-100 border rounded-l-lg border-gray-300"># of Words</label>
-                      <input type="number" min="1" max="10" step="1" value={@settings.num_words} class="font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg border-gray-300" name="num_words" id="num_words" required />
+                    <div class="join w-full flex flex-row">
+                      <label
+                        for="num_words"
+                        class="font-normal items-center text-base text-center px-3 py-2 bg-gray-100 border rounded-l-lg border-gray-300 flex-none"
+                      >
+                        # of Words
+                      </label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="10"
+                        step="1"
+                        value={@settings.num_words}
+                        class="font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg border-gray-300 flex-auto w-1/12"
+                        name="num_words"
+                        id="num_words"
+                        required
+                      />
                       <!--div class="invalid-feedback">Enter a number between 1 and 10</div-->
                     </div>
                   </div>
                   <div class="mt-2 col-span-6 md:col-span-3 lg:col-span-2">
-                    <div class="join w-full grid grid-cols-2">
-                      <label for="word_length_min" class="font-normal items-center text-base text-center py-2 bg-gray-100 border rounded-l-lg border-gray-300">
+                    <div class="join w-full flex flex-row">
+                      <label
+                        for="word_length_min"
+                        class="font-normal items-center text-base text-center px-3 py-2 bg-gray-100 border rounded-l-lg border-gray-300 flex-none"
+                      >
                         Min Length
                       </label>
-                      <input type="number" min="4" max="10" step="1" value={@settings.word_length_min} class="font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg border-gray-300" name="word_length_min" id="word_length_min" required aria-describedby="word_length_min_error" />
+                      <input
+                        type="number"
+                        min="4"
+                        max="10"
+                        step="1"
+                        value={@settings.word_length_min}
+                        class="font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg border-gray-300 flex-auto w-1/12"
+                        name="word_length_min"
+                        id="word_length_min"
+                        required
+                        aria-describedby="word_length_min_error"
+                      />
                       <!--div id="word_length_min_error" class="invalid-feedback">Enter a number between 4 and 10</div-->
                     </div>
                   </div>
                   <div class="mt-2 col-span-6 md:col-span-3 lg:col-span-2">
-                    <div class="join w-full grid grid-cols-2">
-                      <label for="word_length_max" class="font-normal items-center text-base text-center py-2 bg-gray-100 border rounded-l-lg border-gray-300">
+                    <div class="join w-full flex flex-row">
+                      <label
+                        for="word_length_max"
+                        class="font-normal items-center text-base text-center px-3 py-2 bg-gray-100 border rounded-l-lg border-gray-300 flex-none"
+                      >
                         Max Length
                       </label>
-                      <input type="number" min="4" max="10" step="1" value={@settings.word_length_max} class="font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg border-gray-300" name="word_length_max" id="word_length_max" required aria-describedby="word_length_max_error" />
+                      <input
+                        type="number"
+                        min="4"
+                        max="10"
+                        step="1"
+                        value={@settings.word_length_max}
+                        class="font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg border-gray-300 flex-auto w-1/12"
+                        name="word_length_max"
+                        id="word_length_max"
+                        required
+                        aria-describedby="word_length_max_error"
+                      />
                       <!--div id="word_length_max_error" class="invalid-feedback">Enter a number between 4 and 10</div-->
                     </div>
                   </div>
                 </div>
                 <!-- section_words -->
-                <!-- Word Transformations ->
-                  <div id="section_transformations" class="row mb-3">
-                    <h5>Transformations</h5>
-                    <div class="input-group mt-2">
-                      <label for="case_transform" class="input-group-text">
-                        Case Transformation
-                      </label>
-                      <select name="case_transform" id="case_transform" class="form-select">
-                        <option value="NONE" selected="selected">-none-</option>
-                        <option value="ALTERNATE">alternating WORD case</option>
-                        <option value="CAPITALISE">Capitalise First Letter</option>
-                        <option value="INVERT">cAPITALISE eVERY lETTER eXCEPT tHe fIRST</option>
-                        <option value="LOWER">lower case</option>
-                        <option value="UPPER">UPPER CASE</option>
-                        <option value="RANDOM">EVERY word randomly CAPITALISED or NOT</option>
-                      </select>
-                    </div>
+                <!-- Word Transformations -->
+                <div
+                  id="section_transformations"
+                  class="grid grid-cols-1 w-full gap-1 mt-0 py-3 g-1"
+                >
+                  <h5 class="text-xl font-medium leading-5 shrink-0 mb-2 col-span-1">
+                    Transformations
+                  </h5>
+                  <div class="join w-full w-max-full flex flex-row">
+                    <label
+                      for="case_transform"
+                      class="font-normal items-center text-base text-center px-3 py-2 bg-gray-100 border rounded-l-lg border-gray-300 flex-none"
+                    >
+                      Case Transformation
+                    </label>
+                    <select
+                      name="case_transform"
+                      id="case_transform"
+                      class="font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg border-gray-300 flex-auto w-1"
+                    >
+                      <%= Phoenix.HTML.Form.options_for_select(
+                        [
+                          "-none-": :none,
+                          "alternating WORD case": :alternate,
+                          "Capitalise First Letter": :capitalise,
+                          "cAPITALISE eVERY lETTER eXCEPT tHe fIRST": :invert,
+                          "lower case": :lower,
+                          "UPPER CASE": :upper,
+                          "EVERY word randomly CAPITALISED or NOT": :random
+                        ],
+                        @settings.case_transform
+                      ) %>
+                    </select>
                   </div>
-                  <!-- /section_transformations ->
-
-                          <!-- Separator ->
-                  <div id="section_separator" class="row g-1 mb-3">
-                    <h5>Separator</h5>
-                    <div class="mt-2 col-sm-12 col-md-6">
-                      <div class="input-group">
-                        <label for="separator_type" class="input-group-text">Type</label>
-                        <select name="separator_type" id="separator_type" class="form-control">
-                          <option value="NONE" selected="selected">-none-</option>
-                          <option value="FIXED">Specified Character</option>
-                          <option value="RANDOM">Random Character</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div class="col-sm-12 col-md-6 mt-2">
-                      <div class="input-group">
-                        <!-- specific character ->
-                        <label for="separator_character" class="input-group-text">
-                          Character
-                        </label>
-                        <input
-                          name="separator_character"
-                          id="separator_character"
-                          class="form-control rounded-end"
-                          type="text"
-                          size="1"
-                          minlength="1"
-                          maxlength="1"
-                          value="-"
-                        />
-                        <div class="invalid-feedback">Enter exactly 1 character</div>
-                      </div>
-                      <div class="input-group">
-                        <!-- random characters ->
-                        <label for="separator_alphabet" class="input-group-text rounded-start">
-                          Alphabet
-                        </label>
-                        <input
-                          name="separator_alphabet"
-                          id="separator_alphabet"
-                          class="form-control rounded-end"
-                          type="text"
-                          size="6"
-                          minlength="2"
-                          maxlength="20"
-                          value=""
-                        />
-                        <div class="invalid-feedback">
-                          Enter at least 2 characters and no more than 20
-                        </div>
-                      </div>
-                    </div>
+                </div>
+                <!-- /section_transformations -->
+                <!-- Separator -->
+                <div id="section_separator" class="grid grid-cols-1 w-full gap-1 mt-0 py-3 g-1">
+                  <h5 class="text-xl font-medium leading-5 shrink-0 mb-2 col-span-1">
+                    Separator
+                  </h5>
+                  <div class="join w-full w-max-full flex flex-row">
+                    <!-- specific character -->
+                    <label
+                      for="separator_character"
+                      class="font-normal items-center text-base text-center px-3 py-2 bg-gray-100 border rounded-l-lg border-gray-300 flex-none"
+                    >
+                      Character
+                    </label>
+                    <input
+                      name="separator_character"
+                      id="separator_character"
+                      class="font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg border-gray-300 flex-auto w-1"
+                      type="text"
+                      size="1"
+                      value={@settings.separator_character}
+                    />
                   </div>
-                  <!-- /section_separator ->
+                </div>
+                <!-- /section_separator -->
 
                           <!-- Digit Padding ->
                   <div id="section_padding" class="row g-1 mb-3">
@@ -404,8 +441,7 @@
           </div>
         </div>
       </section>
-
-        <!-- this section (id = generatePassword) is handled by the PasswordController and the PasswordView ->
+      <!-- this section (id = generatePassword) is handled by the PasswordController and the PasswordView ->
         <div id="generatePassword" class="mt-2">
           <!-- open generate pw - need to split pw box out ->
           <h3>Generate Password(s)</h3>

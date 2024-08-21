@@ -5,9 +5,11 @@ defmodule EXKPasswdWeb.HomeLive do
 
   @impl Phoenix.LiveView
   def mount(_params, _sessoin, socket) do
-    socket = socket
-    |> assign(presets: Presets.all())
-    |> assign(settings: Presets.get(:default))
+    socket =
+      socket
+      |> assign(presets: Presets.all())
+      |> assign(settings: Presets.get(:default))
+
     {:ok, socket}
   end
 
