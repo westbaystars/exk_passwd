@@ -249,194 +249,191 @@
                   </div>
                 </div>
                 <!-- /section_separator -->
-
-                          <!-- Digit Padding ->
-                  <div id="section_padding" class="row g-1 mb-3">
-                    <h5>Padding</h5>
-                    <div class="mt-2 col-sm-12 col-md-6">
-                      <div class="input-group">
-                        <!-- padding digits before ->
-                        <label for="padding_digits_before" class="input-group-text">
-                          Digit(s) Before
-                        </label>
-                        <input
-                          type="number"
-                          min="0"
-                          max="5"
-                          step="1"
-                          value="2"
-                          class="form-control rounded-end"
-                          name="padding_digits_before"
-                          id="padding_digits_before"
-                          required
-                        />
-                        <div class="invalid-feedback">Enter a number between 0 and 5</div>
-                      </div>
+                <!-- Padding -->
+                <div id="section_padding" class="grid grid-cols-2 w-full gap-1 mt-0 py-3 g-1">
+                  <h5 class="text-xl font-medium leading-5 shrink-0 mb-2 col-span-2">Padding</h5>
+                  <div class="mt-2 col-span-2 md:col-span-1">
+                    <div class="join w-full w-max-full flex flex-row">
+                      <!-- padding digits before -->
+                      <label
+                        for="digits_before"
+                        class="font-normal items-center text-base text-center px-3 py-2 bg-gray-100 border rounded-l-lg border-gray-300 flex-none"
+                      >
+                        Digit(s) Before
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        max="5"
+                        step="1"
+                        value={@settings.digits_before}
+                        class="font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg border-gray-300 flex-auto w-1"
+                        name="digits_before"
+                        id="digits_before"
+                        required
+                      />
+                      <!--div class="invalid-feedback">Enter a number between 0 and 5</div-->
                     </div>
-                    <!-- /padding_digits_before ->
-                    <div class="mt-2 col-sm-12 col-md-6">
-                      <div class="input-group">
-                        <!-- padding digits after ->
-                        <label for="padding_digits_after" class="input-group-text">
-                          Digit(s) After
-                        </label>
-                        <input
-                          type="number"
-                          min="0"
-                          max="5"
-                          step="1"
-                          value="2"
-                          class="form-control rounded-end"
-                          name="padding_digits_after"
-                          id="padding_digits_after"
-                          required
-                        />
-                        <div class="invalid-feedback">Enter a number between 0 and 5</div>
-                      </div>
-                    </div>
-                    <!-- /padding_digits_after ->
-
-                            <!-- Symbol Padding ->
-                    <div class="mt-2 col-sm-12 col-md-4">
-                      <div class="input-group">
-                        <label for="padding_type" class="input-group-text">Type</label>
-                        <select name="padding_type" id="padding_type" class="form-select">
-                          <option value="NONE" selected="selected">-none-</option>
-                          <option value="FIXED">Fixed</option>
-                          <option value="ADAPTIVE">Adaptive</option>
-                        </select>
-                      </div>
-                    </div>
-                    <!-- /padding_type ->
-                    <div class="mt-2 col-sm-12 col-md-4">
-                      <div class="input-group">
-                        <!-- padding characters before ->
-                        <label for="padding_characters_before" class="input-group-text">
-                          Symbol(s) Before
-                        </label>
-                        <input
-                          type="number"
-                          min="0"
-                          max="5"
-                          step="1"
-                          value="0"
-                          class="form-control rounded-end"
-                          name="padding_characters_before"
-                          id="padding_characters_before"
-                          required
-                        />
-                        <div class="invalid-feedback">Enter a number between 0 and 5</div>
-                      </div>
-                    </div>
-                    <!-- /padding_characters_before ->
-                    <div class="mt-2 col-sm-12 col-md-4">
-                      <div class="input-group">
-                        <!-- padding characters after ->
-                        <label for="padding_characters_after" class="input-group-text">
-                          Symbol(s) After
-                        </label>
-                        <input
-                          type="number"
-                          min="0"
-                          max="5"
-                          step="1"
-                          value="0"
-                          class="form-control rounded-end"
-                          name="padding_characters_after"
-                          id="padding_characters_after"
-                          required
-                        />
-                        <div class="invalid-feedback">Enter a number between 0 and 5</div>
-                      </div>
-                    </div>
-                    <!-- /padding_characters_after ->
-                    <div class="mt-2 col-sm-12 col-md-8">
-                      <div class="input-group">
-                        <!-- pad to length ->
-                        <label for="pad_to_length" class="input-group-text">Pad to Length</label>
-                        <input
-                          type="number"
-                          size="3"
-                          name="pad_to_length"
-                          id="pad_to_length"
-                          value="8"
-                          min="8"
-                          max="999"
-                          step="1"
-                          class="form-control rounded-end"
-                          required
-                        />
-                        <div class="invalid-feedback">Enter a number between 8 and 999</div>
-                      </div>
-                    </div>
-                    <!-- /pad_to_length ->
-
-                            <!-- character type ->
-                    <div id="padding_char_container">
-                      <div class="mt-2">
-                        <div class="input-group">
-                          <label for="padding_character_type" class="input-group-text">
-                            Padding Type
-                          </label>
-                          <select
-                            name="padding_character_type"
-                            id="padding_character_type"
-                            class="form-select"
-                          >
-                            <option value="SEPARATOR">Use Separator Character</option>
-                            <option value="FIXED" selected="selected">Specified Character</option>
-                            <option value="RANDOM">Random Character</option>
-                          </select>
-                        </div>
-                      </div>
-                      <!-- /padding_character_type ->
-
-                              <!-- padding character ->
-                      <div class="mt-2">
-                        <div class="input-group">
-                          <label for="padding_character" class="input-group-text">Padding
-                            Character</label>
-                          <input
-                            class="form-control rounded-end"
-                            type="text"
-                            size="1"
-                            maxlength="1"
-                            value="*"
-                            name="padding_character"
-                            id="padding_character"
-                          />
-                          <div class="invalid-feedback">Enter exactly 1 character</div>
-                        </div>
-                      </div>
-                      <!-- /padding_character ->
-
-                              <!-- padding character alphabet ->
-                      <div class="mt-2">
-                        <div class="input-group">
-                          <label for="padding_alphabet" class="input-group-text">Padding Character
-                            Alphabet</label>
-                          <input
-                            name="padding_alphabet"
-                            id="padding_alphabet"
-                            class="form-control rounded-end"
-                            type="text"
-                            size="6"
-                            minlength="2"
-                            maxlength="20"
-                            value=""
-                          />
-                          <div class="invalid-feedback">
-                            Enter at least 2 characters and max 20
-                          </div>
-                        </div>
-                      </div>
-                      <!-- /padding_alphabet ->
-                    </div>
-                    <!-- /padding_char_container ->
                   </div>
+                  <!-- /padding_digits_before -->
+                  <div class="mt-2 col-span-2 md:col-span-1">
+                    <div class="join w-full w-max-full flex flex-row">
+                      <!-- padding digits after -->
+                      <label
+                        for="digits_after"
+                        class="font-normal items-center text-base text-center px-3 py-2 bg-gray-100 border rounded-l-lg border-gray-300 flex-none"
+                      >
+                        Digit(s) After
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        max="5"
+                        step="1"
+                        value={@settings.digits_after}
+                        class="font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg border-gray-300 flex-auto w-1"
+                        name="digits_after"
+                        id="digits_after"
+                        required
+                      />
+                      <!--div class="invalid-feedback">Enter a number between 0 and 5</div-->
+                    </div>
+                  </div>
+                  <!-- /padding_digits_after -->
+                  <!-- padding_character -->
+                  <div class="mt-2 col-span-2">
+                    <div class="join w-full w-max-full flex flex-row">
+                      <label
+                        for="padding_character"
+                        class="font-normal items-center text-base text-center px-3 py-2 bg-gray-100 border rounded-l-lg border-gray-300 flex-none"
+                      >
+                        Padding Characters
+                      </label>
+                      <input
+                        name="padding_character"
+                        id="padding_character"
+                        class="font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg border-gray-300 flex-auto w-1"
+                        type="text"
+                        size="6"
+                        minlength="2"
+                        maxlength="20"
+                        value={@settings.padding_character}
+                      />
+                      <!--div class="invalid-feedback">Enter at least 2 characters and max 20</div-->
+                    </div>
+                  </div>
+                  <!-- /padding_character -->
+                  <!-- padding_characters -->
+                  <div class="mt-2 col-span-2">
+                    <div class="join w-full w-max-full flex flex-row">
+                      <input
+                        type="radio"
+                        value={:fixed}
+                        class="flex-none"
+                        name="padding_type"
+                        id="padding_fixed"
+                        checked={@padding_type == :fixed}
+                      />
+                      <label
+                        for="padding_fixed"
+                        class="font-normal items-center text-base text-center px-3 flex-none"
+                      >
+                        Fixed Padding
+                      </label>
+                    </div>
+                  </div>
+                  <!-- padding characters before -->
+                  <div class="mt-2 col-span-2 md:col-span-1 pl-7">
+                    <div class="join w-full w-max-full flex flex-row">
+                      <label
+                        for="padding_before"
+                        class="font-normal items-center text-base text-center px-3 py-2 bg-gray-100 border rounded-l-lg border-gray-300 flex-none"
+                      >
+                        Symbol(s) Before
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        max="5"
+                        step="1"
+                        value={@settings.padding_before}
+                        class="font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg border-gray-300 flex-auto w-1 rounded-end"
+                        name="padding_before"
+                        id="padding_before"
+                      />
+                      <!--div class="invalid-feedback">Enter a number between 0 and 5</div-->
+                    </div>
+                  </div>
+                  <!-- /padding_characters_before -->
+                  <!-- padding characters after -->
+                  <div class="mt-2 col-span-2 md:col-span-1 pl-7 md:pl-0">
+                    <div class="join w-full w-max-full flex flex-row">
+                      <label
+                        for="padding_after"
+                        class="font-normal items-center text-base text-center px-3 py-2 bg-gray-100 border rounded-l-lg border-gray-300 flex-none"
+                      >
+                        Symbol(s) After
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        max="5"
+                        step="1"
+                        value={@settings.padding_after}
+                        class="font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg border-gray-300 flex-auto w-1"
+                        name="padding_after"
+                        id="padding_after"
+                      />
+                      <!--div class="invalid-feedback">Enter a number between 0 and 5</div-->
+                    </div>
+                  </div>
+                  <!-- /padding_characters_after -->
+                  <!-- pad to length -->
+                  <div class="mt-2 col-span-2">
+                    <div class="join w-full w-max-full flex flex-row">
+                      <input
+                        type="radio"
+                        value={:adaptive}
+                        class="flex-none"
+                        name="padding_type"
+                        id="padding_adaptive"
+                        checked={@padding_type != :fixed}
+                      />
+                      <label
+                        for="padding_adaptive"
+                        class="font-normal items-center text-base text-center px-3 flex-none"
+                      >
+                        Adaptive Padding
+                      </label>
+                    </div>
+                  </div>
+                  <div class="mt-2 col-span-2 pl-7">
+                    <div class="join w-full w-max-full flex flex-row">
+                      <label
+                        for="pad_to_length"
+                        class="font-normal items-center text-base text-center px-3 py-2 bg-gray-100 border rounded-l-lg border-gray-300 flex-none"
+                      >
+                        Pad to Length
+                      </label>
+                      <input
+                        type="number"
+                        size="3"
+                        name="pad_to_length"
+                        id="pad_to_length"
+                        value={@settings.pad_to_length}
+                        min="8"
+                        max="999"
+                        step="1"
+                        class="font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg border-gray-300 flex-auto w-1"
+                      />
+                      <!--div class="invalid-feedback">Enter a number between 8 and 999</div-->
+                    </div>
+                  </div>
+                  <!-- /pad_to_length -->
+                  <!-- /padding_char_container -->
+                </div>
                 <!-- /section_padding -->
               </form>
-              <p>Settings go here</p>
             </div>
           </div>
         </div>

@@ -5,10 +5,14 @@ defmodule EXKPasswdWeb.HomeLive do
 
   @impl Phoenix.LiveView
   def mount(_params, _sessoin, socket) do
+    preset = Presets.get(:default)
+    padding_type = if preset.pad_to_length > 0, do: :adaptive, else: :fixed
+
     socket =
       socket
       |> assign(presets: Presets.all())
-      |> assign(settings: Presets.get(:default))
+      |> assign(settings: preset)
+      |> assign(padding_type: padding_type)
 
     {:ok, socket}
   end
