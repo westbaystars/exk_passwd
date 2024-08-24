@@ -155,11 +155,11 @@ Checking the `PasswordCreator` module, the `case_transform` may be any of:
 
 * :none: No transformation - use word as listed
 * :alternate: alternating WORD case
-* :capitalise: Capitalise First Letter
-* :invert: cAPITALISE eVERY lETTER eXCEPT tHe fIRST
+* :capitalize: Capitalize First Letter
+* :invert: cAPITALIZE eVERY lETTER eXCEPT tHe fIRST
 * :lower: lower case
 * :upper: UPPER CASE
-* :random: EVERY word randomly CAPITALISED or NOT
+* :random: EVERY word randomly CAPITALIZED or NOT
 
 In the Official Port, this is just a pull down selection. So let's implement it.
 
@@ -173,11 +173,11 @@ In the Official Port, this is just a pull down selection. So let's implement it.
       <%= Phoenix.HTML.Form.options_for_select(
         [ "-none-": :none,
           "alternating WORD case": :alternate,
-          "Capitalise First Letter": :capitalise,
-          "cAPITALISE eVERY lETTER eXCEPT tHe fIRST": :invert,
+          "Capitalize First Letter": :capitalize,
+          "cAPITALIZE eVERY lETTER eXCEPT tHe fIRST": :invert,
           "lower case": :lower,
           "UPPER CASE": :upper,
-          "EVERY word randomly CAPITALISED or NOT": :random
+          "EVERY word randomly CAPITALIZED or NOT": :random
         ], @settings.case_transform) %>
     </select>
   </div>

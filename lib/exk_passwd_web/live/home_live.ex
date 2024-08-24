@@ -1,7 +1,7 @@
 defmodule EXKPasswdWeb.HomeLive do
   use EXKPasswdWeb, :live_view
 
-  alias EXKPasswd.{Presets, PasswordCreator}
+  alias EXKPasswd.{Presets, PasswordCreator, Settings}
 
   @impl Phoenix.LiveView
   def mount(_params, _sessoin, socket) do
@@ -26,20 +26,30 @@ defmodule EXKPasswdWeb.HomeLive do
   def handle_event("validate", %{"_target" => ["num_words"], "num_words" => num_words}, socket) do
     settings = socket.assigns.settings
     num_words = s_to_i(num_words)
-    socket = cond do
-      num_words < 1 -> socket
-        #|> put_flash(:error, "Enter a number between 1 and 10")
-        |> assign(settings: %PasswordCreator{settings | num_words: 1})
-      num_words > 10 -> socket
-        #|> put_flash(:error, "Enter a number between 1 and 10")
-        |> assign(settings: %{settings | num_words: 10})
-      num_words == :error -> socket
-        #|> put_flash(:error, "Enter a number between 1 and 10")
-        #|> assign(settings: %{settings | num_words: 3})
-      true -> socket
-        #|> put_flash(:info, "num_words set to #{num_words}")
-        #|> assign(socket, settings: %{settings | num_words: num_words})
-    end
+
+    socket =
+      cond do
+        num_words < 1 ->
+          socket
+          # |> put_flash(:error, "Enter a number between 1 and 10")
+          #|> assign(settings: %PasswordCreator{settings | num_words: 1})
+
+        num_words > 10 ->
+          socket
+          # |> put_flash(:error, "Enter a number between 1 and 10")
+          #|> assign(settings: %{settings | num_words: 10})
+
+        num_words == :error ->
+          socket
+
+        # |> put_flash(:error, "Enter a number between 1 and 10")
+        # |> assign(settings: %{settings | num_words: 3})
+        true ->
+          socket
+          # |> put_flash(:info, "num_words set to #{num_words}")
+          # |> assign(socket, settings: %{settings | num_words: num_words})
+      end
+
     {:noreply, socket}
   end
 
@@ -49,9 +59,10 @@ defmodule EXKPasswdWeb.HomeLive do
 
   # Returns either the string converted to an integer or `:error` if it is not an integer.
   defp s_to_i(string) when is_binary(string) do
-    with {value, _} <- Integer.parse(string)
-      do value
-      else _ -> :error
+    with {value, _} <- Integer.parse(string) do
+      value
+    else
+      _ -> :error
     end
   end
 end

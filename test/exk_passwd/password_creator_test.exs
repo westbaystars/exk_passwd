@@ -1,15 +1,15 @@
 defmodule EXKPasswd.PasswordCreatorTest do
   use ExUnit.Case, async: true
-  alias EXKPasswd.{PasswordCreator, Presets}
+  alias EXKPasswd.{PasswordCreator, Presets, Settings}
 
   doctest PasswordCreator
 
-  test "verify that the default %PasswordCreator is the same as @default_settings" do
-    assert Presets.get(:default) === %PasswordCreator{}
+  test "verify that the default %Settings is the same as @default_settings" do
+    assert Presets.get(:default) === %Settings{}
   end
 
-  test "verify that the default %PasswordCreator is not the same as @web32_settings" do
-    refute Presets.get(:web32) === %PasswordCreator{}
+  test "verify that the default %Settings is not the same as @web32_settings" do
+    refute Presets.get(:web32) === %Settings{}
   end
 
   test "verify a default password generates 3 words, alternating all lower case and all capital letters, with the same symbol between them and a pair of 2-digit numbers on either side, wrapped by a symbol repeated twice" do

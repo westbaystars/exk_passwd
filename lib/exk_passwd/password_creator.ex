@@ -10,46 +10,7 @@ defmodule EXKPasswd.PasswordCreator do
   leverage pattern matching where multiple `if/else` phrases were necessary
   in the port.
   """
-  alias EXKPasswd.{PasswordCreator, TokenGenerator}
-
-  @doc """
-  The `case_transform` may be any of:
-
-  * :none: No transformation - use word as listed
-  * :alternate: alternating WORD case
-  * :capitalise: Capitalise First Letter
-  * :invert: cAPITALISE eVERY lETTER eXCEPT tHe fIRST
-  * :lower: lower case
-  * :upper: UPPER CASE
-  * :random: EVERY word randomly CAPITALISED or NOT
-
-  If `pad_to_length` is greater than zero and `padding_character` exists,
-  `adding_before` and `padding_after` are ignored and the password is
-  created with the specified length, padded on the end with the
-  `padding_character`.
-
-  `separator_character` and `padding_character` may be an emty string
-  (`""`) to disable use, a string of length 1 character for a fixed
-  value, or a list of characters which will be randomly selected. If
-  the value is a string of length greater than 1, each character will
-  be separated into a list to be selected randomly.
-  """
-  defstruct description:
-              "The default preset resulting in a password consisting of " <>
-                "3 random words of between 4 and 8 letters with alternating " <>
-                "case separated by a random character, with two random digits " <>
-                "before and after, and padded with two random characters front and back.",
-            num_words: 3,
-            word_length_min: 4,
-            word_length_max: 8,
-            case_transform: :alternate,
-            separator_character: ~w(! @ $ % ^ & * - _ + = : | ~ ? / . ;),
-            digits_before: 2,
-            digits_after: 2,
-            pad_to_length: 0,
-            padding_character: ~w(! @ $ % ^ & * - _ + = : | ~ ? / . ;),
-            padding_before: 2,
-            padding_after: 2
+  alias EXKPasswd.{Settings, TokenGenerator}
 
   @doc """
   Create a password based on the settings either passed in or the default settings.
@@ -62,7 +23,7 @@ defmodule EXKPasswd.PasswordCreator do
     "29-large-WINTER-77"
 
   """
-  def create(settings \\ %PasswordCreator{}) do
+  def create(settings \\ %Settings{name: "default"}) do
     separator = TokenGenerator.get_token(settings.separator_character)
 
     Enum.map(1..settings.num_words, fn _ ->
