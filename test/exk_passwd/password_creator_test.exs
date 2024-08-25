@@ -5,11 +5,11 @@ defmodule EXKPasswd.PasswordCreatorTest do
   doctest PasswordCreator
 
   test "verify that the default %Settings is the same as @default_settings" do
-    assert Presets.get(:default) === %Settings{}
+    assert Presets.get("default") === %Settings{}
   end
 
   test "verify that the default %Settings is not the same as @web32_settings" do
-    refute Presets.get(:web32) === %Settings{}
+    refute Presets.get("web32") === %Settings{}
   end
 
   test "verify a default password generates 3 words, alternating all lower case and all capital letters, with the same symbol between them and a pair of 2-digit numbers on either side, wrapped by a symbol repeated twice" do
@@ -28,7 +28,7 @@ defmodule EXKPasswd.PasswordCreatorTest do
     regex =
       ~r/^([!@\$%\^&\*\+=:\|~])[[:digit:]]{2}([\-+=.*_\|~])[[:lower:]]{4,5}\2[[:upper:]]{4,5}\2[[:lower:]]{4,5}\2[[:upper:]]{4,5}\2[[:digit:]]{3}\1$/
 
-    settings = Presets.get(:web32)
+    settings = Presets.get("web32")
 
     assert String.match?(
              PasswordCreator.create(settings),
@@ -52,7 +52,7 @@ defmodule EXKPasswd.PasswordCreatorTest do
     regex =
       ~r/^[a-zA-Z]{4}([!@\$%\^&\*-_\+=:\|~\?\/\.])[a-zA-Z]{4}\1[a-zA-Z]{4}\1\d$/
 
-    settings = Presets.get(:web16)
+    settings = Presets.get("web16")
 
     assert String.match?(
              PasswordCreator.create(settings),
@@ -75,7 +75,7 @@ defmodule EXKPasswd.PasswordCreatorTest do
     regex =
       ~r/[[:digit:]]{4}([-\+=\.\*_\|~,])[[:lower:]]{4,8}\1[[:upper:]]{4,8}\1[[:lower:]]{4,8}\1[[:upper:]]{4,8}\1[[:lower:]]{4,8}\1[[:upper:]]{4,8}\1[[:digit:]]{4}[!@\$%\^&\*\+=:\|~\?]*$/
 
-    settings = Presets.get(:wifi)
+    settings = Presets.get("wifi")
 
     assert String.match?(
              PasswordCreator.create(settings),
@@ -99,7 +99,7 @@ defmodule EXKPasswd.PasswordCreatorTest do
       ~r/[[:digit:]]{4}([-\+=\.\*_\|~,])[[:lower:]]{4,8}\1[[:upper:]]{4,8}\1[[:lower:]]{4,8}\1[[:upper:]]{4,8}\1[[:lower:]]{4,8}\1[[:upper:]]{4,8}\1[[:digit:]]{4}$/
 
     # Force a password to be created with all 8 character words based on the @wifi_settings
-    settings = Presets.get(:wifi)
+    settings = Presets.get("wifi")
     password = PasswordCreator.create(%{settings | word_length_min: 8})
 
     assert String.length(password) == 63
@@ -110,7 +110,7 @@ defmodule EXKPasswd.PasswordCreatorTest do
     regex =
       ~r/^([-:\.!\?@&])[[:digit:]]{2}([-:\.@&])[a-zA-Z]{4,7}\2[a-zA-Z]{4,7}\2[a-zA-Z]{4,7}\2[[:digit]]{2}\1$/
 
-    settings = Presets.get(:apple_id)
+    settings = Presets.get("apple_id")
 
     Enum.all?(1..5000, fn _ ->
       password = PasswordCreator.create(settings)
@@ -126,7 +126,7 @@ defmodule EXKPasswd.PasswordCreatorTest do
   end
 
   test "verify that the @apple_id_settings password generates a password 22 charaters in length at least once in 5,000 tries" do
-    settings = Presets.get(:apple_id)
+    settings = Presets.get("apple_id")
 
     assert Enum.any?(1..5000, fn _ ->
              String.length(PasswordCreator.create(settings)) == 22
@@ -134,7 +134,7 @@ defmodule EXKPasswd.PasswordCreatorTest do
   end
 
   test "verify that the @apple_id_settings password generates a password 31 characters in length at least once in 5,000 tries" do
-    settings = Presets.get(:apple_id)
+    settings = Presets.get("apple_id")
 
     assert Enum.any?(1..5000, fn _ ->
              String.length(PasswordCreator.create(settings)) == 31
@@ -145,7 +145,7 @@ defmodule EXKPasswd.PasswordCreatorTest do
     regex =
       ~r/^\w{4-8} \w{4-8} \w{4-8} \w{4-8} \w{4-8} \w{4-8}[\.!\?]$/
 
-    settings = Presets.get(:security)
+    settings = Presets.get("security")
 
     Enum.all?(1..5000, fn _ ->
       password = PasswordCreator.create(settings)
@@ -162,7 +162,7 @@ defmodule EXKPasswd.PasswordCreatorTest do
     regex =
       ~r/^[[[a-zA-Z]]]{4,8}-[a-zA-Z]{4,8}-[a-zA-Z]{4,8}-[a-zA-Z]{4,8}-[a-zA-Z]{4,8}[\.!\?]$/
 
-    settings = Presets.get(:xkcd)
+    settings = Presets.get("xkcd")
 
     Enum.all?(1..5000, fn _ ->
       password = PasswordCreator.create(settings)
@@ -178,7 +178,7 @@ defmodule EXKPasswd.PasswordCreatorTest do
   end
 
   test "verify that the @xkcd_settings password generates a password 24 charaters in length at least once in 5,000 tries" do
-    settings = Presets.get(:xkcd)
+    settings = Presets.get("xkcd")
 
     assert Enum.any?(1..5000, fn _ ->
              String.length(PasswordCreator.create(settings)) == 24
@@ -186,7 +186,7 @@ defmodule EXKPasswd.PasswordCreatorTest do
   end
 
   test "verify that the @xkcd_settings password generates a password 44 characters in length when forced to use 8 character long words" do
-    settings = Presets.get(:xkcd)
+    settings = Presets.get("xkcd")
     assert String.length(PasswordCreator.create(%{settings | word_length_min: 8})) == 44
   end
 end

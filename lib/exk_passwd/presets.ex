@@ -7,8 +7,10 @@ defmodule EXKPasswd.Presets do
   (https://github.com/bartificer/xkpasswd-js/blob/main/src/lib/presets.mjs).
   """
 
+  alias EXKPasswd.Settings
+
   @presets [
-    %{
+    %Settings{
       name: "default",
       description:
         "The default preset resulting in a password consisting of " <>
@@ -26,7 +28,7 @@ defmodule EXKPasswd.Presets do
       padding_before: 2,
       padding_after: 2
     },
-    %{
+    %Settings{
       name: "web32",
       description: "A preset for websites that allow passwords up to 32 characters long.",
       num_words: 4,
@@ -40,7 +42,7 @@ defmodule EXKPasswd.Presets do
       padding_before: 1,
       padding_after: 1
     },
-    %{
+    %Settings{
       name: "web16",
       description:
         "A preset for websites that insist passwords not be longer " <>
@@ -57,7 +59,7 @@ defmodule EXKPasswd.Presets do
       digits_after: 1,
       padding_character: ""
     },
-    %{
+    %Settings{
       name: "wifi",
       description:
         "A preset for generating 63 character long WPA2 keys " <>
@@ -73,7 +75,7 @@ defmodule EXKPasswd.Presets do
       pad_to_length: 63,
       padding_character: ~s(!@$%^&*+=:|~?)
     },
-    %{
+    %Settings{
       name: "apple_id",
       description:
         "A preset respecting the many prerequisites Apple places " <>
@@ -91,7 +93,7 @@ defmodule EXKPasswd.Presets do
       padding_before: 1,
       padding_after: 1
     },
-    %{
+    %Settings{
       name: "security",
       description: "A preset for creating fake answers to security questions.",
       num_words: 6,
@@ -105,7 +107,7 @@ defmodule EXKPasswd.Presets do
       padding_before: 0,
       padding_after: 1
     },
-    %{
+    %Settings{
       name: "xkcd",
       description:
         "A preset for generating passwords similar " <>

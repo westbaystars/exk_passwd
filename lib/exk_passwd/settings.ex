@@ -3,6 +3,7 @@ defmodule EXKPasswd.Settings do
   import Ecto.Changeset
   alias EXKPasswd.Settings
 
+  @primary_key {:name, :string, default: "default"}
   @doc """
   The `case_transform` may be any of:
 
@@ -26,8 +27,11 @@ defmodule EXKPasswd.Settings do
   be separated into a list to be selected randomly.
   """
   embedded_schema do
-    field(:name, :string)
-    field(:description, :string, default: "")
+    field(:description, :string, default: "The default preset resulting " <>
+      "in a password consisting of 3 random words of between 4 and 8 " <>
+      "letters with alternating case separated by a random character, " <>
+      "with two random digits before and after, and padded with two " <>
+      "random characters front and back.")
     field(:num_words, :integer, default: 3)
     field(:word_length_min, :integer, default: 4)
     field(:word_length_max, :integer, default: 8)
@@ -37,7 +41,7 @@ defmodule EXKPasswd.Settings do
       default: :alternate
     )
 
-    field(:separater_character, :string, default: ~s(!@$%^&*-_+=:|~?/.;))
+    field(:separator_character, :string, default: ~s(!@$%^&*-_+=:|~?/.;))
     field(:digits_before, :integer, default: 2)
     field(:digits_after, :integer, default: 2)
     field(:pad_to_length, :integer, default: 0)
@@ -57,7 +61,7 @@ defmodule EXKPasswd.Settings do
       :word_length_min,
       :word_length_max,
       :case_transform,
-      :separater_character,
+      :separator_character,
       :digits_before,
       :digits_after,
       :pad_to_length,
@@ -72,7 +76,7 @@ defmodule EXKPasswd.Settings do
       :word_length_min,
       :word_length_max,
       :case_transform,
-      :separater_character,
+      :separator_character,
       :digits_before,
       :digits_after,
       :pad_to_length,
