@@ -96,50 +96,52 @@
               type="radio"
               name="accordian-content"
               class="w-full checked:bg-active"
-              checked="checked"
+              value="presets"
+              checked={@accordian == "presets"}
             />
             <div class="collapse-title text-xl font-medium">
               Presets
             </div>
             <div class="collapse-content grid grid-cols-6">
-              <%= for {preset, _} <- @presets do %>
+              <%= for preset <- @presets do %>
                 <button class="btn btn-outline uppercase col-span-3 md:col-span-2 lg:col-span-1">
-                  <%= preset %>
+                  <%= preset.name %>
                 </button>
               <% end %>
             </div>
           </div>
           <div class="collapse collapse-arrow bg-base-200 border-base-300 border rounded-t-none">
-            <input type="radio" name="accordian-content" class="w-full checked:bg-active" />
+            <input
+              type="radio"
+              name="accordian-content"
+              value="settings"
+              class="w-full checked:bg-active"
+              checked={@accordian == "settings"}
+            />
             <div class="collapse-title text-xl font-medium">
               Settings
             </div>
             <div class="collapse-content bg-white">
-              <form id="password-settings" phx-change="validate" phx-submit="apply">
+              <.simple_form
+                for={@form}
+                id="password-settings"
+                phx-change="validate"
+                phx-submit="apply"
+              >
                 <!-- word settings -->
                 <div id="section_words" class="grid grid-cols-6 w-full gap-1 mt-0 py-3 g-1">
                   <h5 class="text-xl font-medium leading-5 shrink-0 mb-2 col-span-6">Words</h5>
                   <div class="mt-2 col-span-6 md:col-span-3 lg:col-span-2">
-                    <div class="join w-full flex flex-row">
-                      <label
-                        for="num_words"
-                        class="font-normal items-center text-base text-center px-3 py-2 bg-gray-100 border rounded-l-lg border-gray-300 flex-none"
-                      >
-                        # of Words
-                      </label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="10"
-                        step="1"
-                        value={@settings.num_words}
-                        class="font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg border-gray-300 flex-auto w-1/12"
-                        name="num_words"
-                        id="num_words"
-                        required
-                      />
-                      <!--div class="invalid-feedback">Enter a number between 1 and 10</div-->
-                    </div>
+                    <.input
+                      type="number"
+                      min="1"
+                      max="10"
+                      step="1"
+                      id="num_words"
+                      name="num_words"
+                      label="# of words"
+                      field={@form[:num_words]}
+                    />
                   </div>
                   <div class="mt-2 col-span-6 md:col-span-3 lg:col-span-2">
                     <div class="join w-full flex flex-row">
@@ -429,7 +431,7 @@
                   <!-- /padding_char_container -->
                 </div>
                 <!-- /section_padding -->
-              </form>
+              </.simple_form>
             </div>
           </div>
         </div>

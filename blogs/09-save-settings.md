@@ -31,7 +31,7 @@ Anyway, it's time to add Ecto into the project and modify the settings
 with an Ecto struct. We won't be using a database on the server side. Only
 the `Changeset` functionality.
 
-The first thing we need is to add `{:ecto, "~> 3.12"},` to the `deps` in
+The first thing we need is to add `{:phoenix_ecto, "~> 4.6"},` to the `deps` in
 `mix.exs`, then run `mix deps.get` and `mix deps.compile`.
 
 Now let's generate an embedded `Settings` structure with the same structure
@@ -343,3 +343,39 @@ field(:description, :string, default: "The default preset resulting " <>
   "with two random digits before and after, and padded with two " <>
   "random characters front and back.")
 ```
+
+Running the tests again, huh, still 2 failures. Aaaaah. the `Settings`
+version has an `id` and default `pad_to_length: 0` fields. I didn't
+expect that an `id` field would be added to an `embedded_schema/1`
+schema. Then again, these are often JSON objects inserted into Postgres
+JSONB blobs which need indexed for updating as well. Should have
+anticipated that. At least the inserted and updated timestamps don't
+get added.
+
+To fix this, remove the `:name` field and add the following macro before
+the `embedded_schema/1` call:
+
+```elixir
+@primary_key {:name, :string, default: "default"}
+```
+
+The name should be unique to each of the `Settings` structs, so this is fine.
+
+To handle the `pad_to_length: 0` problem for this and all presets that may
+ignore setting it, allowing it to be the default `0`, let's add that make
+all of the presets `%Settings{}` structs as so:
+
+```elixir
+@presets [
+  %Settings{
+    name: "default",
+    ...
+```
+
+Not doing so will make the next `refute` test pass, but for the wrong reason.
+
+Now running the `test/exk_passwd/password_creator_test.exs` test will result
+in all 14 tests passings.
+
+Okay, now where was I when I got distracted by this refactoring? Oh, yeah.
+Handling the `num_words` validations. That'll be next.

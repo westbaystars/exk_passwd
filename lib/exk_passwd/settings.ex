@@ -27,11 +27,15 @@ defmodule EXKPasswd.Settings do
   be separated into a list to be selected randomly.
   """
   embedded_schema do
-    field(:description, :string, default: "The default preset resulting " <>
-      "in a password consisting of 3 random words of between 4 and 8 " <>
-      "letters with alternating case separated by a random character, " <>
-      "with two random digits before and after, and padded with two " <>
-      "random characters front and back.")
+    field(:description, :string,
+      default:
+        "The default preset resulting " <>
+          "in a password consisting of 3 random words of between 4 and 8 " <>
+          "letters with alternating case separated by a random character, " <>
+          "with two random digits before and after, and padded with two " <>
+          "random characters front and back."
+    )
+
     field(:num_words, :integer, default: 3)
     field(:word_length_min, :integer, default: 4)
     field(:word_length_max, :integer, default: 8)
@@ -51,7 +55,7 @@ defmodule EXKPasswd.Settings do
   end
 
   @doc false
-  def changeset(attrs), do: changeset(%Settings{}, attrs)
+  # def changeset(attrs), do: changeset(%Settings{}, attrs)
   def changeset(%Settings{} = settings, attrs) do
     settings
     |> cast(attrs, [
@@ -69,6 +73,11 @@ defmodule EXKPasswd.Settings do
       :padding_before,
       :padding_after
     ])
+    |> validate()
+  end
+
+  def validate(changeset) do
+    changeset
     |> validate_required([
       :name,
       :description,
@@ -84,5 +93,6 @@ defmodule EXKPasswd.Settings do
       :padding_before,
       :padding_after
     ])
+    |> validate_inclusion(:num_words, 1..10, message: "must be between 1 and 10")
   end
 end
