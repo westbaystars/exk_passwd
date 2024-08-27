@@ -144,46 +144,28 @@
                     />
                   </div>
                   <div class="mt-2 col-span-6 md:col-span-3 lg:col-span-2">
-                    <div class="join w-full flex flex-row">
-                      <label
-                        for="word_length_min"
-                        class="font-normal items-center text-base text-center px-3 py-2 bg-gray-100 border rounded-l-lg border-gray-300 flex-none"
-                      >
-                        Min Length
-                      </label>
-                      <input
+                      <.input
                         type="number"
                         min="4"
                         max="10"
                         step="1"
-                        value={@settings.word_length_min}
-                        class="font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg border-gray-300 flex-auto w-1/12"
-                        name="word_length_min"
                         id="word_length_min"
+                        name="word_length_min"
+                        label="Min Length"
+                        field={@form[:word_length_min]}
                       />
-                      <!--div id="word_length_min_error" class="invalid-feedback">Enter a number between 4 and 10</div-->
-                    </div>
                   </div>
                   <div class="mt-2 col-span-6 md:col-span-3 lg:col-span-2">
-                    <div class="join w-full flex flex-row">
-                      <label
-                        for="word_length_max"
-                        class="font-normal items-center text-base text-center px-3 py-2 bg-gray-100 border rounded-l-lg border-gray-300 flex-none"
-                      >
-                        Max Length
-                      </label>
-                      <input
+                      <.input
                         type="number"
                         min="4"
                         max="10"
                         step="1"
-                        value={@settings.word_length_max}
-                        class="font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg border-gray-300 flex-auto w-1/12"
-                        name="word_length_max"
                         id="word_length_max"
+                        name="word_length_max"
+                        label="Max Length"
+                        field={@form[:word_length_max]}
                       />
-                      <!--div id="word_length_max_error" class="invalid-feedback">Enter a number between 4 and 10</div-->
-                    </div>
                   </div>
                 </div>
                 <!-- section_words -->

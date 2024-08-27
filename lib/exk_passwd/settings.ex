@@ -94,5 +94,20 @@ defmodule EXKPasswd.Settings do
       :padding_after
     ])
     |> validate_inclusion(:num_words, 1..10, message: "must be between 1 and 10")
+    |> validate_inclusion(:word_length_min, 4..10, message: "must be between 4 and 10")
+    |> validate_inclusion(:word_length_max, 4..10, message: "must be between 4 and 10")
+    |> validate_less_than_or_equal(:word_length_min, :word_length_max, "Max Length")
+  end
+
+  defp validate_less_than_or_equal(changeset, min, max, upper_label) do
+    {_, min_value} = fetch_field(changeset, min)
+    {_, max_value} = fetch_field(changeset, max)
+
+    if min_value <= max_value do
+      changeset
+    else
+      message = "must be <= to #{upper_label}"
+      add_error(changeset, min, message, max_field: max)
+    end
   end
 end

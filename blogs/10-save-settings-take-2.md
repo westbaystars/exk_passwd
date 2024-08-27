@@ -108,21 +108,21 @@ the form data for us. So let's edit the `<form ...>` to read:
  Next, we need to add the `:form` to our assigns in `mount/3`:
 
  ```elixir
- @impl Phoenix.LiveView
- def mount(_params, _sessoin, socket) do
-   preset = Presets.get("default")
-   IO.inspect(preset, label: "Mounting")
-   padding_type = if preset.pad_to_length > 0, do: :adaptive, else: :fixed
+  @impl Phoenix.LiveView
+  def handle_event(
+        "validate",
+        %{"_target" => ["num_words"], "num_words" => num_words},
+        %{assigns: %{settings: settings, form: form}} = socket
+      ) do
+    changeset =
+      settings
+      |> Settings.changeset(Map.merge(form.source.changes, %{num_words: num_words}))
+      |> Map.put(:action, :validate)
 
-   socket =
-     socket
-     |> assign(presets: Presets.all())
-     |> assign(settings: preset)
-     |> assign_form(Settings.changeset(preset, %{}))
-     |> assign(padding_type: padding_type)
-
-   {:ok, socket}
- end
+    {:noreply,
+    socket
+    |> assign_form(changeset)}
+  end
 ```
 
 `assign_form` is new. It needs to be added at to the bottom of the module:
@@ -206,3 +206,132 @@ a `must be between 1 and 10` error underneath and the edit box turning
 red.
 
 ## Handling Min Length and Max Length Changes
+
+Because we have already prepared the label/component/error element in
+`core_components.ex`, we can use it and clean up our `home_live.html.heex`
+file for `word_length_min` and `word_length_max` entry parameters.
+
+```elixir
+<div class="mt-2 col-span-6 md:col-span-3 lg:col-span-2">
+    <.input
+      type="number"
+      min="4"
+      max="10"
+      step="1"
+      id="word_length_min"
+      name="word_length_min"
+      label="Min Length"
+      field={@form[:word_length_min]}
+    />
+</div>
+<div class="mt-2 col-span-6 md:col-span-3 lg:col-span-2">
+    <.input
+      type="number"
+      min="4"
+      max="10"
+      step="1"
+      id="word_length_max"
+      name="word_length_max"
+      label="Max Length"
+      field={@form[:word_length_max]}
+    />
+</div>
+```
+
+Word can be from 4 to 10 characters in length. And we're now getting the
+data from the `@form` assign instead of the `@setting` default preset
+that we originally setup in `mount/3`.
+
+Now it's time to wire it up. In `home_live.ex`:
+
+```elixir
+def handle_event(
+      "validate",
+      %{"_target" => ["word_length_min"], "word_length_min" => word_length_min},
+      %{assigns: %{settings: settings, form: form}} = socket
+    ) do
+  changeset =
+    settings
+    |> Settings.changeset(Map.merge(form.source.changes, %{word_length_min: word_length_min}))
+    |> Map.put(:action, :validate)
+
+  {:noreply,
+   socket
+   |> assign_form(changeset)}
+end
+
+def handle_event(
+      "validate",
+      %{"_target" => ["word_length_max"], "word_length_max" => word_length_max},
+      %{assigns: %{settings: settings, form: form}} = socket
+    ) do
+  changeset =
+    settings
+    |> Settings.changeset(Map.merge(form.source.changes, %{word_length_max: word_length_max}))
+    |> Map.put(:action, :validate)
+
+  {:noreply,
+   socket
+   |> assign_form(changeset)}
+end
+```
+
+These event handlers are very much like the handlers we wrote for `num_words`.
+We take the value that was changed along with the `settings` and `form`.
+The `settings` is converted to a `Changeset`, merging the changes so far
+with the new value and the `action` is set to `:validate`. The `changeset`
+is then converted to the `Phoenix.HTML.Form` struct and returned as an
+assign to the page.
+
+The last thing that needs to be done is that the min and max values need to
+be validated in `settings.ex`.
+
+```elixir
+...
+|> validate_inclusion(:num_words, 1..10, message: "must be between 1 and 10")
+|> validate_inclusion(:word_length_min, 4..10, message: "must be between 4 and 10")
+|> validate_inclusion(:word_length_max, 4..10, message: "must be between 4 and 10")
+```
+
+The last two validations are added to make sure that their values are between
+4 and 10 (inclusive).
+
+With this, we can now veryify that numbers entered less than 4 or greater
+than 10 cause an error to be shown for both fields. But what happens when
+the `Min Length` is greater than the `Max Length`? Nothing. That's
+currently acceptable.
+
+To fix that, let's write a custom validation.
+
+```elixir
+defp validate_less_than_or_equal(changeset, min, max, upper_label) do
+  {_, min_value} = fetch_field(changeset, min)
+  {_, max_value} = fetch_field(changeset, max)
+
+  if min_value <= max_value do
+    changeset
+  else
+    message = "must be <= to #{upper_label}"
+    add_error(changeset, min, message, max_field: max)
+  end
+end
+```
+
+We get the min and max values, compare them, and if min is less than or
+equal to max, return the `changeset` as is -- no problem. Otherwise,
+add the error message to the min field for display.
+
+And we need to call it in our validation pipeline:
+
+```elixir
+...
+|> validate_inclusion(:num_words, 1..10, message: "must be between 1 and 10")
+|> validate_inclusion(:word_length_min, 4..10, message: "must be between 4 and 10")
+|> validate_inclusion(:word_length_max, 4..10, message: "must be between 4 and 10")
+|> validate_less_than_or_equal(:word_length_min, :word_length_max, "Max Length")
+```
+
+Now if we change the `Min Length` to `6` and the `Max Length` to `4`, we
+get the error `must be <= to Max Length` below the `Min Length` field.
+
+## Case Transformations

@@ -31,20 +31,44 @@ defmodule EXKPasswdWeb.HomeLive do
         %{"_target" => ["num_words"], "num_words" => num_words},
         %{assigns: %{settings: settings, form: form}} = socket
       ) do
-    IO.inspect(form, label: "The form")
+    changeset =
+      settings
+      |> Settings.changeset(Map.merge(form.source.changes, %{num_words: num_words}))
+      |> Map.put(:action, :validate)
 
-    with {num_words, _} <- Integer.parse(num_words) do
-      changeset =
-        settings
-        |> Settings.changeset(Map.merge(form.source.changes, %{num_words: num_words}))
-        |> Map.put(:action, :validate)
+    {:noreply,
+     socket
+     |> assign_form(changeset)}
+  end
 
-      {:noreply,
-       socket
-       |> assign_form(changeset)}
-    else
-      _ -> {:noreply, socket}
-    end
+  def handle_event(
+        "validate",
+        %{"_target" => ["word_length_min"], "word_length_min" => word_length_min},
+        %{assigns: %{settings: settings, form: form}} = socket
+      ) do
+    changeset =
+      settings
+      |> Settings.changeset(Map.merge(form.source.changes, %{word_length_min: word_length_min}))
+      |> Map.put(:action, :validate)
+
+    {:noreply,
+     socket
+     |> assign_form(changeset)}
+  end
+
+  def handle_event(
+        "validate",
+        %{"_target" => ["word_length_max"], "word_length_max" => word_length_max},
+        %{assigns: %{settings: settings, form: form}} = socket
+      ) do
+    changeset =
+      settings
+      |> Settings.changeset(Map.merge(form.source.changes, %{word_length_max: word_length_max}))
+      |> Map.put(:action, :validate)
+
+    {:noreply,
+     socket
+     |> assign_form(changeset)}
   end
 
   def handle_event("validate", _params, socket) do
