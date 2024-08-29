@@ -31,7 +31,9 @@ defmodule EXKPasswdWeb.HomeLive do
       ) do
     changeset =
       settings
-      |> Settings.changeset(Map.merge(form.source.changes, %{String.to_existing_atom(target) => params[target]}))
+      |> Settings.changeset(
+        Map.merge(form.source.changes, %{String.to_existing_atom(target) => params[target]})
+      )
       |> Map.put(:action, :validate)
 
     {:noreply,

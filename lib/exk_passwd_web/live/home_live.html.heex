@@ -144,28 +144,28 @@
                     />
                   </div>
                   <div class="mt-2 col-span-6 md:col-span-3 lg:col-span-2">
-                      <.input
-                        type="number"
-                        min="4"
-                        max="10"
-                        step="1"
-                        id="word_length_min"
-                        name="word_length_min"
-                        label="Min Length"
-                        field={@form[:word_length_min]}
-                      />
+                    <.input
+                      type="number"
+                      min="4"
+                      max="10"
+                      step="1"
+                      id="word_length_min"
+                      name="word_length_min"
+                      label="Min Length"
+                      field={@form[:word_length_min]}
+                    />
                   </div>
                   <div class="mt-2 col-span-6 md:col-span-3 lg:col-span-2">
-                      <.input
-                        type="number"
-                        min="4"
-                        max="10"
-                        step="1"
-                        id="word_length_max"
-                        name="word_length_max"
-                        label="Max Length"
-                        field={@form[:word_length_max]}
-                      />
+                    <.input
+                      type="number"
+                      min="4"
+                      max="10"
+                      step="1"
+                      id="word_length_max"
+                      name="word_length_max"
+                      label="Max Length"
+                      field={@form[:word_length_max]}
+                    />
                   </div>
                 </div>
                 <!-- section_words -->
@@ -183,13 +183,13 @@
                     id="case_transform"
                     name="case_transform"
                     options={[
-                        "-none-": :none,
-                        "alternating WORD case": :alternate,
-                        "Capitalize First Letter": :capitalize,
-                        "cAPITALIZE eVERY lETTER eXCEPT tHe fIRST": :invert,
-                        "lower case": :lower,
-                        "UPPER CASE": :upper,
-                        "EVERY word randomly CAPITALIZED or NOT": :random
+                      "-none-": :none,
+                      "alternating WORD case": :alternate,
+                      "Capitalize First Letter": :capitalize,
+                      "cAPITALIZE eVERY lETTER eXCEPT tHe fIRST": :invert,
+                      "lower case": :lower,
+                      "UPPER CASE": :upper,
+                      "EVERY word randomly CAPITALIZED or NOT": :random
                     ]}
                     value={@form[:case_transform].value}
                   />
@@ -201,20 +201,12 @@
                     Separator
                   </h5>
                   <div class="join w-full w-max-full flex flex-row">
-                    <!-- specific character -->
-                    <label
-                      for="separator_character"
-                      class="font-normal items-center text-base text-center px-3 py-2 bg-gray-100 border rounded-l-lg border-gray-300 flex-none"
-                    >
-                      Character
-                    </label>
-                    <input
-                      name="separator_character"
-                      id="separator_character"
-                      class="font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg border-gray-300 flex-auto w-1"
+                    <.input
                       type="text"
-                      size="1"
-                      value={@settings.separator_character}
+                      id="separator_character"
+                      name="separator_character"
+                      label="Separator Characters"
+                      field={@form[:separator_character]}
                     />
                   </div>
                 </div>
@@ -223,77 +215,44 @@
                 <div id="section_padding" class="grid grid-cols-2 w-full gap-1 mt-0 py-3 g-1">
                   <h5 class="text-xl font-medium leading-5 shrink-0 mb-2 col-span-2">Padding</h5>
                   <div class="mt-2 col-span-2 md:col-span-1">
-                    <div class="join w-full w-max-full flex flex-row">
-                      <!-- padding digits before -->
-                      <label
-                        for="digits_before"
-                        class="font-normal items-center text-base text-center px-3 py-2 bg-gray-100 border rounded-l-lg border-gray-300 flex-none"
-                      >
-                        Digit(s) Before
-                      </label>
-                      <input
-                        type="number"
-                        min="0"
-                        max="5"
-                        step="1"
-                        value={@settings.digits_before}
-                        class="font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg border-gray-300 flex-auto w-1"
-                        name="digits_before"
-                        id="digits_before"
-                        required
-                      />
-                      <!--div class="invalid-feedback">Enter a number between 0 and 5</div-->
-                    </div>
+                    <!-- padding digits before -->
+                    <.input
+                      type="number"
+                      min="0"
+                      max="5"
+                      step="1"
+                      id="digits_before"
+                      name="digits_before"
+                      label="Digit(s) Before"
+                      field={@form[:digits_before]}
+                    />
                   </div>
                   <!-- /padding_digits_before -->
                   <div class="mt-2 col-span-2 md:col-span-1">
-                    <div class="join w-full w-max-full flex flex-row">
-                      <!-- padding digits after -->
-                      <label
-                        for="digits_after"
-                        class="font-normal items-center text-base text-center px-3 py-2 bg-gray-100 border rounded-l-lg border-gray-300 flex-none"
-                      >
-                        Digit(s) After
-                      </label>
-                      <input
-                        type="number"
-                        min="0"
-                        max="5"
-                        step="1"
-                        value={@settings.digits_after}
-                        class="font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg border-gray-300 flex-auto w-1"
-                        name="digits_after"
-                        id="digits_after"
-                        required
-                      />
-                      <!--div class="invalid-feedback">Enter a number between 0 and 5</div-->
-                    </div>
+                    <!-- padding digits after -->
+                    <.input
+                      type="number"
+                      min="0"
+                      max="5"
+                      step="1"
+                      id="digits_after"
+                      name="digits_after"
+                      label="Digit(s) After"
+                      field={@form[:digits_after]}
+                    />
                   </div>
                   <!-- /padding_digits_after -->
-                  <!-- padding_character -->
-                  <div class="mt-2 col-span-2">
-                    <div class="join w-full w-max-full flex flex-row">
-                      <label
-                        for="padding_character"
-                        class="font-normal items-center text-base text-center px-3 py-2 bg-gray-100 border rounded-l-lg border-gray-300 flex-none"
-                      >
-                        Padding Characters
-                      </label>
-                      <input
-                        name="padding_character"
-                        id="padding_character"
-                        class="font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg border-gray-300 flex-auto w-1"
-                        type="text"
-                        size="6"
-                        minlength="2"
-                        maxlength="20"
-                        value={@settings.padding_character}
-                      />
-                      <!--div class="invalid-feedback">Enter at least 2 characters and max 20</div-->
-                    </div>
-                  </div>
-                  <!-- /padding_character -->
                   <!-- padding_characters -->
+                  <div class="mt-2 col-span-2">
+                    <.input
+                      type="text"
+                      id="padding_character"
+                      name="padding_character"
+                      label="Padding Characters"
+                      field={@form[:padding_character]}
+                    />
+                  </div>
+                  <!-- /padding_characters -->
                   <div class="mt-2 col-span-2">
                     <div class="join w-full w-max-full flex flex-row">
                       <input
@@ -314,48 +273,30 @@
                   </div>
                   <!-- padding characters before -->
                   <div class="mt-2 col-span-2 md:col-span-1 pl-7">
-                    <div class="join w-full w-max-full flex flex-row">
-                      <label
-                        for="padding_before"
-                        class="font-normal items-center text-base text-center px-3 py-2 bg-gray-100 border rounded-l-lg border-gray-300 flex-none"
-                      >
-                        Symbol(s) Before
-                      </label>
-                      <input
-                        type="number"
-                        min="0"
-                        max="5"
-                        step="1"
-                        value={@settings.padding_before}
-                        class="font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg border-gray-300 flex-auto w-1 rounded-end"
-                        name="padding_before"
-                        id="padding_before"
-                      />
-                      <!--div class="invalid-feedback">Enter a number between 0 and 5</div-->
-                    </div>
+                    <.input
+                      type="number"
+                      min="0"
+                      max="5"
+                      step="1"
+                      id="padding_before"
+                      name="padding_before"
+                      label="Symbol(s) Before"
+                      field={@form[:padding_before]}
+                    />
                   </div>
                   <!-- /padding_characters_before -->
                   <!-- padding characters after -->
                   <div class="mt-2 col-span-2 md:col-span-1 pl-7 md:pl-0">
-                    <div class="join w-full w-max-full flex flex-row">
-                      <label
-                        for="padding_after"
-                        class="font-normal items-center text-base text-center px-3 py-2 bg-gray-100 border rounded-l-lg border-gray-300 flex-none"
-                      >
-                        Symbol(s) After
-                      </label>
-                      <input
-                        type="number"
-                        min="0"
-                        max="5"
-                        step="1"
-                        value={@settings.padding_after}
-                        class="font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg border-gray-300 flex-auto w-1"
-                        name="padding_after"
-                        id="padding_after"
-                      />
-                      <!--div class="invalid-feedback">Enter a number between 0 and 5</div-->
-                    </div>
+                    <.input
+                      type="number"
+                      min="0"
+                      max="5"
+                      step="1"
+                      id="padding_after"
+                      name="padding_after"
+                      label="Symbol(s) After"
+                      field={@form[:padding_after]}
+                    />
                   </div>
                   <!-- /padding_characters_after -->
                   <!-- pad to length -->
@@ -378,26 +319,16 @@
                     </div>
                   </div>
                   <div class="mt-2 col-span-2 pl-7">
-                    <div class="join w-full w-max-full flex flex-row">
-                      <label
-                        for="pad_to_length"
-                        class="font-normal items-center text-base text-center px-3 py-2 bg-gray-100 border rounded-l-lg border-gray-300 flex-none"
-                      >
-                        Pad to Length
-                      </label>
-                      <input
-                        type="number"
-                        size="3"
-                        name="pad_to_length"
-                        id="pad_to_length"
-                        value={@settings.pad_to_length}
-                        min="8"
-                        max="999"
-                        step="1"
-                        class="font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg border-gray-300 flex-auto w-1"
-                      />
-                      <!--div class="invalid-feedback">Enter a number between 8 and 999</div-->
-                    </div>
+                    <.input
+                      type="number"
+                      min="8"
+                      max="999"
+                      step="1"
+                      id="pad_to_length"
+                      name="pad_to_length"
+                      label="Pad to Length"
+                      field={@form[:pad_to_length]}
+                    />
                   </div>
                   <!-- /pad_to_length -->
                   <!-- /padding_char_container -->

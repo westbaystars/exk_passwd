@@ -335,3 +335,251 @@ Now if we change the `Min Length` to `6` and the `Max Length` to `4`, we
 get the error `must be <= to Max Length` below the `Min Length` field.
 
 ## Case Transformations
+
+Once again, we're going to modify a default `core_components.ex` element to
+match the Official port in look and feel. Find the `type: "select` `input`
+definition and replace it with:
+
+```elixir
+def input(%{type: "select"} = assigns) do
+  ~H"""
+  <label class="form-control w-full">
+    <div class="join w-full w-max-full flex flex-row">
+      <label
+        for={@id}
+        class="font-normal items-center text-base text-center px-3 py-2 bg-gray-100 border rounded-l-lg border-zinc-300 flex-none"
+      >
+        <%= @label %>
+      </label>
+      <select
+        id={@id}
+        name={@name}
+        class="font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg border-gray-300 bg-white shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm flex-auto w-1"
+        multiple={@multiple}
+        {@rest}
+      >
+        <option :if={@prompt} value=""><%= @prompt %></option>
+        <%= Phoenix.HTML.Form.options_for_select(@options, @value) %>
+      </select>
+    </div>
+    <.error :for={msg <- @errors}><%= msg %></.error>
+  </label>
+  """
+end
+```
+
+Here we wrap the label, select, and error into a `form-control` and add
+the classes that we used before.
+
+Now, let's use this in `home_live.html.heex`:
+
+```elixir
+<!-- Word Transformations -->
+<div
+  id="section_transformations"
+  class="grid grid-cols-1 w-full gap-1 mt-0 py-3 g-1"
+>
+  <h5 class="text-xl font-medium leading-5 shrink-0 mb-2 col-span-1">
+    Transformations
+  </h5>
+  <.input
+    type="select"
+    label="Case Transform"
+    id="case_transform"
+    name="case_transform"
+    options={[
+        "-none-": :none,
+        "alternating WORD case": :alternate,
+        "Capitalize First Letter": :capitalize,
+        "cAPITALIZE eVERY lETTER eXCEPT tHe fIRST": :invert,
+        "lower case": :lower,
+        "UPPER CASE": :upper,
+        "EVERY word randomly CAPITALIZED or NOT": :random
+    ]}
+    value={@form[:case_transform].value}
+  />
+</div>
+<!-- /section_transformations -->
+```
+
+Finally, to wire this up in `home_live.ex`, we could add another event
+handler for when `_target => ["case_transform"]`. But looking at the previous
+ones, they are pretty much all the same except for what is being targetted.
+Let's combine them all into a single `handle_event` function:
+
+```elixir
+def handle_event(
+      "validate",
+      %{"_target" => [target]} = params,
+      %{assigns: %{settings: settings, form: form}} = socket
+    ) do
+  changeset =
+    settings
+    |> Settings.changeset(Map.merge(form.source.changes, %{String.to_existing_atom(target) => params[target]}))
+    |> Map.put(:action, :validate)
+
+  {:noreply,
+   socket
+   |> assign_form(changeset)}
+end
+```
+
+Mysteriously, merging the maps worked fine when doing this in functions that
+specified the `_target` and getting the parameter in the pattern matching, but
+failed in this more general function. The problem was that the
+`form.source.changes` was a map using atoms and this was merging that with
+a `Map` with a string key. Turning the `target` to an atom (safely) got it
+working again after more than one change has been made.
+
+Pulling up the page in a browser and setting `# of words` to 0, `Min Length`
+to `8` and `Max Lenth` to `3` should give us one error message under each of
+the three `Words` entries. Changing `Case Transform` will output the `HANDLE
+EVENT` message to the console, but the main thing is that it doesn't then
+crash the page. You are welcome to insert an `IO.inspect` in the `assign_form`
+function to verify that it has been chagned.
+
+## Separator and Padding Inputs
+
+We can now wizz through the Separator Character, Padding Digits (Before and
+After), Padding Characters, Symbol Padding (Before and After), and Padding
+Length. All of them are consolidating parameters to an `<.input ...>`
+component.
+
+```elixir
+<!-- Separator -->
+<div id="section_separator" class="grid grid-cols-1 w-full gap-1 mt-0 py-3 g-1">
+  <h5 class="text-xl font-medium leading-5 shrink-0 mb-2 col-span-1">
+    Separator
+  </h5>
+  <div class="join w-full w-max-full flex flex-row">
+    <.input
+      type="text"
+      id="separator_character"
+      name="separator_character"
+      label="Separator Character"
+      field={@form[:separator_character]}
+    />
+  </div>
+</div>
+<!-- /section_separator -->
+<!-- Padding -->
+<div id="section_padding" class="grid grid-cols-2 w-full gap-1 mt-0 py-3 g-1">
+  <h5 class="text-xl font-medium leading-5 shrink-0 mb-2 col-span-2">Padding</h5>
+  <div class="mt-2 col-span-2 md:col-span-1">
+    <!-- padding digits before -->
+    <.input
+      type="number"
+      min="0"
+      max="5"
+      step="1"
+      id="digits_before"
+      name="digits_before"
+      label="Digit(s) Before"
+      field={@form[:digits_before]}
+    />
+  </div>
+  <!-- /padding_digits_before -->
+  <div class="mt-2 col-span-2 md:col-span-1">
+    <!-- padding digits after -->
+    <.input
+      type="number"
+      min="0"
+      max="5"
+      step="1"
+      id="digits_after"
+      name="digits_after"
+      label="Digit(s) After"
+      field={@form[:digits_after]}
+    />
+  </div>
+  <!-- /padding_digits_after -->
+  <!-- padding_characters -->
+  <div class="mt-2 col-span-2">
+    <.input
+      type="text"
+      id="padding_character"
+      name="padding_character"
+      label="Padding Characters"
+      field={@form[:padding_character]}
+    />
+  </div>
+  <!-- /padding_characters -->
+  ...<!-- radio button --> ...
+  <!-- padding characters before -->
+  <div class="mt-2 col-span-2 md:col-span-1 pl-7">
+    <.input
+      type="number"
+      min="0"
+      max="5"
+      step="1"
+      id="padding_before"
+      name="padding_before"
+      label="Symbol(s) Before"
+      field={@form[:padding_before]}
+    />
+  </div>
+  <!-- /padding_characters_before -->
+  <!-- padding characters after -->
+  <div class="mt-2 col-span-2 md:col-span-1 pl-7 md:pl-0">
+    <.input
+      type="number"
+      min="0"
+      max="5"
+      step="1"
+      id="padding_after"
+      name="padding_after"
+      label="Symbol(s) After"
+      field={@form[:padding_after]}
+    />
+  </div>
+  <!-- /padding_characters_after -->
+  ...<!-- radio button --> ...
+  <div class="mt-2 col-span-2 pl-7">
+    <.input
+      type="number"
+      min="8"
+      max="999"
+      step="1"
+      id="pad_to_length"
+      name="pad_to_length"
+      label="Pad to Length"
+      field={@form[:pad_to_length]}
+    />
+  </div>
+  <!-- /pad_to_length -->
+  <!-- /padding_char_container -->
+</div>
+<!-- /section_padding -->
+```
+
+We'll get to handling the radio buttons in a bit. For now, let's wire up the
+value and/or size constraints for the `Separator` and `Padding` fields we
+just updated.
+
+In `settings.ex` add the following `validate_...` calls:
+
+```elixir
+...
+|> validate_length(:separator_character, max: 20)
+|> validate_inclusion(:digits_before, 0..5, message: "must be between 0 and 5")
+|> validate_inclusion(:digits_after, 0..5, message: "must be between 0 and 5")
+|> validate_length(:padding_character, min: 1, max: 20)
+|> validate_inclusion(:pad_to_length, Enum.concat([0..0, 8..999]), message: "must be 0 or between 8 and 999")
+|> validate_inclusion(:padding_before, 0..5, message: "must be between 0 and 5")
+|> validate_inclusion(:padding_after, 0..5, message: "must be between 0 and 5")
+```
+
+Now if we go to the
+browser and try to enter invalid data into the fields, such as negative
+or decimal numbers into the `Digits` or `Symbols` padding size
+fields, we'll get errors, as will numbers greater than `5`. Enter more
+letters, number, or symbols into the `Separator` and `Padding Characters`
+fields and you'll get a "`should be at most 20 character(s)`" message.
+
+## Fixed and Adaptive Padding
+
+The behavior of our `Fixed` and `Adaptive` radio buttons, when being run
+through our `validate` event handler is rather odd. `Addaptive Padding`
+has to be hit twice to register the change. The problem is that
+`:padding_type` is not in our `Settings` struct, and therefore not in
+the `@form` to be updated. So we need to handle these changes separately.

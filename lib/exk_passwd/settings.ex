@@ -97,6 +97,15 @@ defmodule EXKPasswd.Settings do
     |> validate_inclusion(:word_length_min, 4..10, message: "must be between 4 and 10")
     |> validate_inclusion(:word_length_max, 4..10, message: "must be between 4 and 10")
     |> validate_less_than_or_equal(:word_length_min, :word_length_max, "Max Length")
+    |> validate_length(:separator_character, max: 20)
+    |> validate_inclusion(:digits_before, 0..5, message: "must be between 0 and 5")
+    |> validate_inclusion(:digits_after, 0..5, message: "must be between 0 and 5")
+    |> validate_length(:padding_character, min: 1, max: 20)
+    |> validate_inclusion(:pad_to_length, Enum.concat([0..0, 8..999]),
+      message: "must be 0 or between 8 and 999"
+    )
+    |> validate_inclusion(:padding_before, 0..5, message: "must be between 0 and 5")
+    |> validate_inclusion(:padding_after, 0..5, message: "must be between 0 and 5")
   end
 
   defp validate_less_than_or_equal(changeset, min, max, upper_label) do
