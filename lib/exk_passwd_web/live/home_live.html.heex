@@ -177,32 +177,22 @@
                   <h5 class="text-xl font-medium leading-5 shrink-0 mb-2 col-span-1">
                     Transformations
                   </h5>
-                  <div class="join w-full w-max-full flex flex-row">
-                    <label
-                      for="case_transform"
-                      class="font-normal items-center text-base text-center px-3 py-2 bg-gray-100 border rounded-l-lg border-gray-300 flex-none"
-                    >
-                      Case Transformation
-                    </label>
-                    <select
-                      name="case_transform"
-                      id="case_transform"
-                      class="font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg border-gray-300 flex-auto w-1"
-                    >
-                      <%= Phoenix.HTML.Form.options_for_select(
-                        [
-                          "-none-": :none,
-                          "alternating WORD case": :alternate,
-                          "Capitalize First Letter": :capitalize,
-                          "cAPITALIZE eVERY lETTER eXCEPT tHe fIRST": :invert,
-                          "lower case": :lower,
-                          "UPPER CASE": :upper,
-                          "EVERY word randomly CAPITALIZED or NOT": :random
-                        ],
-                        @settings.case_transform
-                      ) %>
-                    </select>
-                  </div>
+                  <.input
+                    type="select"
+                    label="Case Transform"
+                    id="case_transform"
+                    name="case_transform"
+                    options={[
+                        "-none-": :none,
+                        "alternating WORD case": :alternate,
+                        "Capitalize First Letter": :capitalize,
+                        "cAPITALIZE eVERY lETTER eXCEPT tHe fIRST": :invert,
+                        "lower case": :lower,
+                        "UPPER CASE": :upper,
+                        "EVERY word randomly CAPITALIZED or NOT": :random
+                    ]}
+                    value={@form[:case_transform].value}
+                  />
                 </div>
                 <!-- /section_transformations -->
                 <!-- Separator -->

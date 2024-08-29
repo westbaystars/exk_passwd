@@ -330,20 +330,27 @@ defmodule EXKPasswdWeb.CoreComponents do
 
   def input(%{type: "select"} = assigns) do
     ~H"""
-    <div>
-      <.label for={@id}><%= @label %></.label>
-      <select
-        id={@id}
-        name={@name}
-        class="mt-2 block w-full rounded-md border border-gray-300 bg-white shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm"
-        multiple={@multiple}
-        {@rest}
-      >
-        <option :if={@prompt} value=""><%= @prompt %></option>
-        <%= Phoenix.HTML.Form.options_for_select(@options, @value) %>
-      </select>
+    <label class="form-control w-full">
+      <div class="join w-full w-max-full flex flex-row">
+        <label
+          for={@id}
+          class="font-normal items-center text-base text-center px-3 py-2 bg-gray-100 border rounded-l-lg border-zinc-300 flex-none"
+        >
+          <%= @label %>
+        </label>
+        <select
+          id={@id}
+          name={@name}
+          class="font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg border-gray-300 bg-white shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm flex-auto w-1"
+          multiple={@multiple}
+          {@rest}
+        >
+          <option :if={@prompt} value=""><%= @prompt %></option>
+          <%= Phoenix.HTML.Form.options_for_select(@options, @value) %>
+        </select>
+      </div>
       <.error :for={msg <- @errors}><%= msg %></.error>
-    </div>
+    </label>
     """
   end
 
@@ -369,7 +376,7 @@ defmodule EXKPasswdWeb.CoreComponents do
   # All other inputs text, datetime-local, url, password, etc. are handled here...
   def input(assigns) do
     ~H"""
-    <label class="form-control w-full max-w-xs">
+    <label class="form-control w-full">
       <div class="join w-full flex flex-row">
         <label
           for={@id}

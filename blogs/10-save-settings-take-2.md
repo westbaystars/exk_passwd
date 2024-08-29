@@ -18,7 +18,7 @@ a base, replace the fall through `input` function as so:
 # All other inputs text, datetime-local, url, password, etc. are handled here...
 def input(assigns) do
   ~H"""
-  <label class="form-control w-full max-w-xs">
+  <label class="form-control w-full">
     <div class="join w-full flex flex-row">
       <label
         for={@id}
