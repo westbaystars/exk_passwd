@@ -257,11 +257,11 @@
                     <div class="join w-full w-max-full flex flex-row">
                       <input
                         type="radio"
-                        value={:fixed}
+                        value="fixed"
                         class="flex-none"
                         name="padding_type"
                         id="padding_fixed"
-                        checked={@padding_type == :fixed}
+                        checked={@padding_type == "fixed"}
                       />
                       <label
                         for="padding_fixed"
@@ -282,6 +282,7 @@
                       name="padding_before"
                       label="Symbol(s) Before"
                       field={@form[:padding_before]}
+                      disabled={@padding_type != "fixed"}
                     />
                   </div>
                   <!-- /padding_characters_before -->
@@ -296,6 +297,7 @@
                       name="padding_after"
                       label="Symbol(s) After"
                       field={@form[:padding_after]}
+                      disabled={@padding_type != "fixed"}
                     />
                   </div>
                   <!-- /padding_characters_after -->
@@ -304,11 +306,11 @@
                     <div class="join w-full w-max-full flex flex-row">
                       <input
                         type="radio"
-                        value={:adaptive}
+                        value="adaptive"
                         class="flex-none"
                         name="padding_type"
                         id="padding_adaptive"
-                        checked={@padding_type != :fixed}
+                        checked={@padding_type != "fixed"}
                       />
                       <label
                         for="padding_adaptive"
@@ -328,6 +330,7 @@
                       name="pad_to_length"
                       label="Pad to Length"
                       field={@form[:pad_to_length]}
+                      disabled={@padding_type == "fixed"}
                     />
                   </div>
                   <!-- /pad_to_length -->

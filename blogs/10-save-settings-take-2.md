@@ -504,7 +504,7 @@ component.
     />
   </div>
   <!-- /padding_characters -->
-  ...<!-- radio button --> ...
+  <!-- place holder for Fixed Padding radio button -->
   <!-- padding characters before -->
   <div class="mt-2 col-span-2 md:col-span-1 pl-7">
     <.input
@@ -533,7 +533,7 @@ component.
     />
   </div>
   <!-- /padding_characters_after -->
-  ...<!-- radio button --> ...
+  <!-- place holder for Adaptive Padding radio button -->
   <div class="mt-2 col-span-2 pl-7">
     <.input
       type="number"
@@ -578,8 +578,116 @@ fields and you'll get a "`should be at most 20 character(s)`" message.
 
 ## Fixed and Adaptive Padding
 
-The behavior of our `Fixed` and `Adaptive` radio buttons, when being run
-through our `validate` event handler is rather odd. `Addaptive Padding`
-has to be hit twice to register the change. The problem is that
-`:padding_type` is not in our `Settings` struct, and therefore not in
-the `@form` to be updated. So we need to handle these changes separately.
+Notice how the `Symbol(s) Before`/`After` and `Pad to Length` elements are
+indented under `Padding Characters`? We want these to be controlled by a
+pair of radio buttons, so one is selected or the other. The way this works
+is that, if `pad_to_length` value is greater than zero, then `Adaptive
+Padding` is active. Otherwise, `Fixed Padding` is. Let's go to our
+`mount/3` function and codify that:
+
+```elixir
+  preset = Presets.get("default")
+  padding_type = if preset.pad_to_length > 0, do: "adaptive", else: "fixed"
+  ...
+  |> assign(padding_type: padding_type)
+```
+
+In the place holder for `Fixed Padding` the we made above, let's add:
+
+```elixir
+<div class="mt-2 col-span-2">
+  <div class="join w-full w-max-full flex flex-row">
+    <input
+      type="radio"
+      value="fixed"
+      class="flex-none"
+      name="padding_type"
+      id="padding_fixed"
+      checked={@padding_type == "fixed"}
+    />
+    <label
+      for="padding_fixed"
+      class="font-normal items-center text-base text-center px-3 flex-none"
+    >
+      Fixed Padding
+    </label>
+  </div>
+</div>
+```
+
+And the place holder for `Adaptive Padding` gets a similar radio button:
+
+```elixir
+<div class="mt-2 col-span-2">
+  <div class="join w-full w-max-full flex flex-row">
+    <input
+      type="radio"
+      value="adaptive"
+      class="flex-none"
+      name="padding_type"
+      id="padding_adaptive"
+      checked={@padding_type != "fixed"}
+    />
+    <label
+      for="padding_adaptive"
+      class="font-normal items-center text-base text-center px-3 flex-none"
+    >
+      Adaptive Padding
+    </label>
+  </div>
+</div>
+```
+
+Finally, before the the general `_target` event handler, let's add:
+
+```elixir
+def handle_event(
+      "validate",
+      %{"_target" => ["padding_type"], "padding_type" => padding_type},
+      socket
+    ) do
+  {:noreply,
+   socket
+   |> assign(padding_type: padding_type)
+  }
+end
+```
+
+I now want to enable and disable the relavant entry elements depending on
+which radio button is active. For that, let's add the:
+
+```elixir
+  disabled={@padding_type != "fixed"}
+```
+
+to both of the `Symbol` fixed padding elements and:
+
+```elixir
+  disabled={@padding_type == "fixed"}
+```
+
+to the `Pad to Length` adaptive padding element. Then, in `core_components.ex`,
+extend the `class` definition to change the font weight depending on if it
+is disabled or not:
+
+```elixir
+  class={[
+    "block text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
+    "font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg flex-auto w-1",
+    @errors == [] && "border-zinc-300 focus:border-zinc-400",
+    @errors != [] && "border-rose-400 focus:border-rose-400",
+    Map.get(@rest, :disabled, false) && "text-zinc-300",
+    Map.get(@rest, :disabled, true) && "text-zinc-900"
+  ]}
+  {@rest}
+```
+
+Now the value grays out when the input element is disabled, which helps the
+usability a lot.
+
+That's fine, but what we really need is for the `Adaptive Padding` length
+value to be greater than zero when it is selected and zero when the `Fixed`
+option is selected. We're going to need to save the value entered when
+the radio button is toggled to and away, so let's have a stand alone
+`pad_to_length` value in the state along with the one in the `@form`
+struct.
