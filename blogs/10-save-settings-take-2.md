@@ -691,3 +691,122 @@ option is selected. We're going to need to save the value entered when
 the radio button is toggled to and away, so let's have a stand alone
 `pad_to_length` value in the state along with the one in the `@form`
 struct.
+
+In `home_live.ex`, add the following within `mount/3` and the
+`calc_max_length` function at the bottom:
+
+```elixir
+def mount(_params, _sessoin, socket) do
+  preset = Presets.get("default")
+  padding_type = if preset.pad_to_length > 0, do: "adaptive", else: "fixed"
+  pad_to_length = if preset.pad_to_length > 0, do: preset.pad_to.length, else: calc_max_length(preset)
+
+  socket =
+    socket
+    |> assign(presets: Presets.all())
+    |> assign(settings: preset)
+    |> assign_form(Settings.changeset(preset, %{}))
+    |> assign(accordian: "settings")
+    |> assign(padding_type: padding_type)
+    |> assign(pad_to_length: pad_to_length)
+
+  {:ok, socket}
+end
+
+...
+
+defp calc_max_length(setting) do
+  separator_length = if String.length(setting.separator_character) > 0, do: 1, else: 0
+
+  (setting.num_words * setting.word_length_max) +
+  (separator_length * setting.num_words - 1) +
+  (if setting.digits_before > 0, do: setting.digits_before + separator_length, else: 0) +
+  (if setting.digits_after > 0, do: setting.digits_after + separator_length, else: 0) +
+  (if setting.padding_before > 0, do: setting.padding_before, else: 0) +
+  (if setting.padding_after > 0, do: setting.padding_after, else: 0)
+end
+```
+
+Then, when we handle the `:padding_type` event handler, we set the `@form`
+to either `0` or our stateful `:pad_to_length`. Furthermore, we need a
+handler for when `:pad_to_length` is changed, placing the modified stateful
+value into the `@form` and its `assign`.
+
+```elixir
+def handle_event(
+      "validate",
+      %{"_target" => ["padding_type"], "padding_type" => padding_type},
+      %{assigns: %{settings: settings, form: form, pad_to_length: pad_to_length}} = socket
+    ) do
+      pad_to_length = if padding_type == "fixed", do: "0", else: pad_to_length
+  changeset =
+    settings
+    |> Settings.changeset(
+      Map.merge(form.source.changes, %{:pad_to_length => pad_to_length})
+    )
+    |> Map.put(:action, :validate)
+  IO.inspect({:padding_type, padding_type})
+  {:noreply,
+   socket
+   |> assign(padding_type: padding_type)
+   |> assign_form(changeset)
+  }
+end
+
+def handle_event(
+      "validate",
+      %{"_target" => ["pad_to_length"], "pad_to_length" => pad_to_length},
+      %{assigns: %{settings: settings, form: form}} = socket
+    ) do
+  changeset =
+    settings
+    |> Settings.changeset(
+      Map.merge(form.source.changes, %{:pad_to_length => pad_to_length})
+    )
+    |> Map.put(:action, :validate)
+  {:noreply,
+   socket
+   |> assign(pad_to_length: pad_to_length)
+   |> assign_form(changeset)
+  }
+end
+```
+
+Fuzzing a bit in the browser, while `Fixed Padding` is selected, the
+`Pad to Length` remains zero. `Symbol(s) Before` and `After` bring up
+errors when exceeding `5` or negative number. With `Adaptive Padding`
+selected, negative numbers, numbers `1..7`, and numbers `1,000` or
+greater give us errors for that field.
+
+However, we can set the `Pad to Length` to zero manually while `Adaptive
+Padding` is enabled. That should not be allowed. If one manually sets
+`Pad to Length` to zero, let's automatically flip back to `Fixed Padding`.
+
+Between the above two event handlers, add the case when
+`"pad_to_length" => "0"`:
+
+```elixir
+def handle_event(
+      "validate",
+      %{"_target" => ["pad_to_length"], "pad_to_length" => "0"},
+      %{assigns: %{settings: settings, form: form}} = socket
+    ) do
+  changeset =
+    settings
+    |> Settings.changeset(
+      Map.merge(form.source.changes, %{:pad_to_length => "0"})
+    )
+    |> Map.put(:action, :validate)
+  {:noreply,
+   socket
+   |> assign(padding_type: "fixed")
+   |> assign_form(changeset)
+  }
+end
+```
+
+We update the changeset to set `:pad_to_length` to zero, then set the
+`@adding_type` to `"fixed"`, toggling the radio button back. In the browser,
+if we then toggle back to `Adaptive Padding`, then the previous value for
+`Pad to Length` is still there, not zero. So it is clear that the `Fixed
+Padding` will be used.
