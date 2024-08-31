@@ -674,10 +674,9 @@ is disabled or not:
   class={[
     "block text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
     "font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg flex-auto w-1",
+    "text-zinc-900 disabled:text-zinc-300",
     @errors == [] && "border-zinc-300 focus:border-zinc-400",
-    @errors != [] && "border-rose-400 focus:border-rose-400",
-    Map.get(@rest, :disabled, false) && "text-zinc-300",
-    Map.get(@rest, :disabled, true) && "text-zinc-900"
+    @errors != [] && "border-rose-400 focus:border-rose-400"
   ]}
   {@rest}
 ```
@@ -810,3 +809,181 @@ We update the changeset to set `:pad_to_length` to zero, then set the
 if we then toggle back to `Adaptive Padding`, then the previous value for
 `Pad to Length` is still there, not zero. So it is clear that the `Fixed
 Padding` will be used.
+
+## Save Settings
+
+Now that we can change all of the settings, let's save the changes to local
+storage so that we get our preferred current settings each time we open the
+tool.
+
+For that, we start in `assets/js/apps.js` and add a pair of `hooks` to the
+JavaScipt side of things.
+
+```elixir
+let hooks = {};
+hooks.settings = {
+  mounted() {
+    this.handleEvent("saveSettings", (settings) => {
+      settingName = Object.keys(settings)[0];
+      localStorage.setItem(settingName, JSON.stringify(settings[settingName]));
+    });
+    this.handleEvent("getSettings", ({ name }) => {
+      settings = localStorage.getItem(name);
+      this.pushEvent("restoreSettings", { settings: JSON.parse(settings) });
+    });
+  },
+};
+
+let csrfToken = document
+  .querySelector("meta[name='csrf-token']")
+  .getAttribute("content");
+let liveSocket = new LiveSocket("/live", Socket, {
+  longPollFallbackMs: 2500,
+  params: { _csrf_token: csrfToken },
+  hooks: hooks,
+});
+```
+
+Hooks need to be declared before the `liveSocket`, then added to the
+`liveSocket`'s list of attributes.
+
+When sending the `settings` to the `saveSettings` event handler, it needs
+to be in the form of a JSON `Object` with the key being the setting name
+and the value of that being a JSON representation of the `Settings` struct.
+So we first extract the name of the setting, then `stringify` the
+settings for local storage.
+
+Getting the `settings` out of local storage requires rehydration (`parse`)
+of the stored string and pushing the `restoreSettings` event back up to the
+LiveView, using `settings` as the key for consistancy.
+
+Now that we can save and get a `setting`, it's time to implement these on
+the server side.
+
+First, let's save our current settings. To do that, let's add a button at
+the bottom of our form in `home`live.html.heex` to trigger the save:
+
+```elixir
+  <div id="current-settings" phx-hook="settings">
+    <.button type="button" phx-click="save_settings">Save Current Settings</.button>
+  </div>
+</.simple_form>
+```
+
+Now, going to `home_live.ex`, let's handle the `save_settings` event:
+
+```elixir
+def handle_event(
+      "save_settings",
+      _params,
+      %{assigns: %{settings: settings, form: form}} = socket
+    ) do
+  changeset =
+    settings
+    |> Settings.changeset(
+      Map.merge(form.source.changes, %{
+        name: "current",
+        description: "The current working settings."
+      })
+    )
+
+  {:noreply,
+   socket
+   |> save_settings(changeset)}
+end
+
+...
+
+defp save_settings(socket, changeset) do
+  with {:ok, settings} <- Ecto.Changeset.apply_action(changeset, :update) do
+    push_event(socket, "saveSettings", %{current: settings})
+  else
+    {:error, _changeset} -> socket
+  end
+end
+```
+
+We first change the `:name` and `:description` for our current `Settings`
+for upload. This is a fixed name for use, kind of our 8th preset.
+
+Because we don't want to save a `Settings` full of errors, we apply the
+changes first and only `push_event` if the `Settings` are validated.
+
+We do run into a problem if we try this. The `push_event` will try to convert
+the third parameter to JSON, but it is an Elixir struct. In front of our
+`@primarykey` declaration, enter:
+
+```elixir
+@derive Jason.Encoder
+```
+
+This adds the ability to covert our Ecto struct to JSON.
+
+Now if we make some changes to our settings and hit the "Save Current
+Settings" button, then go into the Developer Tools in the browser and select
+`Application` → `Local storage` → `http://localhost:4000` (or URL you
+are using), then there should be an entry with the Key `current` and some
+JSON that looks much like your settings.
+
+The ultimate test, though, is to load the changes back to your browser.
+For that, let's call a function to `load_current_setting/1` in `mount/3`:
+
+```elixir
+    socket =
+      socket
+      |> load_current_setting()
+      ...
+
+  ...
+
+  defp load_current_setting(socket) do
+    if connected?(socket) do
+      push_event(socket, "getSettings", %{name: "current"})
+    else
+      socket
+    end
+  end
+```
+
+The `load_current_setting/1` function pushes the `getSettings` event to the
+JavaScript, but only when the LiveView session is connected. The parameter
+specifies that the name of the item in local storage is `"current"`. (We'll
+want to save our own presets eventually.)
+
+Checking the JavaScript code for the `getSettings` hook, we see that it calls
+back to the `restoreSettings` event handler. So let's add it to our
+`home_live.ex` handlers as well:
+
+```elixir
+def handle_event("restoreSettings", %{"settings" => nil}, socket), do: {:noreply, socket}
+
+def handle_event(
+      "restoreSettings",
+      %{"settings" => settings},
+      socket
+    ) do
+  IO.inspect(settings)
+
+  changeset =
+    Settings.changeset(%Settings{}, settings)
+    |> Map.put(:action, :validate)
+
+  {:noreply, socket
+    |> assign(settings: settings)
+    |> assign_form(changeset)
+  }
+end
+```
+
+Note that we don't do anything if the `settings` we receive is `nil`? Before
+anything has been saved, or if local storage has been cleared, this will be
+the case.
+
+Otherwise, we initialize our `settings` to the restored values, assign
+those as our new base `settings`, and assign the `form` to update all
+form values.
+
+Now, when you reload the page, you should get your previously changed values
+showing. If you clear the local storage and reload, you'll get the `default`
+settings. Make some changes, save, then reload the page to view that the
+latest changes still take effect.

@@ -3,6 +3,7 @@ defmodule EXKPasswd.Settings do
   import Ecto.Changeset
   alias EXKPasswd.Settings
 
+  @derive Jason.Encoder
   @primary_key {:name, :string, default: "default"}
   @doc """
   The `case_transform` may be any of:

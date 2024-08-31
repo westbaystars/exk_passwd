@@ -13,6 +13,7 @@ defmodule EXKPasswdWeb.HomeLive do
 
     socket =
       socket
+      |> load_current_setting()
       |> assign(presets: Presets.all())
       |> assign(settings: preset)
       |> assign_form(Settings.changeset(preset, %{}))
@@ -97,8 +98,66 @@ defmodule EXKPasswdWeb.HomeLive do
      |> assign_form(changeset)}
   end
 
+  def handle_event("restoreSettings", %{"settings" => nil}, socket), do: {:noreply, socket}
+
+  def handle_event(
+        "restoreSettings",
+        %{"settings" => settings},
+        socket
+      ) do
+    IO.inspect(settings)
+
+    changeset =
+      Settings.changeset(%Settings{}, settings)
+      |> Map.put(:action, :validate)
+
+    {:noreply,
+     socket
+     |> assign(settings: settings)
+     |> assign_form(changeset)}
+  end
+
+  def handle_event(
+        "save_settings",
+        _params,
+        %{assigns: %{settings: settings, form: form}} = socket
+      ) do
+    changeset =
+      settings
+      |> Settings.changeset(
+        Map.merge(form.source.changes, %{
+          name: "current",
+          description: "The current working settings."
+        })
+      )
+
+    IO.inspect(changeset, label: "Save Settings")
+
+    {:noreply,
+     socket
+     |> save_settings(changeset)}
+  end
+
   defp assign_form(socket, changeset) do
-    assign(socket, :form, to_form(changeset))
+    socket
+    |> assign(:form, to_form(changeset))
+  end
+
+  defp load_current_setting(socket) do
+    if connected?(socket) do
+      push_event(socket, "getSettings", %{name: "current"})
+    else
+      socket
+    end
+  end
+
+  defp save_settings(socket, changeset) do
+    with {:ok, settings} <- Ecto.Changeset.apply_action(changeset, :update) do
+      IO.inspect(settings, label: "Save Settings")
+      push_event(socket, "saveSettings", %{current: settings})
+    else
+      {:error, _changeset} -> socket
+    end
   end
 
   defp calc_max_length(setting) do
