@@ -1,15 +1,11 @@
 defmodule EXKPasswdWeb.HomeLive do
   use EXKPasswdWeb, :live_view
 
-  alias EXKPasswd.{Presets, Settings}
+  alias EXKPasswd.{Presets, Settings, PasswordCreator}
 
   @impl Phoenix.LiveView
   def mount(_params, _sessoin, socket) do
     preset = Presets.get("default")
-    padding_type = if preset.pad_to_length > 0, do: "adaptive", else: "fixed"
-
-    pad_to_length =
-      if preset.pad_to_length > 0, do: preset.pad_to.length, else: calc_max_length(preset)
 
     socket =
       socket
@@ -18,8 +14,8 @@ defmodule EXKPasswdWeb.HomeLive do
       |> assign(settings: preset)
       |> assign_form(Settings.changeset(preset, %{}))
       |> assign(accordian: "settings")
-      |> assign(padding_type: padding_type)
-      |> assign(pad_to_length: pad_to_length)
+      |> assign_padding(preset)
+      |> assign(passwords: [])
 
     {:ok, socket}
   end
@@ -105,15 +101,16 @@ defmodule EXKPasswdWeb.HomeLive do
         %{"settings" => settings},
         socket
       ) do
-    IO.inspect(settings)
-
     changeset =
       Settings.changeset(%Settings{}, settings)
       |> Map.put(:action, :validate)
 
+    {:ok, new_settings} = Ecto.Changeset.apply_action(changeset, :update)
+
     {:noreply,
      socket
-     |> assign(settings: settings)
+     |> assign(settings: new_settings)
+     |> assign_padding(new_settings)
      |> assign_form(changeset)}
   end
 
@@ -131,11 +128,41 @@ defmodule EXKPasswdWeb.HomeLive do
         })
       )
 
-    IO.inspect(changeset, label: "Save Settings")
-
     {:noreply,
      socket
      |> save_settings(changeset)}
+  end
+
+  def handle_event(
+        "generate",
+        %{"selectAmount" => count},
+        %{assigns: %{form: form}} = socket
+      ) do
+    with (
+           {:ok, settings} = Ecto.Changeset.apply_action(form.source, :update)
+           {count, _} = Integer.parse(count)
+
+           passwords =
+             Enum.map(1..max(1, count), fn _n -> PasswordCreator.create(settings) end)
+             |> IO.inspect(label: "New passwords")
+         ) do
+      {:noreply,
+       socket
+       |> assign(passwords: passwords)}
+    else
+      {:error, _} -> {:noreply, socket}
+    end
+  end
+
+  defp assign_padding(socket, setting) do
+    padding_type = if setting.pad_to_length > 0, do: "adaptive", else: "fixed"
+
+    pad_to_length =
+      if setting.pad_to_length > 0, do: setting.pad_to_length, else: calc_max_length(setting)
+
+    socket
+    |> assign(padding_type: padding_type)
+    |> assign(pad_to_length: pad_to_length)
   end
 
   defp assign_form(socket, changeset) do
