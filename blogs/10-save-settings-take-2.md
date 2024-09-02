@@ -962,11 +962,10 @@ def handle_event(
       %{"settings" => settings},
       socket
     ) do
-  IO.inspect(settings)
-
   changeset =
     Settings.changeset(%Settings{}, settings)
     |> Map.put(:action, :validate)
+  {:ok, new_settings} = Ecto.Changeset.apply_action(changeset, :update)
 
   {:noreply, socket
     |> assign(settings: settings)
@@ -987,3 +986,67 @@ Now, when you reload the page, you should get your previously changed values
 showing. If you clear the local storage and reload, you'll get the `default`
 settings. Make some changes, save, then reload the page to view that the
 latest changes still take effect.
+
+Whoops. Saving with `Adaptive Padding` length set to `36` and reloading the
+page returns us to `Fixed Padding` being selected. We need to
+`assign(padding_type: ...)` appropriately depending on if `pad_to_length`
+is `0` or not.
+
+Let's move all of that logic to a private function `assign_padding`:
+
+```elixir
+defp assign_padding(socket, setting) do
+  padding_type = if setting.pad_to_length > 0, do: "adaptive", else: "fixed"
+
+  pad_to_length =
+    if setting.pad_to_length > 0, do: setting.pad_to_length, else: calc_max_length(setting)
+
+  socket
+  |> assign(padding_type: padding_type)
+  |> assign(pad_to_length: pad_to_length)
+end
+```
+
+Now we can remove that from `mount/3` and call the function with `preset`:
+
+```elixir
+def mount(_params, _sessoin, socket) do
+  preset = Presets.get("default")
+
+  socket =
+    socket
+    |> load_current_setting()
+    |> assign(presets: Presets.all())
+    |> assign(settings: preset)
+    |> assign_form(Settings.changeset(preset, %{}))
+    |> assign(accordian: "settings")
+    |> assign_padding(preset)
+
+  {:ok, socket}
+end
+```
+
+In in our `restore`, we can do the same with the `new_setting`:
+
+```elixir
+def handle_event(
+      "restoreSettings",
+      %{"settings" => settings},
+      socket
+    ) do
+  changeset =
+    Settings.changeset(%Settings{}, settings)
+    |> Map.put(:action, :validate)
+
+  {:ok, new_settings} = Ecto.Changeset.apply_action(changeset, :update)
+
+  {:noreply,
+   socket
+   |> assign(settings: new_settings)
+   |> assign_padding(new_settings)
+   |> assign_form(changeset)}
+end
+```
+
+Okay, saving fixed or adaptive padding now restores properly when we reload
+after saving.
