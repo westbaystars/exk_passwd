@@ -212,6 +212,26 @@ the `navbar`.
 
 That was easy enough.
 
+## Update the "Powered by" notice on the footer
+
+The other quick and easy "fix" is to update the "Powered by" footer to point
+to the `EXKPasswd` repository.
+
+In the `<footer>`, change the link and add an `E` to the anchor's test:
+
+```diff
+</a>
+|
+Powered by
+-      <a href="https://github.com/bartificer/xkpasswd-js" target="_blank" class="link">XKPasswd on
++      <a href="https://github.com/westbaystars/exk_passwd" target="_blank" class="link">EXKPasswd on
+  GitHub</a>
+</div>
+</footer>
+```
+
+Okay. Now anyone can modify and host this on their own. The joys of Open
+Source!
+
 ## Make the preset buttons into pills
 ## Enable the presets to populate the settings when clicked
-## Update the "Powered by" notice on the footer
