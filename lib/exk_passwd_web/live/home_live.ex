@@ -148,7 +148,7 @@ defmodule EXKPasswdWeb.HomeLive do
          ) do
       {:noreply,
        socket
-       |> assign(passwords: passwords)}
+       |> assign(passwords: Enum.join(passwords, "\n"))}
     else
       {:error, _} -> {:noreply, socket}
     end

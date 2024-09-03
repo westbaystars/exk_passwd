@@ -171,3 +171,99 @@ Requesting `6` passwords produces six of them. Invalid values, such a `-1`,
 `0`, or `20` fail with a browser error.
 
 Next, we'll need to display the generated passwords.
+
+## Output Generated Passwords
+
+By checking the console log we were able to confirm that the passwords were
+generated properly. Now it's time to output them.
+
+In `home_live.html.heex`, after the section `<picture>...</picture>` block and
+the `</section></div>` it resides in, we have:
+
+```elixir
+<div class="row">
+  <!-- open row for password card -->
+
+  <!-- this section (id = password-card) is handled by the PasswordController and the PasswordView -->
+  <section id="password-card" class="order-3 px-0">
+    ...
+```
+
+The `password-card` is where we output the passwords. After working with the
+original `XKPasswd` tool and the Official port, I like the way that the
+original did this better. It had a `<textarea>` where one could then modify
+the generated passwords before copying them to the registration form one is
+working on. I liked being able to modify them there because not all
+registration forms make it clear up front what is and isn't allowed, so I
+would use something close to the `default` preset then trim/change one of
+the generated passwords to fix the presented "errors."
+
+So, let's modify the `password-card` apporpriately:
+
+```elixir
+<!-- open row for password card -->
+<div class="flex flex-wrap gap-6 mt-0 -mx-3">
+  <!-- this section (id = password-card) is handled by the PasswordController and the PasswordView -->
+  <section id="password-card" class="flex-1 order-3 px-0">
+    <div class="card w-full md:w-2/3 lg:w-1/2 mt-4 lg:mt-6">
+      <div class="card-body">
+        <h2 class="card-title">Passwords</h2>
+        <textarea
+          type="text"
+          rows="3"
+          id="passwords"
+          name="passwords"
+        ><%= @passwords %></textarea>
+      </div>
+    </div>
+    <!--
+    <div class="card-footer">
+      ...
+    </div>
+    <!-- close password card with stats -->
+  </section>
+</div>
+```
+
+Let's comment out the `card-footer` portion for now.
+
+We now have a place for the generated `@passwords` to live. Hit the
+`Generate` button and the `textarea` gets filled in with:
+
+```text
+49;street;OFTEN;angle;27;;;;;;;;83!fact!ALASKA!yard!85%%%%%%%%%%57-ever-NOTE-join-26^^^^^^^^^^^^
+```
+
+Ah, looks like we need to insert some `\n` in between each password.
+
+Going back to `home_live.ex`, in the `generate` event handler, assign the
+password as so:
+
+```elixir
+    |> assign(passwords: Enum.join(passwords, "\n"))}
+```
+
+With that, we now get:
+
+```text
++++71@thought@PAIN@delaware@24+++
+===24/wagon/COOL/many/22===
+;;;03=bread=ROLL=friday=11;;;
+```
+
+in our `textbox`. Remove the `|> IO.inspect(label: "New passwords")` that
+was added to view the generated passwords in the `generate` event handler
+and we have a working password generator!
+
+### Still To Do
+
+There are still a lot of things that need to be done, namely:
+
+* Implement filling the settings form when a preset is clicked
+* Saving and loading personal presets, giving them a name
+* Make a RESTful or GraphQL API
+* Running this past a UI/UX expert (my daughter)
+* Add back the stats for how strong the passwords generated are
+* Update the "Powered by" phrase in the footer
+
+I think that once the first one is done, I can call it version 1.0.

@@ -405,85 +405,44 @@
     <!-- close section for graphic -->
   </div>
   <!-- close opening row -->
-  <div class="row">
-    <!-- open row for password card -->
 
+  <!-- open row for password card -->
+  <div class="flex flex-wrap gap-6 mt-0 -mx-3">
     <!-- this section (id = password-card) is handled by the PasswordController and the PasswordView -->
-    <section id="password-card" class="order-3 px-0">
-      <div class="card mt-3 mt-lg-5 col">
-        <!-- open password card with stats -->
-        <div class="card-header d-flex align-items-center">
-          <span class="text-uppercase">Passwords</span>
-        </div>
+    <section id="password-card" class="flex-1 order-3 px-0">
+      <div class="card w-full md:w-2/3 lg:w-1/2 mt-4 lg:mt-6">
         <div class="card-body">
-          <div id="password_presentation">
-            <input
-              id="pw_lst"
-              type="radio"
-              name="pwdPresentation"
-              value="lst"
-              aria-description="Present passwords in a list"
-              tabindex="0"
-              checked
-            />
-            <label
-              for="pw_lst"
-              class="bi bi-list-ul"
-              aria-label="Present passwords in a list"
-              style="margin-left:0.5em;margin-right:1em"
-            >
-            </label>
-            <input
-              id="pw_txt"
-              type="radio"
-              name="pwdPresentation"
-              value="txt"
-              aria-description="Present passwords as a block of text"
-              tabindex="0"
-            />
-            <label
-              for="pw_txt"
-              class="bi bi-file-earmark-text"
-              aria-label="Present passwords as a block of text"
-              style="margin-left:0.5em;margin-right:1em"
-            >
-            </label>
-          </div>
-          <div id="generated_password_lst" class="list-group list-group-flush"></div>
-
-          <label for="generated_password_txt" class="visually-hidden">Bulk password text</label>
+          <h2 class="card-title">Passwords</h2>
           <textarea
             type="text"
-            readonly
-            class="form-control form-control-plaintext border-0 font-monospace mb-3 password-textbox"
             rows="3"
-            id="generated_password_txt"
-          ></textarea>
-
-          <div id="passwordErrorContainer"></div>
-        </div>
-        <div class="card-footer">
-          <div id="password_stats_container" class="pt-1 fs-6">
-            <h6><i class="bi bi-graph-up"></i> Statistics</h6>
-            <p class="fw-lighter lh-1 ">
-              <span class="fw-bolder">Strength </span><span
-                class="btn btn-stats btn-success"
-                id="password_strength"
-              >test</span>
-            </p>
-            <p class="fw-light">
-              <span class="fw-bolder">Entropy</span>&nbsp;<span id="entropy_blind">
-              </span> blind & <span
-                class="btn btn-stats btn-warning"
-                id="entropy_seen"
-              >seen</span>&nbsp;with
-              full knowledge <br />
-              <span class="fst-italic" id="entropy_suggestion"></span>
-            </p>
-          </div>
+            id="passwords"
+            name="passwords"
+          ><%= @passwords %></textarea>
         </div>
       </div>
-      <!-- close password card with stats -->
+      <!--
+      <div class="card-footer">
+        <div id="password_stats_container" class="pt-1 fs-6">
+          <h6><i class="bi bi-graph-up"></i> Statistics</h6>
+          <p class="fw-lighter lh-1 ">
+            <span class="fw-bolder">Strength </span><span
+              class="btn btn-stats btn-success"
+              id="password_strength"
+            >test</span>
+          </p>
+          <p class="fw-light">
+            <span class="fw-bolder">Entropy</span>&nbsp;<span id="entropy_blind">
+            </span> blind & <span
+              class="btn btn-stats btn-warning"
+              id="entropy_seen"
+            >seen</span>&nbsp;with
+            full knowledge <br />
+            <span class="fst-italic" id="entropy_suggestion"></span>
+          </p>
+        </div>
+      </div>
+    <!-- close password card with stats -->
     </section>
   </div>
 
