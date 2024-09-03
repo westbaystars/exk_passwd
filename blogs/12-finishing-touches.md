@@ -185,7 +185,33 @@ That was a lot of them. But it feels a little better to me. But then again,
 I have a tendency to prefer everything be close together so that I can take
 it all in rather than scroll. Still, scrolling will be necessary.
 
+## Remove the menu bar at the top
+
+This one is pretty straight forward. Remove the `<header>` block that contains
+the `navbar`.
+
+```diff
++++ b/lib/exk_passwd_web/live/home_live.html.heex
+@@ -25,69 +25,6 @@
+         </section>
+       </div>
+       <!-- close row for topBanner on mobile screens -->
+-      <header class="flex flex-wrap gap-6 mt-0 -mx-3">
+-        <!-- open row for nav -->
+-        <div class="navbar bg-primary text-primary-content flex-wrap justify-start rounded-lg w-11/12">
+-          <div class="navbar-start">
+             ...
+-          </div>
+-        </div>
+-      </header>
+-      <!-- close row for nav -->
+    <section id="content" class="flex flex-wrap gap-6 mt-0 -mx-3">
+        <!-- open row for content below nav -->
+        <div class="join join-vertical shrink-0 w-11/12 mt-6">
+```
+
+That was easy enough.
+
 ## Make the preset buttons into pills
 ## Enable the presets to populate the settings when clicked
-## Remove the menu bar at the top
 ## Update the "Powered by" notice on the footer
