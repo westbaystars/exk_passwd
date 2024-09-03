@@ -36,8 +36,6 @@ defmodule EXKPasswdWeb.HomeLive do
       |> Settings.changeset(Map.merge(form.source.changes, %{:pad_to_length => pad_to_length}))
       |> Map.put(:action, :validate)
 
-    IO.inspect({:padding_type, padding_type})
-
     {:noreply,
      socket
      |> assign(padding_type: padding_type)
@@ -143,7 +141,6 @@ defmodule EXKPasswdWeb.HomeLive do
 
            passwords =
              Enum.map(1..max(1, count), fn _n -> PasswordCreator.create(settings) end)
-             |> IO.inspect(label: "New passwords")
          ) do
       {:noreply,
        socket
@@ -179,7 +176,6 @@ defmodule EXKPasswdWeb.HomeLive do
 
   defp save_settings(socket, changeset) do
     with {:ok, settings} <- Ecto.Changeset.apply_action(changeset, :update) do
-      IO.inspect(settings, label: "Save Settings")
       push_event(socket, "saveSettings", %{current: settings})
     else
       {:error, _changeset} -> socket
