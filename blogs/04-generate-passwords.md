@@ -177,7 +177,7 @@ defmodule EXKPasswd.PasswordCreator do
   created with the specified length, padded on the end with the
   `padding_character`.
 
-  `separator_character` and `padding_character` may be an emty string
+  `separator_character` and `padding_character` may be an empty string
   (`""`) to disable use, a string of length 1 character for a fixed
   value, or a list of characters which will be randomly selected. If
   the value is a string of length greater than 1, each character will
