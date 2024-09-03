@@ -13,7 +13,6 @@ defmodule EXKPasswdWeb.HomeLive do
       |> assign(presets: Presets.all())
       |> assign(settings: preset)
       |> assign_form(Settings.changeset(preset, %{}))
-      |> assign(accordian: "settings")
       |> assign_padding(preset)
       |> assign(passwords: [])
 
