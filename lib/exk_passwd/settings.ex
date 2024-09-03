@@ -21,7 +21,7 @@ defmodule EXKPasswd.Settings do
   created with the specified length, padded on the end with the
   `padding_character`.
 
-  `separator_character` and `padding_character` may be an emty string
+  `separator_character` and `padding_character` may be an empty string
   (`""`) to disable use, a string of length 1 character for a fixed
   value, or a list of characters which will be randomly selected. If
   the value is a string of length greater than 1, each character will
@@ -86,11 +86,9 @@ defmodule EXKPasswd.Settings do
       :word_length_min,
       :word_length_max,
       :case_transform,
-      :separator_character,
       :digits_before,
       :digits_after,
       :pad_to_length,
-      :padding_character,
       :padding_before,
       :padding_after
     ])
@@ -101,7 +99,7 @@ defmodule EXKPasswd.Settings do
     |> validate_length(:separator_character, max: 20)
     |> validate_inclusion(:digits_before, 0..5, message: "must be between 0 and 5")
     |> validate_inclusion(:digits_after, 0..5, message: "must be between 0 and 5")
-    |> validate_length(:padding_character, min: 1, max: 20)
+    |> validate_length(:padding_character, max: 20)
     |> validate_inclusion(:pad_to_length, Enum.concat([0..0, 8..999]),
       message: "must be 0 or between 8 and 999"
     )

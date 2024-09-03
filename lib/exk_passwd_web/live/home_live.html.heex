@@ -34,7 +34,11 @@
             </div>
             <div class="content flex p-4">
               <%= for preset <- @presets do %>
-                <div class="badge badge-info uppercase flex-1">
+                <div
+                  class="badge badge-info uppercase flex-1 cursor-pointer"
+                  phx-click="select-preset"
+                  phx-value-preset={preset.name}
+                >
                   <%= preset.name %>
                 </div>
               <% end %>

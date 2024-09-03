@@ -57,7 +57,9 @@ defmodule EXKPasswd.Presets do
       separator_character: ~s(!@$%^&*-_+=:|~?/.),
       digits_before: 0,
       digits_after: 1,
-      padding_character: ""
+      padding_character: "",
+      padding_before: 0,
+      padding_after: 0
     },
     %Settings{
       name: "wifi",

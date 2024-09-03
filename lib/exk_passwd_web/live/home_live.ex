@@ -150,6 +150,24 @@ defmodule EXKPasswdWeb.HomeLive do
     end
   end
 
+  def handle_event(
+        "select-preset",
+        %{"preset" => preset_name},
+        socket
+      ) do
+    preset = Presets.get(preset_name)
+
+    if preset == nil do
+      {:noreply, socket}
+    else
+      {:noreply,
+       socket
+       |> assign(settings: preset)
+       |> assign_form(Settings.changeset(preset, %{}))
+       |> assign_padding(preset)}
+    end
+  end
+
   defp assign_padding(socket, setting) do
     padding_type = if setting.pad_to_length > 0, do: "adaptive", else: "fixed"
 

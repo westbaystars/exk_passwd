@@ -185,7 +185,7 @@ That was a lot of them. But it feels a little better to me. But then again,
 I have a tendency to prefer everything be close together so that I can take
 it all in rather than scroll. Still, scrolling will be necessary.
 
-## Remove the menu bar at the top
+## Remove Menu Bar
 
 This one is pretty straight forward. Remove the `<header>` block that contains
 the `navbar`.
@@ -212,7 +212,7 @@ the `navbar`.
 
 That was easy enough.
 
-## Update the "Powered by" notice on the footer
+## Update "Powered by" Notice
 
 The other quick and easy "fix" is to update the "Powered by" footer to point
 to the `EXKPasswd` repository.
@@ -233,7 +233,7 @@ Powered by
 Okay. Now anyone can modify and host this on their own. The joys of Open
 Source!
 
-## Make the preset buttons into pills
+## Make the Preset Buttons into Pills
 
 This is another easy one. Convert the `<button>`s to `<div>`s with the
 `badge` related classes.
@@ -257,4 +257,73 @@ This is another easy one. Convert the `<button>`s to `<div>`s with the
 I was considering making them all yellow, but blue is a bit easier on the
 eyes. (I cannot be trusted with what looks good, apparently.)
 
-## Enable the presets to populate the settings when clicked
+## Enable Presets to Populate Settings
+
+Now the final tweak that will be a little more involved. When a preset is
+clicked, the form below should be populated with that preset's values.
+
+Let's start by triggering an event when clicking a preset.
+
+```elixir
+<%= for preset <- @presets do %>
+  <div
+    class="badge badge-info uppercase flex-1 cursor-pointer"
+    phx-click="select-preset"
+    phx-value-preset={preset.name}
+  >
+    <%= preset.name %>
+  </div>
+<% end %>
+```
+
+This will call `handle_event` with `select-preset` as the event and the
+name of the preset as the `preset` parameter. I also added the
+`cursor-pointer` to the `class` so make it clear that these are clickable.
+
+So now we need to handle the event:
+
+```elixir
+def handle_event(
+      "select-preset",
+      %{"preset" => preset_name},
+      socket
+    ) do
+  preset = Presets.get(preset_name)
+
+  if preset == nil
+    do {:noreply, socket}
+    else {:noreply,
+     socket
+     |> assign(settings: preset)
+     |> assign_form(Settings.changeset(preset, %{}))
+     |> assign_padding(preset)
+    }
+  end
+end
+```
+
+We need to make sure that the preset exists. Otherwise, it's much like a
+trimmed down version of the `mount/3` function. Get the `preset`, verify
+that it exists, if so, assign `:settings` to the preset, pass it as a
+`Changeset` to `assign_form/2`, and be sure to set the `padding` radio
+button appropriately.
+
+Checking that all of the presets generate appropriate passwords, I got an
+error with `WI-FI`. Hmmm. The error was stating that the `padding_character`
+can't be blank. But it should be able to! Ah, it's in the `validate_required`
+list. Also, I appear to have set the `validate_length` to `min: 1`.
+
+In `settings.ex`, let's remove both `:separator_character` and
+`padding_character` from the `validate_required` list. Also, remove the
+`min: 1` from `:padding_character`'s `validate_length`.
+
+Another anomoly with `WI-FI` is that `padding_after`, which should be `0`
+is defaulting to `1`. That's because we aren't setting it specifically to
+`0`, so let's initialize both `padding_before` and `padding_after` to
+`0` in `settings.ex`.
+
+And that does it! We now have a working password generating site!
+
+Time to release this as version 1.0.0 and deploy it.
+
+This was a fun exercise.
