@@ -234,4 +234,27 @@ Okay. Now anyone can modify and host this on their own. The joys of Open
 Source!
 
 ## Make the preset buttons into pills
+
+This is another easy one. Convert the `<button>`s to `<div>`s with the
+`badge` related classes.
+
+```diff
+            <div class="bg-base-200 collapse-title text-xl font-medium">
+              Presets
+            </div>
+-            <div class="content grid grid-cols-6 p-4">
++            <div class="content flex p-4">
+              <%= for preset <- @presets do %>
+-                <button class="btn btn-outline uppercase col-span-3 md:col-span-2 lg:col-span-1">
++                <div class="badge badge-info uppercase flex-1">
+                  <%= preset.name %>
+-                </button>
++                </div>
+              <% end %>
+            </div>
+```
+
+I was considering making them all yellow, but blue is a bit easier on the
+eyes. (I cannot be trusted with what looks good, apparently.)
+
 ## Enable the presets to populate the settings when clicked
