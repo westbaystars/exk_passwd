@@ -35,3 +35,9 @@ exk_passwd-*.tar
 npm-debug.log
 /assets/node_modules/
 
+# Fly release files
+.dockerignore
+.github/
+Dockerfile
+fly.toml
+rel/

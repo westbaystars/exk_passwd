@@ -34,12 +34,17 @@ if config_env() == :prod do
       """
 
   host = System.get_env("PHX_HOST") || "example.com"
+  dns_host = System.get_env("DNS_HOST") || "another.com"
   port = String.to_integer(System.get_env("PORT") || "4000")
 
   config :exk_passwd, :dns_cluster_query, System.get_env("DNS_CLUSTER_QUERY")
 
   config :exk_passwd, EXKPasswdWeb.Endpoint,
-    url: [host: host, port: 443, scheme: "https"],
+    check_origin: [
+      "https://#{host}:443",
+      "https://#{dns_host}:443",
+      "https://www.#{dns_host}:443"
+    ],
     http: [
       # Enable IPv6 and bind on all interfaces.
       # Set it to  {0, 0, 0, 0, 0, 0, 0, 1} for local network only access.
