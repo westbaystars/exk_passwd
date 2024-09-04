@@ -41,9 +41,9 @@ if config_env() == :prod do
 
   config :exk_passwd, EXKPasswdWeb.Endpoint,
     check_origin: [
-      "https://#{host}:443",
-      "https://#{dns_host}:443",
-      "https://www.#{dns_host}:443"
+      "//#{host}",
+      "//#{dns_host}",
+      "//www.#{dns_host}"
     ],
     http: [
       # Enable IPv6 and bind on all interfaces.
