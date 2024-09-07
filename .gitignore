@@ -35,6 +35,9 @@ exk_passwd-*.tar
 npm-debug.log
 /assets/node_modules/
 
+# Ignore Mac generated directory files
+.DS_Store
+
 # Fly release files
 .dockerignore
 .github/

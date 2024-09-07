@@ -3,3 +3,11 @@
 @import "tailwindcss/utilities";
 
 /* This file is for your main application CSS */
+@font-face {
+    font-family: "KodeMono";
+    src: url("/fonts/KodeMono-VariableFont_wght.ttf") format("truetype");
+}
+
+body {
+    font-family: "KodeMono";
+}

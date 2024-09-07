@@ -11,12 +11,21 @@ module.exports = {
     "../lib/exk_passwd_web.ex",
     "../lib/exk_passwd_web/**/*.*ex",
   ],
+  daisyui: {
+    themes: ["forest"],
+  },
   theme: {
     extend: {
       colors: {
-        brand: "#FD4F00",
-        primary: "#0d6efd",
-        secondary: "#6c757d",
+        "color-scheme": "dark",
+        primary: "#00FE94",
+        "primary-content": "#000000",
+        secondary: "#1DB88E",
+        accent: "#1DB8AB",
+        neutral: "#19362D",
+        "base-100": "#171212",
+        "border-color": "#1DB8AB",
+        "--rounded-btn": "1.9rem",
       },
     },
   },

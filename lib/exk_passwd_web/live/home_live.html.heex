@@ -13,13 +13,13 @@
         >
           <picture>
             <!-- show this up to lg -->
-            <source media="(max-width: 768px)" srcset="/images/topBanner.png" />
+            <source media="(max-width: 768px)" srcset="/images/topBanner_green.png" />
             <!-- else show this -->
             <img
               class="block w-auto max-h-[350px]"
               aria-hidden="true"
               alt="XKPasswd - A Secure Memorable Password Generator"
-              src="/images/topBanner.png"
+              src="/images/topBanner_green.png"
             />
           </picture>
         </section>
@@ -28,14 +28,14 @@
       <section id="content" class="flex flex-wrap gap-6 mt-0 -mx-3">
         <!-- open row for content below nav -->
         <div class="join join-vertical shrink-0 w-11/12 mt-6">
-          <div class="border-base-300 border rounded-b-none">
-            <div class="bg-base-200 collapse-title text-xl font-medium">
+          <div class="border-primary border rounded-b-none">
+            <div class="bg-zinc-900 collapse-title text-xl font-medium">
               Presets
             </div>
             <div class="content flex flex-wrap basis-1/6 p-4 gap-2">
               <%= for preset <- @presets do %>
                 <div
-                  class="badge badge-info uppercase flex-1 cursor-pointer"
+                  class="badge bg-primary text-zinc-900 uppercase flex-1 cursor-pointer"
                   phx-click="select-preset"
                   phx-value-preset={preset.name}
                 >
@@ -44,8 +44,8 @@
               <% end %>
             </div>
           </div>
-          <div class="border-base-300 border rounded-t-none">
-            <div class="grid grid-cols-1 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 bg-base-200">
+          <div class="border-primary border rounded-t-none">
+            <div class="grid grid-cols-1 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 bg-zinc-900">
               <div class="collapse-title text-xl font-medium">
                 Settings
               </div>
@@ -53,7 +53,7 @@
                 <%= @settings.description %>
               </div>
             </div>
-            <div class="content bg-white p-4">
+            <div class="content bg-zinc-900 p-4">
               <.simple_form
                 for={@form}
                 id="password-settings"
@@ -321,13 +321,13 @@
       <!-- open section for graphic -->
       <picture>
         <!-- show this on large and above -->
-        <source media="(max-width: 1024px)" srcset="/images/sideBanner.png" />
+        <source media="(max-width: 1024px)" srcset="/images/sideBanner_green.png" />
         <!-- else show this -->
         <img
           class="img-fluid"
           aria-hidden="true"
           alt="XKPasswd - A Secure Memorable Password Generator"
-          src="/images/sideBanner.png"
+          src="/images/sideBanner_green.png"
         />
       </picture>
     </section>
@@ -342,7 +342,7 @@
       <div class="card w-full md:w-2/3 lg:w-1/2 mt-4 lg:mt-6">
         <div class="card-body">
           <h2 class="card-title">Passwords</h2>
-          <textarea type="text" rows="3" id="passwords" name="passwords"><%= @passwords %></textarea>
+          <textarea type="text" rows="3" id="passwords" name="passwords" class="bg-zinc-900"><%= @passwords %></textarea>
         </div>
       </div>
       <!--

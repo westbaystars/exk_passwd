@@ -202,7 +202,7 @@ defmodule EXKPasswdWeb.CoreComponents do
   def simple_form(assigns) do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
-      <div class="mt-10 space-y-8 bg-white">
+      <div class="mt-10 space-y-8 bg-zinc-900">
         <%= render_slot(@inner_block, f) %>
         <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
           <%= render_slot(action, f) %>
@@ -231,7 +231,7 @@ defmodule EXKPasswdWeb.CoreComponents do
     <button
       type={@type}
       class={[
-        "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3",
+        "phx-submit-loading:opacity-75 rounded-lg bg-secondary hover:bg-primary py-2 px-3",
         "text-sm font-semibold leading-6 text-white active:text-white/80",
         @class
       ]}
@@ -310,7 +310,7 @@ defmodule EXKPasswdWeb.CoreComponents do
 
     ~H"""
     <div>
-      <label class="flex items-center gap-4 text-sm leading-6 text-zinc-600">
+      <label class="flex items-center gap-4 text-sm leading-6 text-primary">
         <input type="hidden" name={@name} value="false" disabled={@rest[:disabled]} />
         <input
           type="checkbox"
@@ -318,7 +318,7 @@ defmodule EXKPasswdWeb.CoreComponents do
           name={@name}
           value="true"
           checked={@checked}
-          class="rounded border-zinc-300 text-zinc-900 focus:ring-0"
+          class="rounded border-primary text-primary focus:ring-primary"
           {@rest}
         />
         <%= @label %>
@@ -331,17 +331,17 @@ defmodule EXKPasswdWeb.CoreComponents do
   def input(%{type: "select"} = assigns) do
     ~H"""
     <label class="form-control w-full">
-      <div class="join w-full w-max-full flex flex-row">
+      <div class="join w-full w-max-full flex flex-row bg-zinc-900">
         <label
           for={@id}
-          class="font-normal items-center text-base text-center px-3 py-2 bg-gray-100 border rounded-l-lg border-zinc-300 flex-none"
+          class="font-normal items-center text-base text-center px-3 py-2 border rounded-l-lg border-primary flex-none"
         >
           <%= @label %>
         </label>
         <select
           id={@id}
           name={@name}
-          class="font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg border-gray-300 bg-white shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm flex-auto w-1"
+          class="font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg border-primary bg-zinc-900 shadow-sm focus:border-width-2 focus:ring-primary sm:text-sm flex-auto w-1"
           multiple={@multiple}
           {@rest}
         >
@@ -362,8 +362,8 @@ defmodule EXKPasswdWeb.CoreComponents do
         id={@id}
         name={@name}
         class={[
-          "mt-2 block w-full rounded-lg focus:ring-0 sm:text-sm sm:leading-6 min-h-[6rem]",
-          @errors == [] && "border-zinc-300 focus:border-zinc-400",
+          "mt-2 block w-full rounded-lg focus:ring-primary bg-zinc-900 sm:text-sm sm:leading-6 min-h-[6rem]",
+          @errors == [] && "border-primary focus:border-width-2",
           @errors != [] && "border-rose-400 focus:border-rose-400"
         ]}
         {@rest}
@@ -377,10 +377,10 @@ defmodule EXKPasswdWeb.CoreComponents do
   def input(assigns) do
     ~H"""
     <label class="form-control w-full">
-      <div class="join w-full flex flex-row">
+      <div class="join w-full flex flex-row border-primary">
         <label
           for={@id}
-          class="font-normal items-center text-base text-center px-3 py-2 bg-gray-100 border rounded-l-lg border-zinc-300 flex-none"
+          class="font-normal items-center text-base text-center px-3 py-2 bg-gray-900 border rounded-l-lg border-primary flex-none"
         >
           <%= @label %>
         </label>
@@ -390,10 +390,10 @@ defmodule EXKPasswdWeb.CoreComponents do
           id={@id}
           value={Phoenix.HTML.Form.normalize_value(@type, @value)}
           class={[
-            "block text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
+            "block text-primary focus:ring-primary sm:text-sm sm:leading-6",
             "font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg flex-auto w-1",
-            "text-zinc-900 disabled:text-zinc-300",
-            @errors == [] && "border-zinc-300 focus:border-zinc-400",
+            "text-primary disabled:text-secondary bg-zinc-900",
+            @errors == [] && "border-primary focus:border-width-2",
             @errors != [] && "border-rose-400 focus:border-rose-400"
           ]}
           {@rest}
@@ -452,7 +452,7 @@ defmodule EXKPasswdWeb.CoreComponents do
         <h1 class="text-lg font-semibold leading-8 text-zinc-800">
           <%= render_slot(@inner_block) %>
         </h1>
-        <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-zinc-600">
+        <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-primary">
           <%= render_slot(@subtitle) %>
         </p>
       </div>
@@ -506,7 +506,7 @@ defmodule EXKPasswdWeb.CoreComponents do
         <tbody
           id={@id}
           phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}
-          class="relative divide-y divide-zinc-100 border-t border-zinc-200 text-sm leading-6 text-zinc-700"
+          class="relative divide-y divide-zinc-100 border-t border-primary text-sm leading-6 text-zinc-700"
         >
           <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="group hover:bg-zinc-50">
             <td
@@ -516,7 +516,7 @@ defmodule EXKPasswdWeb.CoreComponents do
             >
               <div class="block py-4 pr-6">
                 <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
-                <span class={["relative", i == 0 && "font-semibold text-zinc-900"]}>
+                <span class={["relative", i == 0 && "font-semibold text-primary"]}>
                   <%= render_slot(col, @row_item.(row)) %>
                 </span>
               </div>
@@ -526,7 +526,7 @@ defmodule EXKPasswdWeb.CoreComponents do
                 <span class="absolute -inset-y-px -right-4 left-0 group-hover:bg-zinc-50 sm:rounded-r-xl" />
                 <span
                   :for={action <- @action}
-                  class="relative ml-4 font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
+                  class="relative ml-4 font-semibold leading-6 text-primary hover:text-zinc-700"
                 >
                   <%= render_slot(action, @row_item.(row)) %>
                 </span>
@@ -581,7 +581,7 @@ defmodule EXKPasswdWeb.CoreComponents do
     <div class="mt-16">
       <.link
         navigate={@navigate}
-        class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
+        class="text-sm font-semibold leading-6 text-primary hover:text-zinc-700"
       >
         <.icon name="hero-arrow-left-solid" class="h-3 w-3" />
         <%= render_slot(@inner_block) %>
