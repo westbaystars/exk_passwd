@@ -14,7 +14,7 @@ defmodule EXKPasswdWeb.HomeLive do
       |> assign(settings: preset)
       |> assign_form(Settings.changeset(preset, %{}))
       |> assign_padding(preset)
-      |> assign(passwords: [])
+      |> assign(password: "")
 
     {:ok, socket}
   end
@@ -132,22 +132,16 @@ defmodule EXKPasswdWeb.HomeLive do
 
   def handle_event(
         "generate",
-        %{"selectAmount" => count},
+        _params,
         %{assigns: %{form: form}} = socket
       ) do
-    with (
-           {:ok, settings} = Ecto.Changeset.apply_action(form.source, :update)
-           {count, _} = Integer.parse(count)
+    {:ok, settings} = Ecto.Changeset.apply_action(form.source, :update)
 
-           passwords =
-             Enum.map(1..max(1, count), fn _n -> PasswordCreator.create(settings) end)
-         ) do
-      {:noreply,
-       socket
-       |> assign(passwords: Enum.join(passwords, "\n"))}
-    else
-      {:error, _} -> {:noreply, socket}
-    end
+    password = PasswordCreator.create(settings)
+
+    {:noreply,
+     socket
+     |> assign(password: password)}
   end
 
   def handle_event(

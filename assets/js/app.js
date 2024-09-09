@@ -49,6 +49,16 @@ let liveSocket = new LiveSocket("/live", Socket, {
 topbar.config({ barColors: { 0: "#29d" }, shadowColor: "rgba(0, 0, 0, .3)" });
 window.addEventListener("phx:page-loading-start", (_info) => topbar.show(300));
 window.addEventListener("phx:page-loading-stop", (_info) => topbar.hide());
+window.addEventListener("phx:copy", (event) => {
+  let text = event.target.value; // Alternatively use an element or data tag!
+  navigator.clipboard.writeText(text).then(() => {
+    event.target.value = "Copied to clipboard";
+    setTimeout(function () {
+      event.target.value = text;
+    }, 2000);
+    console.log("Copied to clipboard"); // Or a nice tooltip or something.
+  });
+});
 
 // connect if there are any LiveViews on the page
 liveSocket.connect();

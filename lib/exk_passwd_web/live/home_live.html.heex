@@ -24,18 +24,21 @@
           </picture>
         </section>
       </div>
-      <!-- close row for topBanner on mobile screens -->
-      <section id="content" class="flex flex-wrap gap-6 mt-0 -mx-3">
-        <!-- open row for content below nav -->
-        <div class="join join-vertical shrink-0 w-11/12 mt-6">
-          <div class="border-primary border rounded-b-none">
-            <div class="bg-zinc-900 collapse-title text-xl font-medium">
-              Presets
-            </div>
-            <div class="content flex flex-wrap basis-1/6 p-4 gap-2">
+      <!-- Title Bar -->
+      <div class="w-full mx-auto mt-4 mx-2 gap-4">
+        <div class="bg-primary text-black uppercase w-full px-3 py-2">
+          EXKPasswd
+        </div>
+        <div class="py-2 px-8 md:px-12 lg:px-16">
+          <div class="">
+            <div class="content grid grid-cols-3 lg:grid-cols-3 xl:grid-cols-6 basis-1/6 p-4 gap-x-10 gap-y-4">
               <%= for preset <- @presets do %>
                 <div
-                  class="badge bg-primary text-zinc-900 uppercase flex-1 cursor-pointer"
+                  class={[
+                    "text-center uppercase w-full cursor-pointer border border-primary p-2",
+                    @settings.name == preset.name && "text-black bg-primary",
+                    @settings.name != preset.name && "text-primary"
+                  ]}
                   phx-click="select-preset"
                   phx-value-preset={preset.name}
                 >
@@ -43,274 +46,299 @@
                 </div>
               <% end %>
             </div>
-          </div>
-          <div class="border-primary border rounded-t-none">
-            <div class="grid grid-cols-1 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 bg-zinc-900">
-              <div class="collapse-title text-xl font-medium">
-                Settings
-              </div>
-              <div class="col-span-1 md:col-span-4 lg:col-span-5 xl:col-span-7 pt-0 pb-3 px-3 md:pt-3">
-                <%= @settings.description %>
-              </div>
+            <div class="text-center col-span-1 md:col-span-4 lg:col-span-5 xl:col-span-7 pt-0 pb-3 px-3 md:pt-3">
+              <%= @settings.description %>
             </div>
-            <div class="content bg-zinc-900 p-4">
-              <.simple_form
-                for={@form}
-                id="password-settings"
-                phx-change="validate"
-                phx-submit="apply"
-              >
-                <!-- word settings -->
-                <div id="section_words" class="grid grid-cols-6 w-full gap-1 mt-0 g-1">
-                  <h5 class="text-xl font-medium leading-5 shrink-0 mb-2 col-span-6">Words</h5>
-                  <div class="col-span-6 md:col-span-3 lg:col-span-2">
-                    <.input
-                      type="number"
-                      min="1"
-                      max="10"
-                      step="1"
-                      id="num_words"
-                      name="num_words"
-                      label="# of words"
-                      field={@form[:num_words]}
-                    />
-                  </div>
-                  <div class="col-span-6 md:col-span-3 lg:col-span-2">
-                    <.input
-                      type="number"
-                      min="4"
-                      max="10"
-                      step="1"
-                      id="word_length_min"
-                      name="word_length_min"
-                      label="Min Length"
-                      field={@form[:word_length_min]}
-                    />
-                  </div>
-                  <div class="col-span-6 md:col-span-3 lg:col-span-2">
-                    <.input
-                      type="number"
-                      min="4"
-                      max="10"
-                      step="1"
-                      id="word_length_max"
-                      name="word_length_max"
-                      label="Max Length"
-                      field={@form[:word_length_max]}
-                    />
-                  </div>
-                </div>
-                <!-- section_words -->
-                <!-- Word Transformations -->
-                <div id="section_transformations" class="grid grid-cols-1 w-full gap-1 mt-0 g-1">
-                  <h5 class="text-xl font-medium leading-5 shrink-0 mb-2 col-span-1">
-                    Transformations
-                  </h5>
-                  <.input
-                    type="select"
-                    label="Case Transform"
-                    id="case_transform"
-                    name="case_transform"
-                    options={[
-                      "-none-": :none,
-                      "alternating WORD case": :alternate,
-                      "Capitalize First Letter": :capitalize,
-                      "cAPITALIZE eVERY lETTER eXCEPT tHe fIRST": :invert,
-                      "lower case": :lower,
-                      "UPPER CASE": :upper,
-                      "EVERY word randomly CAPITALIZED or NOT": :random
-                    ]}
-                    value={@form[:case_transform].value}
-                  />
-                </div>
-                <!-- /section_transformations -->
-                <!-- Separator -->
-                <div id="section_separator" class="grid grid-cols-1 w-full gap-1 mt-0 g-1">
-                  <h5 class="text-xl font-medium leading-5 shrink-0 mb-2 col-span-1">
-                    Separator
-                  </h5>
-                  <div class="join w-full w-max-full flex flex-row">
-                    <.input
-                      type="text"
-                      id="separator_character"
-                      name="separator_character"
-                      label="Separator Characters"
-                      field={@form[:separator_character]}
-                    />
-                  </div>
-                </div>
-                <!-- /section_separator -->
-                <!-- Padding -->
-                <div id="section_padding" class="grid grid-cols-2 w-full gap-1 mt-0 py-3 g-1">
-                  <h5 class="text-xl font-medium leading-5 shrink-0 mb-2 col-span-2">Padding</h5>
-                  <div class="col-span-2 md:col-span-1">
-                    <!-- padding digits before -->
-                    <.input
-                      type="number"
-                      min="0"
-                      max="5"
-                      step="1"
-                      id="digits_before"
-                      name="digits_before"
-                      label="Digit(s) Before"
-                      field={@form[:digits_before]}
-                    />
-                  </div>
-                  <!-- /padding_digits_before -->
-                  <div class="col-span-2 md:col-span-1">
-                    <!-- padding digits after -->
-                    <.input
-                      type="number"
-                      min="0"
-                      max="5"
-                      step="1"
-                      id="digits_after"
-                      name="digits_after"
-                      label="Digit(s) After"
-                      field={@form[:digits_after]}
-                    />
-                  </div>
-                  <!-- /padding_digits_after -->
-                  <!-- padding_characters -->
-                  <div class="col-span-2">
-                    <.input
-                      type="text"
-                      id="padding_character"
-                      name="padding_character"
-                      label="Padding Characters"
-                      field={@form[:padding_character]}
-                    />
-                  </div>
-                  <!-- /padding_characters -->
-                  <div class="col-span-2">
-                    <div class="join w-full w-max-full flex flex-row">
-                      <input
-                        type="radio"
-                        value="fixed"
-                        class="flex-none"
-                        name="padding_type"
-                        id="padding_fixed"
-                        checked={@padding_type == "fixed"}
-                      />
-                      <label
-                        for="padding_fixed"
-                        class="font-normal items-center text-base text-center px-3 flex-none"
-                      >
-                        Fixed Padding
-                      </label>
-                    </div>
-                  </div>
-                  <!-- padding characters before -->
-                  <div class="col-span-2 md:col-span-1 pl-7">
-                    <.input
-                      type="number"
-                      min="0"
-                      max="5"
-                      step="1"
-                      id="padding_before"
-                      name="padding_before"
-                      label="Symbol(s) Before"
-                      field={@form[:padding_before]}
-                      disabled={@padding_type != "fixed"}
-                    />
-                  </div>
-                  <!-- /padding_characters_before -->
-                  <!-- padding characters after -->
-                  <div class="col-span-2 md:col-span-1 pl-7 md:pl-0">
-                    <.input
-                      type="number"
-                      min="0"
-                      max="5"
-                      step="1"
-                      id="padding_after"
-                      name="padding_after"
-                      label="Symbol(s) After"
-                      field={@form[:padding_after]}
-                      disabled={@padding_type != "fixed"}
-                    />
-                  </div>
-                  <!-- /padding_characters_after -->
-                  <!-- pad to length -->
-                  <div class="col-span-2">
-                    <div class="join w-full w-max-full flex flex-row">
-                      <input
-                        type="radio"
-                        value="adaptive"
-                        class="flex-none"
-                        name="padding_type"
-                        id="padding_adaptive"
-                        checked={@padding_type != "fixed"}
-                      />
-                      <label
-                        for="padding_adaptive"
-                        class="font-normal items-center text-base text-center px-3 flex-none"
-                      >
-                        Adaptive Padding
-                      </label>
-                    </div>
-                  </div>
-                  <div class="col-span-2 pl-7">
-                    <.input
-                      type="number"
-                      min="8"
-                      max="999"
-                      step="1"
-                      id="pad_to_length"
-                      name="pad_to_length"
-                      label="Pad to Length"
-                      field={@form[:pad_to_length]}
-                      disabled={@padding_type == "fixed"}
-                    />
-                  </div>
-                  <!-- /pad_to_length -->
-                  <!-- /padding_char_container -->
-                </div>
-                <!-- /section_padding -->
-                <div id="current-settings" phx-hook="settings">
-                  <.button type="button" phx-click="save_settings">Save Current Settings</.button>
-                </div>
-              </.simple_form>
-            </div>
-          </div>
-          <!-- this section (id = generatePassword) is handled by the PasswordController and the PasswordView -->
-          <div id="generatePassword" class="shrink-0 w-full max-w-full mx-3">
-            <!-- open generate pw - need to split pw box out -->
-            <h3 class="text-2xl font-medium leading-snug mt-4">Generate Password(s)</h3>
             <.form id="generatePasswords" for={%{}} phx-submit="generate">
               <!-- open input area for gen pw -->
-              <div class="grid grid-cols-12 w-full flex-wrap gap-6 mt-0">
-                <div class="mt-2 col-span-8 md:col-span-6 mb-4">
-                  <.input
-                    type="number"
-                    min="1"
-                    max="10"
-                    step="1"
-                    value="3"
-                    label="# of passwords"
-                    id="selectAmount"
-                    name="selectAmount"
+              <div class="grid cols-4 md:grid-cols-7 xl:grid-cols-9 gap-6">
+                <div class="col-span-4 md:col-span-5 xl:col-span-7 join w-full border border-primary rounded-none mt-2">
+                  <input
+                    type="text"
+                    value={@password}
+                    id="password"
+                    name="password"
+                    class="bg-zinc-900 join-item border-r-0 w-full"
                   />
+                  <button
+                    phx-click={JS.dispatch("phx:copy", to: "#password")}
+                    type="button"
+                    class="border-l-0 px-auto join-item w-10"
+                  >
+                    <svg
+                      id="copyPasswordIcon"
+                      class="heroicon inline-block h-6 w-6"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="2"
+                      stroke="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                      >
+                      </path>
+                    </svg>
+                  </button>
                 </div>
-                <div class="col-span-3">
+                <div class="col-span-2">
                   <!-- open col for Generate -->
                   <div class="mt-2">
-                    <.button
+                    <button
                       id="generate"
                       type="submit"
                       aria-label="generate passwords"
                       tabindex="0"
+                      class="text-primary text-center uppercase w-full cursor-pointer border border-primary p-2"
+                      ,
                     >
                       Generate
-                    </.button>
+                    </button>
                   </div>
                 </div>
               </div>
             </.form>
-            <!-- close input area for gen pw -->
           </div>
-          <!-- close generate pw -->
         </div>
-      </section>
+        <!-- close row for topBanner on mobile screens -->
+        <section id="content" class="flex flex-wrap gap-6 mt-0 -mx-3">
+          <!-- open row for content below nav -->
+          <div class="join join-vertical shrink-0 w-11/12 mt-6">
+            <div class="border-primary border rounded-t-none">
+              <div class="grid grid-cols-1 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 bg-zinc-900">
+                <div class="collapse-title text-xl font-medium">
+                  Settings
+                </div>
+              </div>
+              <div class="content bg-zinc-900 p-4">
+                <.simple_form
+                  for={@form}
+                  id="password-settings"
+                  phx-change="validate"
+                  phx-submit="apply"
+                >
+                  <!-- word settings -->
+                  <div id="section_words" class="grid grid-cols-6 w-full gap-1 mt-0 g-1">
+                    <h5 class="text-xl font-medium leading-5 shrink-0 mb-2 col-span-6">Words</h5>
+                    <div class="col-span-6 md:col-span-3 lg:col-span-2">
+                      <.input
+                        type="number"
+                        min="1"
+                        max="10"
+                        step="1"
+                        id="num_words"
+                        name="num_words"
+                        label="# of words"
+                        field={@form[:num_words]}
+                      />
+                    </div>
+                    <div class="col-span-6 md:col-span-3 lg:col-span-2">
+                      <.input
+                        type="number"
+                        min="4"
+                        max="10"
+                        step="1"
+                        id="word_length_min"
+                        name="word_length_min"
+                        label="Min Length"
+                        field={@form[:word_length_min]}
+                      />
+                    </div>
+                    <div class="col-span-6 md:col-span-3 lg:col-span-2">
+                      <.input
+                        type="number"
+                        min="4"
+                        max="10"
+                        step="1"
+                        id="word_length_max"
+                        name="word_length_max"
+                        label="Max Length"
+                        field={@form[:word_length_max]}
+                      />
+                    </div>
+                  </div>
+                  <!-- section_words -->
+                <!-- Word Transformations -->
+                  <div id="section_transformations" class="grid grid-cols-1 w-full gap-1 mt-0 g-1">
+                    <h5 class="text-xl font-medium leading-5 shrink-0 mb-2 col-span-1">
+                      Transformations
+                    </h5>
+                    <.input
+                      type="select"
+                      label="Case Transform"
+                      id="case_transform"
+                      name="case_transform"
+                      options={[
+                        "-none-": :none,
+                        "alternating WORD case": :alternate,
+                        "Capitalize First Letter": :capitalize,
+                        "cAPITALIZE eVERY lETTER eXCEPT tHe fIRST": :invert,
+                        "lower case": :lower,
+                        "UPPER CASE": :upper,
+                        "EVERY word randomly CAPITALIZED or NOT": :random
+                      ]}
+                      value={@form[:case_transform].value}
+                    />
+                  </div>
+                  <!-- /section_transformations -->
+                <!-- Separator -->
+                  <div id="section_separator" class="grid grid-cols-1 w-full gap-1 mt-0 g-1">
+                    <h5 class="text-xl font-medium leading-5 shrink-0 mb-2 col-span-1">
+                      Separator
+                    </h5>
+                    <div class="join w-full w-max-full flex flex-row">
+                      <.input
+                        type="text"
+                        id="separator_character"
+                        name="separator_character"
+                        label="Separator Characters"
+                        field={@form[:separator_character]}
+                      />
+                    </div>
+                  </div>
+                  <!-- /section_separator -->
+                <!-- Padding -->
+                  <div id="section_padding" class="grid grid-cols-2 w-full gap-1 mt-0 py-3 g-1">
+                    <h5 class="text-xl font-medium leading-5 shrink-0 mb-2 col-span-2">
+                      Padding
+                    </h5>
+                    <div class="col-span-2 md:col-span-1">
+                      <!-- padding digits before -->
+                      <.input
+                        type="number"
+                        min="0"
+                        max="5"
+                        step="1"
+                        id="digits_before"
+                        name="digits_before"
+                        label="Digit(s) Before"
+                        field={@form[:digits_before]}
+                      />
+                    </div>
+                    <!-- /padding_digits_before -->
+                    <div class="col-span-2 md:col-span-1">
+                      <!-- padding digits after -->
+                      <.input
+                        type="number"
+                        min="0"
+                        max="5"
+                        step="1"
+                        id="digits_after"
+                        name="digits_after"
+                        label="Digit(s) After"
+                        field={@form[:digits_after]}
+                      />
+                    </div>
+                    <!-- /padding_digits_after -->
+                  <!-- padding_characters -->
+                    <div class="col-span-2">
+                      <.input
+                        type="text"
+                        id="padding_character"
+                        name="padding_character"
+                        label="Padding Characters"
+                        field={@form[:padding_character]}
+                      />
+                    </div>
+                    <!-- /padding_characters -->
+                    <div class="col-span-2">
+                      <div class="join w-full w-max-full flex flex-row">
+                        <input
+                          type="radio"
+                          value="fixed"
+                          class="flex-none"
+                          name="padding_type"
+                          id="padding_fixed"
+                          checked={@padding_type == "fixed"}
+                        />
+                        <label
+                          for="padding_fixed"
+                          class="font-normal items-center text-base text-center px-3 flex-none"
+                        >
+                          Fixed Padding
+                        </label>
+                      </div>
+                    </div>
+                    <!-- padding characters before -->
+                    <div class="col-span-2 md:col-span-1 pl-7">
+                      <.input
+                        type="number"
+                        min="0"
+                        max="5"
+                        step="1"
+                        id="padding_before"
+                        name="padding_before"
+                        label="Symbol(s) Before"
+                        field={@form[:padding_before]}
+                        disabled={@padding_type != "fixed"}
+                      />
+                    </div>
+                    <!-- /padding_characters_before -->
+                  <!-- padding characters after -->
+                    <div class="col-span-2 md:col-span-1 pl-7 md:pl-0">
+                      <.input
+                        type="number"
+                        min="0"
+                        max="5"
+                        step="1"
+                        id="padding_after"
+                        name="padding_after"
+                        label="Symbol(s) After"
+                        field={@form[:padding_after]}
+                        disabled={@padding_type != "fixed"}
+                      />
+                    </div>
+                    <!-- /padding_characters_after -->
+                  <!-- pad to length -->
+                    <div class="col-span-2">
+                      <div class="join w-full w-max-full flex flex-row">
+                        <input
+                          type="radio"
+                          value="adaptive"
+                          class="flex-none"
+                          name="padding_type"
+                          id="padding_adaptive"
+                          checked={@padding_type != "fixed"}
+                        />
+                        <label
+                          for="padding_adaptive"
+                          class="font-normal items-center text-base text-center px-3 flex-none"
+                        >
+                          Adaptive Padding
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-span-2 pl-7">
+                      <.input
+                        type="number"
+                        min="8"
+                        max="999"
+                        step="1"
+                        id="pad_to_length"
+                        name="pad_to_length"
+                        label="Pad to Length"
+                        field={@form[:pad_to_length]}
+                        disabled={@padding_type == "fixed"}
+                      />
+                    </div>
+                    <!-- /pad_to_length -->
+                  <!-- /padding_char_container -->
+                  </div>
+                  <!-- /section_padding -->
+                  <div id="current-settings" phx-hook="settings">
+                    <.button type="button" phx-click="save_settings">
+                      Save Current Settings
+                    </.button>
+                  </div>
+                </.simple_form>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
       <!-- close section for content below nav -->
     </section>
     <section
@@ -339,12 +367,6 @@
   <div class="flex flex-wrap gap-6 mt-0 -mx-3">
     <!-- this section (id = password-card) is handled by the PasswordController and the PasswordView -->
     <section id="password-card" class="flex-1 order-3 px-0">
-      <div class="card w-full md:w-2/3 lg:w-1/2 mt-4 lg:mt-6">
-        <div class="card-body">
-          <h2 class="card-title">Passwords</h2>
-          <textarea type="text" rows="3" id="passwords" name="passwords" class="bg-zinc-900"><%= @passwords %></textarea>
-        </div>
-      </div>
       <!--
       <div class="card-footer">
         <div id="password_stats_container" class="pt-1 fs-6">
@@ -382,6 +404,10 @@
       <a href="https://github.com/westbaystars/exk_passwd" target="_blank" class="link">
         EXKPasswd on
         GitHub
+      </a>
+      | UI by
+      <a href="https://www.linkedin.com/in/jobana-westbay/" target="_blank" class="link">
+        Jobana
       </a>
     </div>
   </footer>

@@ -78,7 +78,7 @@ defmodule EXKPasswd.Presets do
       padding_character: ~s(!@$%^&*+=:|~?)
     },
     %Settings{
-      name: "apple_id",
+      name: "apple id",
       description:
         "A preset respecting the many prerequisites Apple places " <>
           "on Apple ID passwords. The preset also limits itself to " <>
