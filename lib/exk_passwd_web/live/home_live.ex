@@ -127,6 +127,7 @@ defmodule EXKPasswdWeb.HomeLive do
 
     {:noreply,
      socket
+     |> assign_form(changeset)
      |> save_settings(changeset)}
   end
 
@@ -188,7 +189,9 @@ defmodule EXKPasswdWeb.HomeLive do
 
   defp save_settings(socket, changeset) do
     with {:ok, settings} <- Ecto.Changeset.apply_action(changeset, :update) do
-      push_event(socket, "saveSettings", %{current: settings})
+      socket
+      |> assign(settings: settings)
+      |> push_event("saveSettings", %{current: settings})
     else
       {:error, _changeset} -> socket
     end
