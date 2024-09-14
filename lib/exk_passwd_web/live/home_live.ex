@@ -76,6 +76,21 @@ defmodule EXKPasswdWeb.HomeLive do
 
   def handle_event(
         "validate",
+        %{"_target" => ["num_words_2"], "num_words_2" => num_words} = params,
+        socket
+      ),
+      do:
+        handle_event(
+          "validate",
+          %{params | "_target" => ["num_words"], "num_words" => num_words},
+          socket
+        )
+
+  def handle_event("validate", %{"num_words" => ""} = params, socket),
+    do: handle_event("validate", %{params | "num_words" => "0"}, socket)
+
+  def handle_event(
+        "validate",
         %{"_target" => [target]} = params,
         %{assigns: %{settings: settings, form: form}} = socket
       ) do

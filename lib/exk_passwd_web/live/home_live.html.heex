@@ -65,20 +65,21 @@
                     type="button"
                     class="border-l-0 px-auto join-item w-10"
                   >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="24px"
-                    viewBox="0 -960 960 960"
-                    width="24px"
-                    fill="#00FE94"
-                    class="heroicon inline-block h-6 w-6"
-                    aria-hidden="true"
-                  >
-                    <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-d="M373.62-250q-38.35 0-64.48-26.14Q283-302.27 283-340.62v-438.76q0-38.35 26.14-64.48Q335.27-870 373.62-870h318.76q38.35 0 64.48 26.14Q783-817.73 783-779.38v438.76q0 38.35-26.14 64.48Q730.73-250 692.38-250H373.62Zm0-66h318.76q9.24 0 16.93-7.69 7.69-7.69 7.69-16.93v-438.76q0-9.24-7.69-16.93-7.69-7.69-16.93-7.69H373.62q-9.24 0-16.93 7.69-7.69 7.69-7.69 16.93v438.76q0 9.24 7.69 16.93 7.69 7.69 16.93 7.69Zm-146 212q-38.35 0-64.48-26.14Q137-156.27 137-194.61v-504.77h66v504.77q0 9.23 7.69 16.92 7.69 7.69 16.93 7.69h384.76v66H227.62ZM349-316v-488 488Z" />
-                  </svg>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="24px"
+                      viewBox="0 -960 960 960"
+                      width="24px"
+                      fill="#00FE94"
+                      class="heroicon inline-block h-6 w-6"
+                      aria-hidden="true"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M373.62-250q-38.35 0-64.48-26.14Q283-302.27 283-340.62v-438.76q0-38.35 26.14-64.48Q335.27-870 373.62-870h318.76q38.35 0 64.48 26.14Q783-817.73 783-779.38v438.76q0 38.35-26.14 64.48Q730.73-250 692.38-250H373.62Zm0-66h318.76q9.24 0 16.93-7.69 7.69-7.69 7.69-16.93v-438.76q0-9.24-7.69-16.93-7.69-7.69-16.93-7.69H373.62q-9.24 0-16.93 7.69-7.69 7.69-7.69 16.93v438.76q0 9.24 7.69 16.93 7.69 7.69 16.93 7.69Zm-146 212q-38.35 0-64.48-26.14Q137-156.27 137-194.61v-504.77h66v504.77q0 9.23 7.69 16.92 7.69 7.69 16.93 7.69h384.76v66H227.62ZM349-316v-488 488Z"
+                      />
+                    </svg>
                   </button>
                 </div>
                 <div class="col-span-2">
@@ -137,19 +138,36 @@ d="M373.62-250q-38.35 0-64.48-26.14Q283-302.27 283-340.62v-438.76q0-38.35 26.14-
                   phx-submit="apply"
                 >
                   <!-- word settings -->
-                  <div id="section_words" class="grid grid-cols-6 w-full gap-1 mt-0 g-1">
-                    <h5 class="text-xl font-medium leading-5 shrink-0 mb-2 col-span-6">Words</h5>
-                    <div class="col-span-6 md:col-span-3 lg:col-span-2">
-                      <.input
-                        type="number"
-                        min="1"
-                        max="10"
-                        step="1"
-                        id="num_words"
-                        name="num_words"
-                        label="# of words"
-                        field={@form[:num_words]}
-                      />
+                  <div id="section_words" class="grid grid-cols-1 md:grid-cols-2 w-full gap-4">
+                    <div class="join join-vertical gap-4">
+                      <div class="font-medium">■ Word Count</div>
+                      <div class="flex w-full">
+                        <input
+                          type="number"
+                          min="1"
+                          max="10"
+                          step="1"
+                          id="num_words"
+                          name="num_words"
+                          label="# of words"
+                          value={
+                            Phoenix.HTML.Form.normalize_value("number", @form[:num_words].value)
+                          }
+                          class="text-primary bg-zinc-900 w-16"
+                        />
+                        <input
+                          type="range"
+                          min="1"
+                          max="10"
+                          phx-value-bind="num_words"
+                          name="num_words_2"
+                          value={
+                            Phoenix.HTML.Form.normalize_value("number", @form[:num_words].value)
+                          }
+                          class="bg-zinc-900 flex-auto mx-4 my-auto range"
+                        />
+                      </div>
+                      <.error :for={{msg, _} <- @form[:num_words].errors}><%= msg %></.error>
                     </div>
                     <div class="col-span-6 md:col-span-3 lg:col-span-2">
                       <.input
