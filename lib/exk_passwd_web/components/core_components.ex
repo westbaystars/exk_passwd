@@ -373,6 +373,33 @@ defmodule EXKPasswdWeb.CoreComponents do
     """
   end
 
+  def input(%{type: "int-slider"} = assigns) do
+    ~H"""
+    <div class="join join-vertical gap-4">
+      <div class="font-medium">■ <%= @label %></div>
+      <div class="flex w-full">
+        <input
+          type="number"
+          id={@id}
+          name={@name}
+          value={Phoenix.HTML.Form.normalize_value(@type, @value)}
+          class="text-primary bg-zinc-900 w-16"
+          {@rest}
+        />
+        <input
+          type="range"
+          phx-value-bind={@name}
+          name={"slider_" <> @name}
+          value={Phoenix.HTML.Form.normalize_value(@type, @value)}
+          class="bg-zinc-900 flex-auto mx-4 my-auto range"
+          {@rest}
+        />
+      </div>
+      <.error :for={msg <- @errors}><%= msg %></.error>
+    </div>
+    """
+  end
+
   # All other inputs text, datetime-local, url, password, etc. are handled here...
   def input(assigns) do
     ~H"""

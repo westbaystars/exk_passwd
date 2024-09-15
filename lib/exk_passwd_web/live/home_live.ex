@@ -74,17 +74,21 @@ defmodule EXKPasswdWeb.HomeLive do
      |> assign_form(changeset)}
   end
 
+  # Redirect slider changes to bound input box with new value
   def handle_event(
         "validate",
-        %{"_target" => ["num_words_2"], "num_words_2" => num_words} = params,
+        %{"_target" => [target]} = params,
         socket
-      ),
-      do:
-        handle_event(
-          "validate",
-          %{params | "_target" => ["num_words"], "num_words" => num_words},
-          socket
-        )
+      )
+      when binary_part(target, 0, 7) === "slider_" do
+    new_target = String.replace_prefix(target, "slider_", "")
+
+    handle_event(
+      "validate",
+      %{params | "_target" => [new_target], new_target => params[target]},
+      socket
+    )
+  end
 
   def handle_event("validate", %{"num_words" => ""} = params, socket),
     do: handle_event("validate", %{params | "num_words" => "0"}, socket)
