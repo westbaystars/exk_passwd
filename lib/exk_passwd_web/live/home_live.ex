@@ -2,6 +2,7 @@ defmodule EXKPasswdWeb.HomeLive do
   use EXKPasswdWeb, :live_view
 
   alias EXKPasswd.{Presets, Settings, PasswordCreator}
+  alias Ecto.Changeset
 
   @impl Phoenix.LiveView
   def mount(_params, _sessoin, socket) do
@@ -110,6 +111,21 @@ defmodule EXKPasswdWeb.HomeLive do
      |> assign_form(changeset)}
   end
 
+  def handle_event("toggle_symbol", %{"_target" => target, "symbol" => symbol},
+      %{assigns: %{settings: settings, form: form}} = socket) do
+    target = String.to_existing_atom(target)
+    changeset = Settings.changeset(settings, form.source.changes)
+
+    symbols = Changeset.get_field(changeset, target)
+    changeset = if String.contains?(symbols, symbol),
+      do: Settings.changeset(settings,
+        Map.merge(form.source.changes, %{target => String.replace(symbols, symbol, "")})),
+      else: Settings.changeset(settings,
+        Map.merge(form.source.changes, %{target => symbols <> symbol}))
+
+    {:noreply, socket |> assign_form(changeset)}
+  end
+
   def handle_event("restoreSettings", %{"settings" => nil}, socket), do: {:noreply, socket}
 
   def handle_event(
@@ -121,7 +137,7 @@ defmodule EXKPasswdWeb.HomeLive do
       Settings.changeset(%Settings{}, settings)
       |> Map.put(:action, :validate)
 
-    {:ok, new_settings} = Ecto.Changeset.apply_action(changeset, :update)
+    {:ok, new_settings} = Changeset.apply_action(changeset, :update)
 
     {:noreply,
      socket
@@ -155,7 +171,7 @@ defmodule EXKPasswdWeb.HomeLive do
         _params,
         %{assigns: %{form: form}} = socket
       ) do
-    {:ok, settings} = Ecto.Changeset.apply_action(form.source, :update)
+    {:ok, settings} = Changeset.apply_action(form.source, :update)
 
     password = PasswordCreator.create(settings)
 
@@ -207,7 +223,7 @@ defmodule EXKPasswdWeb.HomeLive do
   end
 
   defp save_settings(socket, changeset) do
-    with {:ok, settings} <- Ecto.Changeset.apply_action(changeset, :update) do
+    with {:ok, settings} <- Changeset.apply_action(changeset, :update) do
       socket
       |> assign(settings: settings)
       |> push_event("saveSettings", %{current: settings})

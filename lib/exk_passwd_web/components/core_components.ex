@@ -330,27 +330,20 @@ defmodule EXKPasswdWeb.CoreComponents do
 
   def input(%{type: "select"} = assigns) do
     ~H"""
-    <label class="form-control w-full">
-      <div class="join w-full w-max-full flex flex-row bg-zinc-900">
-        <label
-          for={@id}
-          class="font-normal items-center text-base text-center px-3 py-2 border rounded-l-lg border-primary flex-none"
-        >
-          <%= @label %>
-        </label>
-        <select
-          id={@id}
-          name={@name}
-          class="font-normal p-[.375rem .75rem] leading-normal border rounded-r-lg border-primary bg-zinc-900 shadow-sm focus:border-width-2 focus:ring-primary sm:text-sm flex-auto w-1"
-          multiple={@multiple}
-          {@rest}
-        >
-          <option :if={@prompt} value=""><%= @prompt %></option>
-          <%= Phoenix.HTML.Form.options_for_select(@options, @value) %>
-        </select>
-      </div>
+    <div class="form-control join join-vertical gap-4">
+      <label for={@id} class="font-medium">■ <%= @label %></label>
+      <select
+        id={@id}
+        name={@name}
+        class="p-[.375rem .75rem] leading-normal w-full border rounded-none border-primary bg-zinc-900 shadow-sm focus:border-width-2 focus:ring-primary sm:text-sm flex-auto w-1"
+        multiple={@multiple}
+        {@rest}
+      >
+        <option :if={@prompt} value=""><%= @prompt %></option>
+        <%= Phoenix.HTML.Form.options_for_select(@options, @value) %>
+      </select>
       <.error :for={msg <- @errors}><%= msg %></.error>
-    </label>
+    </div>
     """
   end
 
@@ -376,7 +369,7 @@ defmodule EXKPasswdWeb.CoreComponents do
   def input(%{type: "int-slider"} = assigns) do
     ~H"""
     <div class="join join-vertical gap-4">
-      <div class="font-medium">■ <%= @label %></div>
+      <label for={@id} class="font-medium">■ <%= @label %></label>
       <div class="flex w-full">
         <input
           type="number"

@@ -5,6 +5,7 @@ defmodule EXKPasswd.Settings do
 
   @derive Jason.Encoder
   @primary_key {:name, :string, default: "default"}
+  @allowed_symbols ~w(- _ ~ + * = @ ! & $ % ? . : ; ^ | / ' ")
   @doc """
   The `case_transform` may be any of:
 
@@ -86,6 +87,7 @@ defmodule EXKPasswd.Settings do
       :word_length_min,
       :word_length_max,
       :case_transform,
+      :separator_character,
       :digits_before,
       :digits_after,
       :pad_to_length,
@@ -97,6 +99,7 @@ defmodule EXKPasswd.Settings do
     |> validate_inclusion(:word_length_max, 4..10, message: "must be between 4 and 10")
     |> validate_less_than_or_equal(:word_length_min, :word_length_max, "Max Length")
     |> validate_length(:separator_character, max: 20)
+    |> validate_allowed_symbols(:separator_character)
     |> validate_inclusion(:digits_before, 0..5, message: "must be between 0 and 5")
     |> validate_inclusion(:digits_after, 0..5, message: "must be between 0 and 5")
     |> validate_length(:padding_character, max: 20)
@@ -107,6 +110,8 @@ defmodule EXKPasswd.Settings do
     |> validate_inclusion(:padding_after, 0..5, message: "must be between 0 and 5")
   end
 
+  def allowed_symbols(), do: @allowed_symbols
+
   defp validate_less_than_or_equal(changeset, min, max, upper_label) do
     {_, min_value} = fetch_field(changeset, min)
     {_, max_value} = fetch_field(changeset, max)
@@ -116,6 +121,20 @@ defmodule EXKPasswd.Settings do
     else
       message = "must be <= to #{upper_label}"
       add_error(changeset, min, message, max_field: max)
+    end
+  end
+
+  defp validate_allowed_symbols(changeset, symbols) do
+    {_, user_symbols} = fetch_field(changeset, symbols)
+    rejects =
+      String.graphemes(user_symbols)
+      |> Enum.reject(fn x -> Enum.member?(@allowed_symbols, x) end)
+
+    if Enum.empty?(rejects) do
+      changeset
+    else
+      message = "characters #{inspect(rejects)} are not allowed to be symbols"
+      add_error(changeset, symbols, message)
     end
   end
 end

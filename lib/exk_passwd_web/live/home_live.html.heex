@@ -174,9 +174,6 @@
                 </div>
                 <!-- Word Transformations -->
                   <div id="section_transformations" class="grid grid-cols-1 w-full gap-1 mt-0 g-1">
-                    <h5 class="text-xl font-medium leading-5 shrink-0 mb-2 col-span-1">
-                      Transformations
-                    </h5>
                     <.input
                       type="select"
                       label="Case Transform"
@@ -195,19 +192,21 @@
                     />
                   </div>
                   <!-- /section_transformations -->
-                <!-- Separator -->
-                  <div id="section_separator" class="grid grid-cols-1 w-full gap-1 mt-0 g-1">
-                    <h5 class="text-xl font-medium leading-5 shrink-0 mb-2 col-span-1">
-                      Separator
-                    </h5>
-                    <div class="join w-full w-max-full flex flex-row">
-                      <.input
-                        type="text"
-                        id="separator_character"
-                        name="separator_character"
-                        label="Separator Characters"
-                        field={@form[:separator_character]}
-                      />
+                  <!-- Separator -->
+                  <div id="section_separator" class="grid grid-cols-1 w-full gap-4 mt-0 g-1">
+                    <div class="font-medium">■ Separator Characters</div>
+                    <div class="w-full flex flex-wrap gap-4">
+                      <%= for symbol <- Settings.allowed_symbols() do %>
+                        <div phx-click="toggle_symbol"
+                          phx-value-symbol={symbol}
+                          phx-value-_target="separator_character"
+                          class={"btn border rounded-none cursor-pointer " <>
+                          if String.contains?(@form[:separator_character].value, symbol),
+                            do: "btn-primary",
+                            else: "border-primary"
+                          }
+                        ><%= symbol %></div>
+                      <% end %>
                     </div>
                   </div>
                   <!-- /section_separator -->
