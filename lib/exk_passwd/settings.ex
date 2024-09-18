@@ -5,7 +5,9 @@ defmodule EXKPasswd.Settings do
 
   @derive Jason.Encoder
   @primary_key {:name, :string, default: "default"}
-  @allowed_symbols ~w(- _ ~ + * = @ ! & $ % ? . : ; ^ | / ' ")
+  @allowed_symbols ~w(- _ ~ + * = @ ! & $ % ? . : ; ^ | / ' " ) ++ [" "]
+  @empty_values []
+
   @doc """
   The `case_transform` may be any of:
 
@@ -60,21 +62,25 @@ defmodule EXKPasswd.Settings do
   # def changeset(attrs), do: changeset(%Settings{}, attrs)
   def changeset(%Settings{} = settings, attrs) do
     settings
-    |> cast(attrs, [
-      :name,
-      :description,
-      :num_words,
-      :word_length_min,
-      :word_length_max,
-      :case_transform,
-      :separator_character,
-      :digits_before,
-      :digits_after,
-      :pad_to_length,
-      :padding_character,
-      :padding_before,
-      :padding_after
-    ])
+    |> cast(
+      attrs,
+      [
+        :name,
+        :description,
+        :num_words,
+        :word_length_min,
+        :word_length_max,
+        :case_transform,
+        :separator_character,
+        :digits_before,
+        :digits_after,
+        :pad_to_length,
+        :padding_character,
+        :padding_before,
+        :padding_after
+      ],
+      empty_values: @empty_values
+    )
     |> validate()
   end
 
@@ -87,7 +93,6 @@ defmodule EXKPasswd.Settings do
       :word_length_min,
       :word_length_max,
       :case_transform,
-      :separator_character,
       :digits_before,
       :digits_after,
       :pad_to_length,
@@ -98,7 +103,7 @@ defmodule EXKPasswd.Settings do
     |> validate_inclusion(:word_length_min, 4..10, message: "must be between 4 and 10")
     |> validate_inclusion(:word_length_max, 4..10, message: "must be between 4 and 10")
     |> validate_less_than_or_equal(:word_length_min, :word_length_max, "Max Length")
-    |> validate_length(:separator_character, max: 20)
+    |> validate_length(:separator_character, min: 0, max: length(@allowed_symbols))
     |> validate_allowed_symbols(:separator_character)
     |> validate_inclusion(:digits_before, 0..5, message: "must be between 0 and 5")
     |> validate_inclusion(:digits_after, 0..5, message: "must be between 0 and 5")
@@ -124,8 +129,8 @@ defmodule EXKPasswd.Settings do
     end
   end
 
-  defp validate_allowed_symbols(changeset, symbols) do
-    {_, user_symbols} = fetch_field(changeset, symbols)
+  defp validate_allowed_symbols(changeset, symbols_key) do
+    user_symbols = get_field(changeset, symbols_key)
     rejects =
       String.graphemes(user_symbols)
       |> Enum.reject(fn x -> Enum.member?(@allowed_symbols, x) end)
@@ -134,7 +139,7 @@ defmodule EXKPasswd.Settings do
       changeset
     else
       message = "characters #{inspect(rejects)} are not allowed to be symbols"
-      add_error(changeset, symbols, message)
+      add_error(changeset, symbols_key, message)
     end
   end
 end

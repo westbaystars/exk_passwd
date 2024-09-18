@@ -111,17 +111,22 @@ defmodule EXKPasswdWeb.HomeLive do
      |> assign_form(changeset)}
   end
 
-  def handle_event("toggle_symbol", %{"_target" => target, "symbol" => symbol},
-      %{assigns: %{settings: settings, form: form}} = socket) do
-    target = String.to_existing_atom(target)
+  def handle_event(
+        "toggle",
+        %{"name" => name, "toggle" => value},
+        %{assigns: %{settings: settings, form: form}} = socket
+      ) do
+    name = String.to_existing_atom(name)
     changeset = Settings.changeset(settings, form.source.changes)
 
-    symbols = Changeset.get_field(changeset, target)
-    changeset = if String.contains?(symbols, symbol),
-      do: Settings.changeset(settings,
-        Map.merge(form.source.changes, %{target => String.replace(symbols, symbol, "")})),
-      else: Settings.changeset(settings,
-        Map.merge(form.source.changes, %{target => symbols <> symbol}))
+    values = Changeset.get_field(changeset, name)
+    values = case String.contains?(values, value) do
+      true -> String.replace(values, value, "")
+      _ -> values <> value
+    end
+
+    changeset = Changeset.put_change(changeset, name, values)
+    |> Map.put(:action, :validate)
 
     {:noreply, socket |> assign_form(changeset)}
   end
@@ -138,6 +143,7 @@ defmodule EXKPasswdWeb.HomeLive do
       |> Map.put(:action, :validate)
 
     {:ok, new_settings} = Changeset.apply_action(changeset, :update)
+    new_settings = Map.put(new_settings, :action, :validate)
 
     {:noreply,
      socket

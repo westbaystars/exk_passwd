@@ -429,6 +429,55 @@ defmodule EXKPasswdWeb.CoreComponents do
   end
 
   @doc """
+  Renders a list of toggle buttons.
+  """
+  attr :id, :any, default: nil
+  attr :name, :any
+  attr :label, :string, default: nil
+  attr :value, :any
+  attr :values, :list
+
+  attr :field, Phoenix.HTML.FormField,
+    doc: "a form field struct retrieved from the form, for example: @form[:email]"
+
+  attr :errors, :list, default: []
+
+  def toggle_list(%{field: %Phoenix.HTML.FormField{} = field} = assigns) do
+    errors = if Phoenix.Component.used_input?(field), do: field.errors, else: []
+
+    assigns
+    |> assign(field: nil, id: assigns.id || field.id)
+    |> assign(:errors, Enum.map(errors, &translate_error(&1)))
+    |> assign_new(:name, fn -> field.name end)
+    |> assign_new(:value, fn -> field.value end)
+    |> toggle_list()
+  end
+
+  def toggle_list(assigns) do
+    ~H"""
+    <div id={@id} class="join join-vertical gap-4">
+      <label class="font-medium">■ <%= @label %></label>
+      <div class="w-full flex flex-wrap gap-4">
+        <%= for value <- @values do %>
+          <div class={"btn border rounded-none focus:border-primary cursor-pointer " <>
+            if String.contains?(@value, value),
+              do: "btn-primary",
+              else: "border-primary"
+            }
+            phx-click="toggle"
+            phx-value-toggle={value}
+            phx-value-name={@name}
+          >
+            <%= value %>
+          </div>
+        <% end %>
+      </div>
+      <.error :for={msg <- @errors}><%= msg %></.error>
+    </div>
+    """
+  end
+
+  @doc """
   Renders a label.
   """
   attr :for, :string, default: nil

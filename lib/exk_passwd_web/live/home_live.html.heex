@@ -149,30 +149,30 @@
                       label="Word Count"
                       field={@form[:num_words]}
                     />
-                  <div class="join join-vertical md:grid-cols-2 w-full gap-4">
-                    <.input
-                      type="int-slider"
-                      min="4"
-                      max="10"
-                      step="1"
-                      id="word_length_min"
-                      name="word_length_min"
-                      label="Min Length"
-                      field={@form[:word_length_min]}
-                    />
-                    <.input
-                      type="int-slider"
-                      min="4"
-                      max="10"
-                      step="1"
-                      id="word_length_max"
-                      name="word_length_max"
-                      label="Max Length"
-                      field={@form[:word_length_max]}
-                    />
+                    <div class="join join-vertical md:grid-cols-2 w-full gap-4">
+                      <.input
+                        type="int-slider"
+                        min="4"
+                        max="10"
+                        step="1"
+                        id="word_length_min"
+                        name="word_length_min"
+                        label="Min Length"
+                        field={@form[:word_length_min]}
+                      />
+                      <.input
+                        type="int-slider"
+                        min="4"
+                        max="10"
+                        step="1"
+                        id="word_length_max"
+                        name="word_length_max"
+                        label="Max Length"
+                        field={@form[:word_length_max]}
+                      />
+                    </div>
                   </div>
-                </div>
-                <!-- Word Transformations -->
+                  <!-- Word Transformations -->
                   <div id="section_transformations" class="grid grid-cols-1 w-full gap-1 mt-0 g-1">
                     <.input
                       type="select"
@@ -193,21 +193,13 @@
                   </div>
                   <!-- /section_transformations -->
                   <!-- Separator -->
-                  <div id="section_separator" class="grid grid-cols-1 w-full gap-4 mt-0 g-1">
-                    <div class="font-medium">■ Separator Characters</div>
-                    <div class="w-full flex flex-wrap gap-4">
-                      <%= for symbol <- Settings.allowed_symbols() do %>
-                        <div phx-click="toggle_symbol"
-                          phx-value-symbol={symbol}
-                          phx-value-_target="separator_character"
-                          class={"btn border rounded-none cursor-pointer " <>
-                          if String.contains?(@form[:separator_character].value, symbol),
-                            do: "btn-primary",
-                            else: "border-primary"
-                          }
-                        ><%= symbol %></div>
-                      <% end %>
-                    </div>
+                  <div class="w-full mt-0">
+                    <.toggle_list
+                      label="Separator Characters"
+                      name="separator_character"
+                      field={@form[:separator_character]}
+                      values={Settings.allowed_symbols()}
+                    />
                   </div>
                   <!-- /section_separator -->
                 <!-- Padding -->
