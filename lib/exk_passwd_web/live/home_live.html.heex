@@ -102,9 +102,9 @@
           </div>
         </div>
         <!-- close row for topBanner on mobile screens -->
-        <section id="content" class="flex flex-wrap gap-6 mt-0 -mx-3">
+        <section id="content" class="flex flex-wrap gap-6 mt-0">
           <!-- open row for content below nav -->
-          <div class="join join-vertical shrink-0 w-11/12 mt-6">
+          <div class="join join-vertical shrink-0 w-full mt-6">
             <div class="border-primary border rounded-t-none p-3">
               <div class="join flex w-full">
                 <div class="flex-1 bg-primary text-black uppercase align-middle w-full px-3 py-2">
@@ -172,7 +172,30 @@
                       />
                     </div>
                   </div>
-                  <!-- Word Transformations -->
+                  <!-- digits settings -->
+                  <div id="section-digits" class="grid grid-cols-1 md:grid-cols-2 w-full gap-4">
+                    <.input
+                      type="int-slider"
+                      min="0"
+                      max="5"
+                      step="1"
+                      id="digits_before"
+                      name="digits_before"
+                      label="Digit(s) Before"
+                      field={@form[:digits_before]}
+                    />
+                    <.input
+                      type="int-slider"
+                      min="0"
+                      max="5"
+                      step="1"
+                      id="digits_after"
+                      name="digits_after"
+                      label="Digit(s) After"
+                      field={@form[:digits_after]}
+                    />
+                  </div>
+                   <!-- Word Transformations -->
                   <div id="section_transformations" class="grid grid-cols-1 w-full gap-1 mt-0 g-1">
                     <.input
                       type="select"
@@ -191,7 +214,6 @@
                       value={@form[:case_transform].value}
                     />
                   </div>
-                  <!-- /section_transformations -->
                   <!-- Separator -->
                   <div class="w-full mt-0">
                     <.toggle_list
@@ -201,57 +223,23 @@
                       values={Settings.allowed_symbols()}
                     />
                   </div>
-                  <!-- /section_separator -->
-                <!-- Padding -->
-                  <div id="section_padding" class="grid grid-cols-2 w-full gap-1 mt-0 py-3 g-1">
-                    <h5 class="text-xl font-medium leading-5 shrink-0 mb-2 col-span-2">
-                      Padding
-                    </h5>
-                    <div class="col-span-2 md:col-span-1">
-                      <!-- padding digits before -->
-                      <.input
-                        type="number"
-                        min="0"
-                        max="5"
-                        step="1"
-                        id="digits_before"
-                        name="digits_before"
-                        label="Digit(s) Before"
-                        field={@form[:digits_before]}
-                      />
-                    </div>
-                    <!-- /padding_digits_before -->
-                    <div class="col-span-2 md:col-span-1">
-                      <!-- padding digits after -->
-                      <.input
-                        type="number"
-                        min="0"
-                        max="5"
-                        step="1"
-                        id="digits_after"
-                        name="digits_after"
-                        label="Digit(s) After"
-                        field={@form[:digits_after]}
-                      />
-                    </div>
-                    <!-- /padding_digits_after -->
-                  <!-- padding_characters -->
-                    <div class="col-span-2">
-                      <.input
-                        type="text"
-                        id="padding_character"
-                        name="padding_character"
-                        label="Padding Characters"
-                        field={@form[:padding_character]}
-                      />
-                    </div>
+                  <!-- Padding -->
+                  <div class="w-full mt-0">
+                    <.toggle_list
+                      label="Padding Characters"
+                      name="padding_character"
+                      field={@form[:padding_character]}
+                      values={Settings.allowed_symbols()}
+                    />
+                  </div>
+                  <div id="section_padding" class="grid grid-cols-2 w-full gap-4 mt-0 py-3 g-1">
                     <!-- /padding_characters -->
                     <div class="col-span-2">
                       <div class="join w-full w-max-full flex flex-row">
                         <input
                           type="radio"
                           value="fixed"
-                          class="flex-none"
+                          class="flex-none radio radio-primary focus:radio-primary"
                           name="padding_type"
                           id="padding_fixed"
                           checked={@padding_type == "fixed"}
@@ -265,9 +253,9 @@
                       </div>
                     </div>
                     <!-- padding characters before -->
-                    <div class="col-span-2 md:col-span-1 pl-7">
+                    <div class="col-span-2 md:col-span-1 w-full pl-10">
                       <.input
-                        type="number"
+                        type="int-slider"
                         min="0"
                         max="5"
                         step="1"
@@ -280,9 +268,9 @@
                     </div>
                     <!-- /padding_characters_before -->
                   <!-- padding characters after -->
-                    <div class="col-span-2 md:col-span-1 pl-7 md:pl-0">
+                    <div class="col-span-2 md:col-span-1 w-full pl-10">
                       <.input
-                        type="number"
+                        type="int-slider"
                         min="0"
                         max="5"
                         step="1"
@@ -300,7 +288,7 @@
                         <input
                           type="radio"
                           value="adaptive"
-                          class="flex-none"
+                          class="flex-none radio radio-primary focus:radio-primary"
                           name="padding_type"
                           id="padding_adaptive"
                           checked={@padding_type != "fixed"}
@@ -315,7 +303,7 @@
                     </div>
                     <div class="col-span-2 pl-7">
                       <.input
-                        type="number"
+                        type="int-slider"
                         min="8"
                         max="999"
                         step="1"
@@ -394,18 +382,14 @@
       Inspired by <a href="https://xkcd.com/936/" target="_blank" class="link">XKCD</a>
       and
       <a href="https://www.grc.com/haystack.htm" target="_blank" class="link">
-        Password Hay Stacks
-      </a>
+        Password Hay Stacks</a>
       |
       Powered by
       <a href="https://github.com/westbaystars/exk_passwd" target="_blank" class="link">
-        EXKPasswd on
-        GitHub
-      </a>
-      | UI by
+        EXKPasswd on GitHub</a>
+      | UI/UX by
       <a href="https://www.linkedin.com/in/jobana-westbay/" target="_blank" class="link">
-        Jobana
-      </a>
+        Jobana</a>
     </div>
   </footer>
 </div>

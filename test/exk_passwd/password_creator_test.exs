@@ -106,11 +106,11 @@ defmodule EXKPasswd.PasswordCreatorTest do
     assert String.match?(password, regex)
   end
 
-  test "verify that the @apple_id_settings password generates a password in the format: <sym1>dd<sym2>WORD<sym2>WORD<sym2>word<sym2>dd<sym1>" do
+  test "verify that the @apple id_settings password generates a password in the format: <sym1>dd<sym2>WORD<sym2>WORD<sym2>word<sym2>dd<sym1>" do
     regex =
       ~r/^([-:\.!\?@&])[[:digit:]]{2}([-:\.@&])[a-zA-Z]{4,7}\2[a-zA-Z]{4,7}\2[a-zA-Z]{4,7}\2[[:digit]]{2}\1$/
 
-    settings = Presets.get("apple_id")
+    settings = Presets.get("apple id")
 
     Enum.all?(1..5000, fn _ ->
       password = PasswordCreator.create(settings)
@@ -125,18 +125,18 @@ defmodule EXKPasswd.PasswordCreatorTest do
            )
   end
 
-  test "verify that the @apple_id_settings password generates a password 22 charaters in length at least once in 5,000 tries" do
-    settings = Presets.get("apple_id")
+  test "verify that the @apple id_settings password generates a password 22 charaters in length at least once in 5,000 tries" do
+    settings = Presets.get("apple id")
 
-    assert Enum.any?(1..5000, fn _ ->
+    assert Enum.any?(1..5_000, fn _ ->
              String.length(PasswordCreator.create(settings)) == 22
            end)
   end
 
-  test "verify that the @apple_id_settings password generates a password 31 characters in length at least once in 5,000 tries" do
-    settings = Presets.get("apple_id")
+  test "verify that the @apple id_settings password generates a password 31 characters in length at least once in 5,000 tries" do
+    settings = Presets.get("apple id")
 
-    assert Enum.any?(1..5000, fn _ ->
+    assert Enum.any?(1..5_000, fn _ ->
              String.length(PasswordCreator.create(settings)) == 31
            end)
   end

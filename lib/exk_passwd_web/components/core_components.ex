@@ -276,7 +276,7 @@ defmodule EXKPasswdWeb.CoreComponents do
   attr :type, :string,
     default: "text",
     values: ~w(checkbox color date datetime-local email file month number password
-               range search select tel text textarea time url week)
+               range search select tel text textarea time url week int-slider)
 
   attr :field, Phoenix.HTML.FormField,
     doc: "a form field struct retrieved from the form, for example: @form[:email]"
@@ -368,7 +368,7 @@ defmodule EXKPasswdWeb.CoreComponents do
 
   def input(%{type: "int-slider"} = assigns) do
     ~H"""
-    <div class="join join-vertical gap-4">
+    <div class="join join-vertical w-full gap-4">
       <label for={@id} class="font-medium">■ <%= @label %></label>
       <div class="flex w-full">
         <input
@@ -376,7 +376,7 @@ defmodule EXKPasswdWeb.CoreComponents do
           id={@id}
           name={@name}
           value={Phoenix.HTML.Form.normalize_value(@type, @value)}
-          class="text-primary bg-zinc-900 w-16"
+          class="text-primary bg-zinc-900 w-20"
           {@rest}
         />
         <input
@@ -459,7 +459,7 @@ defmodule EXKPasswdWeb.CoreComponents do
       <label class="font-medium">■ <%= @label %></label>
       <div class="w-full flex flex-wrap gap-4">
         <%= for value <- @values do %>
-          <div class={"btn border rounded-none focus:border-primary cursor-pointer " <>
+          <div class={"btn border rounded-none hover:border-primary cursor-pointer w-3 h-3 " <>
             if String.contains?(@value, value),
               do: "btn-primary",
               else: "border-primary"

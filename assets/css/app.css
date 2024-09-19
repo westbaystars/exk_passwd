@@ -38,3 +38,7 @@ body {
     border-radius: 0;
     background-color: #00fe94;
 }
+
+.radio-primary {
+    background: transparent;
+}
