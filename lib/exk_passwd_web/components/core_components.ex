@@ -375,7 +375,7 @@ defmodule EXKPasswdWeb.CoreComponents do
           type="number"
           id={@id}
           name={@name}
-          value={Phoenix.HTML.Form.normalize_value(@type, @value)}
+          value={@value}
           class="text-primary bg-zinc-900 w-20"
           {@rest}
         />
@@ -383,7 +383,7 @@ defmodule EXKPasswdWeb.CoreComponents do
           type="range"
           phx-value-bind={@name}
           name={"slider_" <> @name}
-          value={Phoenix.HTML.Form.normalize_value(@type, @value)}
+          value={@value}
           class="bg-zinc-900 flex-auto mx-4 my-auto range"
           {@rest}
         />
