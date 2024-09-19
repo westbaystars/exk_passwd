@@ -5,7 +5,7 @@ defmodule EXKPasswd.Settings do
 
   @derive Jason.Encoder
   @primary_key {:name, :string, default: "default"}
-  @allowed_symbols ~w(- _ ~ + * = @ ! & $ % ? . : ; ^ | / ' " ) ++ [" "]
+  @allowed_symbols ~w(- _ ~ + * = @ ! & $ % ? . , : ; ^ | / ' " ) ++ [" "]
   @empty_values []
 
   @doc """
