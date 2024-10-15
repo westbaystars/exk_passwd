@@ -8,7 +8,11 @@ Bart is leading this port of the Perl module to JavaScript with the [NosillaCast
 
 As an avid fan of [Programming By Stealth blog/podcast series](https://pbs.bartificer.net) and budding Elixir programmer, I (Michael Westbay) wanted to implement this wonderful tool in Elixir/Phoenix. This is that attempt.
 
-## Current version of the official app
+## Live Version
+
+This unofficial port has been deployed to Fly.io as [https://exkpasswd.org](https://exkpasswd.org/). It's usuable now! Enjoy!
+
+## Current Version of the Official App
 
 For anyone interesting in playing with the official port of the app, primarily implemented in JavaScript by [hepabolu](https://github.com/bartificer/xkpasswd-js/commits?author=hepabolu),
 aka, Helma van der Linden, you can check out the app here: [XKPasswd](https://bartificer.github.io/xkpasswd-js/) with the full source code available on GitHub [here](https://github.com/bartificer/xkpasswd-js).
