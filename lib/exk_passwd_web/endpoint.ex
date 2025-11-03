@@ -25,6 +25,14 @@ defmodule EXKPasswdWeb.Endpoint do
     gzip: false,
     only: EXKPasswdWeb.static_paths()
 
+  # ⚠️ If your app runs behind a Proxy, you must add this plug as well.
+  # Otherwise, we'll block your Proxy and all incoming traffic
+  # because Proxies usually override the request IP with their own.
+  plug RemoteIp
+
+  # 👇 Add the Phx2Ban.Plug behind your Plug.Static
+  plug Phx2Ban.Plug
+
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
   if code_reloading? do

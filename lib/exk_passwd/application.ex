@@ -13,6 +13,10 @@ defmodule EXKPasswd.Application do
       {Phoenix.PubSub, name: EXKPasswd.PubSub},
       # Start a worker by calling: EXKPasswd.Worker.start_link(arg)
       # {EXKPasswd.Worker, arg},
+
+      # Start Phx2Ban before you start your Endpoint.
+      {Phx2Ban, router: MyAppWeb.Router, block_duration: 3_600_000},
+
       # Start to serve requests, typically the last entry
       EXKPasswdWeb.Endpoint
     ]

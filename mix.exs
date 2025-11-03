@@ -3,8 +3,8 @@ defmodule EXKPasswd.MixProject do
 
   def project do
     [
-      app: :exk_passwd,
-      version: "0.1.0",
+      app: :exk_passwd_web,
+      version: "0.2.0",
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -53,7 +53,9 @@ defmodule EXKPasswd.MixProject do
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
-      {:bandit, "~> 1.5"}
+      {:bandit, "~> 1.5"},
+      {:phx_2_ban, "~> 0.2.4", repo: "ezsuite"},
+      {:exk_passwd, path: "../exk_passwd_hex"}
     ]
   end
 
