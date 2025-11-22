@@ -20,5 +20,5 @@ defmodule EXKPasswdWeb.Gettext do
 
   See the [Gettext Docs](https://hexdocs.pm/gettext) for detailed usage.
   """
-  use Gettext, otp_app: :exk_passwd
+  use Gettext.Backend, otp_app: :exk_passwd_app
 end

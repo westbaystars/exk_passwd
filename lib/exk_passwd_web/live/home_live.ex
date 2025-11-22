@@ -1,8 +1,9 @@
 defmodule EXKPasswdWeb.HomeLive do
   use EXKPasswdWeb, :live_view
 
-  alias EXKPasswd.{Presets, Settings, PasswordCreator}
-  alias Ecto.Changeset
+  alias ExkPasswd.Config
+  alias ExkPasswd.Config.{Presets, Schema}
+  # alias Ecto.Changeset
 
   @impl Phoenix.LiveView
   def mount(_params, _sessoin, socket) do
@@ -13,7 +14,7 @@ defmodule EXKPasswdWeb.HomeLive do
       |> load_current_setting()
       |> assign(presets: Presets.all())
       |> assign(settings: preset)
-      |> assign_form(Settings.changeset(preset, %{}))
+      # |> assign_form(Config.changeset(preset, %{}))
       |> assign_padding(preset)
       |> assign(password: "")
 
@@ -31,16 +32,20 @@ defmodule EXKPasswdWeb.HomeLive do
         %{assigns: %{settings: settings, form: form, pad_to_length: pad_to_length}} = socket
       ) do
     pad_to_length = if padding_type == "fixed", do: "0", else: pad_to_length
+    settings = %Config{settings | padding: %{settings.padding | to_length: pad_to_length}}
 
-    changeset =
-      settings
-      |> Settings.changeset(Map.merge(form.source.changes, %{:pad_to_length => pad_to_length}))
-      |> Map.put(:action, :validate)
 
-    {:noreply,
-     socket
-     |> assign(padding_type: padding_type)
-     |> assign_form(changeset)}
+    # changeset =
+    #   settings
+    #   |> Config.changeset(Map.merge(form.source.changes, %{:pad_to_length => pad_to_length}))
+    #   |> Map.put(:action, :validate)
+
+    {
+      :noreply,
+      socket
+      |> assign(padding_type: padding_type, settings: settings)
+      # |> assign_form(changeset)
+    }
   end
 
   def handle_event(
@@ -48,15 +53,18 @@ defmodule EXKPasswdWeb.HomeLive do
         %{"_target" => ["pad_to_length"], "pad_to_length" => "0"},
         %{assigns: %{settings: settings, form: form}} = socket
       ) do
-    changeset =
-      settings
-      |> Settings.changeset(Map.merge(form.source.changes, %{:pad_to_length => "0"}))
-      |> Map.put(:action, :validate)
+    settings = %Config{settings | padding: %{settings.padding | to_length: 0}}
+
+    # changeset =
+    #   settings
+    #   |> Config.changeset(Map.merge(form.source.changes, %{:pad_to_length => "0"}))
+    #   |> Map.put(:action, :validate)
 
     {:noreply,
      socket
-     |> assign(padding_type: "fixed")
-     |> assign_form(changeset)}
+     |> assign(padding_type: "fixed", settings: settings)
+     # |> assign_form(changeset)
+    }
   end
 
   def handle_event(
@@ -66,7 +74,7 @@ defmodule EXKPasswdWeb.HomeLive do
       ) do
     changeset =
       settings
-      |> Settings.changeset(Map.merge(form.source.changes, %{:pad_to_length => pad_to_length}))
+      |> Config.changeset(Map.merge(form.source.changes, %{:pad_to_length => pad_to_length}))
       |> Map.put(:action, :validate)
 
     {:noreply,
@@ -101,7 +109,7 @@ defmodule EXKPasswdWeb.HomeLive do
       ) do
     changeset =
       settings
-      |> Settings.changeset(
+      |> Config.changeset(
         Map.merge(form.source.changes, %{String.to_existing_atom(target) => params[target]})
       )
       |> Map.put(:action, :validate)
@@ -117,16 +125,13 @@ defmodule EXKPasswdWeb.HomeLive do
         %{assigns: %{settings: settings, form: form}} = socket
       ) do
     name = String.to_existing_atom(name)
-    changeset = Settings.changeset(settings, form.source.changes)
+    changeset = Config.changeset(settings, form.source.changes)
 
     values = Changeset.get_field(changeset, name)
-    values = case String.contains?(values, value) do
-      true -> String.replace(values, value, "")
-      _ -> values <> value
-    end
 
-    changeset = Changeset.put_change(changeset, name, values)
-    |> Map.put(:action, :validate)
+    changeset =
+      Changeset.put_change(changeset, name, values)
+      |> Map.put(:action, :validate)
 
     {:noreply, socket |> assign_form(changeset)}
   end
@@ -139,7 +144,7 @@ defmodule EXKPasswdWeb.HomeLive do
         socket
       ) do
     changeset =
-      Settings.changeset(%Settings{}, settings)
+      Config.changeset(%Config{}, settings)
       |> Map.put(:action, :validate)
 
     {:ok, new_settings} = Changeset.apply_action(changeset, :update)
@@ -159,7 +164,7 @@ defmodule EXKPasswdWeb.HomeLive do
       ) do
     changeset =
       settings
-      |> Settings.changeset(
+      |> Config.changeset(
         Map.merge(form.source.changes, %{
           name: "current",
           description: "The current working settings."
@@ -199,16 +204,16 @@ defmodule EXKPasswdWeb.HomeLive do
       {:noreply,
        socket
        |> assign(settings: preset)
-       |> assign_form(Settings.changeset(preset, %{}))
+       |> assign_form(Config.changeset(preset, %{}))
        |> assign_padding(preset)}
     end
   end
 
   defp assign_padding(socket, setting) do
-    padding_type = if setting.pad_to_length > 0, do: "adaptive", else: "fixed"
+    padding_type = if setting.padding.to_length > 0, do: "adaptive", else: "fixed"
 
     pad_to_length =
-      if setting.pad_to_length > 0, do: setting.pad_to_length, else: calc_max_length(setting)
+      if setting.padding.to_length > 0, do: setting.padding.to_length, else: calc_max_length(setting)
 
     socket
     |> assign(padding_type: padding_type)
@@ -239,13 +244,26 @@ defmodule EXKPasswdWeb.HomeLive do
   end
 
   defp calc_max_length(setting) do
-    separator_length = if String.length(setting.separator_character) > 0, do: 1, else: 0
+    separator_length = if String.length(setting.separator) > 0, do: 1, else: 0
+    {digits_before, digits_after} = setting.digits
+    word_length = range_max(setting.word_length)
 
-    setting.num_words * setting.word_length_max +
+    setting.num_words * word_length +
       (separator_length * setting.num_words - 1) +
-      if(setting.digits_before > 0, do: setting.digits_before + separator_length, else: 0) +
-      if(setting.digits_after > 0, do: setting.digits_after + separator_length, else: 0) +
-      if(setting.padding_before > 0, do: setting.padding_before, else: 0) +
-      if setting.padding_after > 0, do: setting.padding_after, else: 0
+      if(digits_before > 0, do: digits_before + separator_length, else: 0) +
+      if(digits_after > 0, do: digits_after + separator_length, else: 0) +
+      if(setting.padding.before > 0, do: setting.padding.before, else: 0) +
+      if setting.padding.after > 0, do: setting.padding.after, else: 0
   end
+
+  defp range_min(range) do
+    Range.to_list(range) |> Enum.min()
+  end
+
+  defp range_max(range) do
+    Range.to_list(range) |> Enum.max()
+  end
+
+  defp pair_before({before, _after}), do: before
+  defp pair_after({_before, after_x}), do: after_x
 end

@@ -1,5 +1,5 @@
 defmodule EXKPasswdWeb.Endpoint do
-  use Phoenix.Endpoint, otp_app: :exk_passwd
+  use Phoenix.Endpoint, otp_app: :exk_passwd_app
 
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
@@ -21,7 +21,7 @@ defmodule EXKPasswdWeb.Endpoint do
   # when deploying your static files in production.
   plug Plug.Static,
     at: "/",
-    from: :exk_passwd,
+    from: :exk_passwd_app,
     gzip: false,
     only: EXKPasswdWeb.static_paths()
 

@@ -12,12 +12,12 @@ import Config
 # If you use `mix release`, you need to explicitly enable the server
 # by passing the PHX_SERVER=true when you start it:
 #
-#     PHX_SERVER=true bin/exk_passwd start
+#     PHX_SERVER=true bin/exk_passwd_app start
 #
 # Alternatively, you can use `mix phx.gen.release` to generate a `bin/server`
 # script that automatically sets the env var above.
 if System.get_env("PHX_SERVER") do
-  config :exk_passwd, EXKPasswdWeb.Endpoint, server: true
+  config :exk_passwd_app, EXKPasswdWeb.Endpoint, server: true
 end
 
 if config_env() == :prod do
@@ -37,9 +37,9 @@ if config_env() == :prod do
   dns_host = System.get_env("DNS_HOST") || "another.com"
   port = String.to_integer(System.get_env("PORT") || "4000")
 
-  config :exk_passwd, :dns_cluster_query, System.get_env("DNS_CLUSTER_QUERY")
+  config :exk_passwd_app, :dns_cluster_query, System.get_env("DNS_CLUSTER_QUERY")
 
-  config :exk_passwd, EXKPasswdWeb.Endpoint,
+  config :exk_passwd_app, EXKPasswdWeb.Endpoint,
     check_origin: [
       "//#{host}",
       "//#{dns_host}",
@@ -51,7 +51,7 @@ if config_env() == :prod do
       # See the documentation on https://hexdocs.pm/bandit/Bandit.html#t:options/0
       # for details about using IPv6 vs IPv4 and loopback vs public addresses.
       ip: {0, 0, 0, 0},
-      #ip: {0, 0, 0, 0, 0, 0, 0, 0},
+      # ip: {0, 0, 0, 0, 0, 0, 0, 0},
       port: port
     ],
     secret_key_base: secret_key_base
@@ -61,7 +61,7 @@ if config_env() == :prod do
   # To get SSL working, you will need to add the `https` key
   # to your endpoint configuration:
   #
-  #     config :exk_passwd, EXKPasswdWeb.Endpoint,
+  #     config :exk_passwd_app, EXKPasswdWeb.Endpoint,
   #       https: [
   #         ...,
   #         port: 443,
@@ -83,7 +83,7 @@ if config_env() == :prod do
   # We also recommend setting `force_ssl` in your config/prod.exs,
   # ensuring no data is ever sent via http, always redirecting to https:
   #
-  #     config :exk_passwd, EXKPasswdWeb.Endpoint,
+  #     config :exk_passwd_app, EXKPasswdWeb.Endpoint,
   #       force_ssl: [hsts: true]
   #
   # Check `Plug.SSL` for all available options in `force_ssl`.

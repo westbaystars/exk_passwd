@@ -39,11 +39,11 @@ defmodule EXKPasswdWeb do
   def controller do
     quote do
       use Phoenix.Controller,
-        formats: [:html, :json],
-        layouts: [html: EXKPasswdWeb.Layouts]
+        formats: [:html, :json]
+
+      use Gettext, backend: EXKPasswdWeb.Gettext
 
       import Plug.Conn
-      import EXKPasswdWeb.Gettext
 
       unquote(verified_routes())
     end
@@ -51,8 +51,7 @@ defmodule EXKPasswdWeb do
 
   def live_view do
     quote do
-      use Phoenix.LiveView,
-        layout: {EXKPasswdWeb.Layouts, :app}
+      use Phoenix.LiveView
 
       unquote(html_helpers())
     end
@@ -81,14 +80,17 @@ defmodule EXKPasswdWeb do
 
   defp html_helpers do
     quote do
+      # Translation
+      use Gettext, backend: EXKPasswdWeb.Gettext
+
       # HTML escaping functionality
       import Phoenix.HTML
       # Core UI components and translation
       import EXKPasswdWeb.CoreComponents
-      import EXKPasswdWeb.Gettext
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS
+      alias EXKPasswdWeb.Layouts
 
       # Routes generation with the ~p sigil
       unquote(verified_routes())

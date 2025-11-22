@@ -9,7 +9,7 @@ defmodule EXKPasswd.Application do
   def start(_type, _args) do
     children = [
       EXKPasswdWeb.Telemetry,
-      {DNSCluster, query: Application.get_env(:exk_passwd, :dns_cluster_query) || :ignore},
+      {DNSCluster, query: Application.get_env(:exk_passwd_app, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: EXKPasswd.PubSub},
       # Start a worker by calling: EXKPasswd.Worker.start_link(arg)
       # {EXKPasswd.Worker, arg},

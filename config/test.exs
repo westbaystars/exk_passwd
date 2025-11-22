@@ -2,7 +2,7 @@ import Config
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
-config :exk_passwd, EXKPasswdWeb.Endpoint,
+config :exk_passwd_app, EXKPasswdWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4002],
   secret_key_base: "PMk+Wj4KSZijNdJ7ZJm6uELevfxQXABxN9f0WBXgI9jcKTPH177G4DX7EeM93gI7",
   server: false
